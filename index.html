@@ -202,6 +202,60 @@ h3 { font-size: 1.5rem; line-height: 1.15; }
 .member { scroll-margin-top: 7rem; }
 .member.flash { outline: 3px solid var(--jupiter); outline-offset: 4px; }
 
+/* lexicon, works, members, rules, leftovers */
+.az { display: flex; flex-wrap: wrap; gap: .3rem; padding-block: 1.5rem; border-bottom: 1px solid var(--rule); }
+.az button, .az span { font-family: var(--mono); font-size: .8rem; width: 2.1rem; height: 2.1rem; display: grid; place-items: center; border: 1px solid var(--rule); background: transparent; color: var(--ink); box-sizing: border-box; }
+.az button { border-color: var(--ink); cursor: pointer; }
+.az button:hover { background: var(--jupiter); color: var(--on-jupiter); border-color: var(--jupiter); }
+.az span { color: var(--muted); opacity: .45; }
+.az-group { display: grid; grid-template-columns: 5rem minmax(0, 1fr); gap: 1.5rem; padding-block: 1.75rem; border-bottom: 1px solid var(--rule); scroll-margin-top: 7rem; }
+.az-letter { font-family: var(--stencil); font-weight: 700; font-size: 3.2rem; line-height: .85; }
+.lex-list { list-style: none; margin: 0; padding: 0; display: grid; gap: .4rem; }
+.lex-list a { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .1rem 1rem; text-decoration: none; padding-block: .35rem; }
+.lex-term { font-family: var(--display); font-size: 1.8rem; line-height: 1.1; }
+.lex-de { font-style: italic; color: var(--muted); }
+.lex-count { grid-column: 2; grid-row: 1 / span 2; align-self: center; font-family: var(--mono); font-size: .72rem; color: var(--muted); }
+.lex-list a:hover .lex-term { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .15em; }
+.lex-how { padding-block: 2rem 4rem; }
+.concept-head { display: grid; gap: .7rem; padding-bottom: 2rem; border-bottom: 2px solid var(--ink); }
+.concept-term { font-size: clamp(3rem, 9vw, 6.5rem); line-height: .92; }
+.concept-de { font-style: italic; font-size: 1.4rem; color: var(--muted); }
+.block { display: grid; gap: 1rem; align-content: start; min-width: 0; }
+.cites { list-style: none; margin: 0; padding: 0; display: grid; max-width: 46rem; border-top: 1px solid var(--rule); }
+.cites li { padding-block: 1.2rem; border-bottom: 1px solid var(--rule); display: grid; gap: .45rem; }
+.cites blockquote { margin: 0; font-family: var(--display); font-size: clamp(1.4rem, 2.8vw, 1.95rem); line-height: 1.2; }
+.cites blockquote::before { content: "\201C"; } .cites blockquote::after { content: "\201D"; }
+.cite-src { font-family: var(--mono); font-size: .76rem; color: var(--muted); }
+.cite-src a { color: var(--ink); }
+.works { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 16rem), 1fr)); gap: 1.25rem; }
+.work-card { display: grid; gap: .55rem; align-content: start; padding: 1.3rem; border: 1.5px solid var(--ink); text-decoration: none; color: inherit; min-width: 0; }
+.work-card:hover { background: var(--paper-2); }
+.work-card h3 { font-size: 1.35rem; }
+.w-ex { color: var(--muted); font-size: 1rem; }
+.tags { display: flex; flex-wrap: wrap; gap: .4rem; }
+.tag { font-family: var(--mono); font-size: .7rem; letter-spacing: .08em; text-transform: uppercase; padding: .28rem .6rem; border: 1px solid var(--rule); color: var(--muted); text-decoration: none; }
+a.tag { border-color: var(--ink); color: var(--ink); }
+a.tag:hover { background: var(--jupiter); color: var(--on-jupiter); border-color: var(--jupiter); }
+.work { display: grid; gap: 1.2rem; max-width: 46rem; padding-bottom: 2rem; border-bottom: 2px solid var(--ink); }
+.work-title { font-size: clamp(2.2rem, 5vw, 3.6rem); line-height: 1.05; }
+.work-text { white-space: pre-line; font-size: 1.25rem; line-height: 1.7; }
+.work-text.one { font-family: var(--display); font-size: clamp(2.2rem, 5.5vw, 3.8rem); line-height: 1.08; white-space: normal; }
+.work-text.one::before { content: "\201C"; } .work-text.one::after { content: "\201D"; }
+.member-head { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 1.5rem; align-items: center; padding-bottom: 2rem; border-bottom: 2px solid var(--ink); }
+.member-head .tile { width: 6.5rem; height: 6.5rem; font-size: 2.6rem; }
+.member-name { font-size: clamp(2.4rem, 5.5vw, 4rem); line-height: 1; }
+.m-name { text-decoration: none; } .m-name:hover { text-decoration: underline; text-decoration-thickness: 1px; }
+.m-open { justify-self: start; padding: .65rem 1rem; }
+.rules { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 3rem; border-top: 2px solid var(--ink); }
+.rules li { position: relative; padding: 1.05rem 0 1.05rem 1.7rem; border-bottom: 1px solid var(--rule); font-size: 1.15rem; }
+.rules li::before { content: ""; position: absolute; left: 0; top: 1.6rem; width: .6rem; height: .6rem; background: var(--jupiter); }
+.leftovers { display: grid; gap: .8rem; padding: 1.5rem; background: var(--paper-2); max-width: 46rem; }
+.leftovers ul { margin: 0; padding-left: 1.2rem; display: grid; gap: .5rem; }
+.leftovers li { font-family: var(--display); font-size: 1.3rem; line-height: 1.25; }
+.left-list { list-style: none; margin: 0; padding: 0; display: grid; border-top: 2px solid var(--ink); }
+.left-list li { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: .3rem 1.5rem; padding-block: 1rem; border-bottom: 1px solid var(--rule); }
+.left-list .q-text { font-family: var(--display); font-size: 1.35rem; line-height: 1.25; flex: 1 1 20rem; min-width: 0; }
+
 /* chamber */
 .members { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: 1.5rem; padding-block: 2.5rem 4rem; }
 .member { border: 1.5px solid var(--ink); padding: 1.6rem; display: grid; gap: 1rem; align-content: start; min-width: 0; }
@@ -289,9 +343,10 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   .road { grid-template-columns: minmax(0, 1fr); }
   .band .inner { grid-template-columns: minmax(0, 1fr); align-items: start; }
   .next .inner { grid-template-columns: auto minmax(0, 1fr); }
-  .next .inner .btn { grid-column: 1 / -1; justify-self: start; }
+  .next .inner .actions { grid-column: 1 / -1; justify-self: start; }
   .founder { grid-template-columns: minmax(0, 1fr); }
   .sess-body { grid-template-columns: minmax(0, 1fr); }
+  .rules { grid-template-columns: minmax(0, 1fr); }
   .f-side { grid-template-columns: 7rem minmax(0, 1fr); align-items: end; }
   .f-tile { font-size: 3rem; }
 }
@@ -299,10 +354,16 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   .timeline { grid-template-columns: minmax(0, 1fr); }
   .rec, .letter, .rec-card, .sess-head { grid-template-columns: minmax(0, 1fr); gap: .75rem; }
   .rec-card .go { display: none; }
+  .az-group { grid-template-columns: minmax(0, 1fr); gap: .5rem; }
+  .member-head { grid-template-columns: minmax(0, 1fr); }
+  .member-head .tile { width: 4.5rem; height: 4.5rem; font-size: 1.8rem; }
+  .lex-list a { grid-template-columns: minmax(0, 1fr); }
+  .lex-count { grid-column: 1; grid-row: auto; }
   .pager { flex-direction: column; } .pager a { max-width: 100%; } .pager .older { margin-left: 0; text-align: left; }
   .fields > div { grid-template-columns: minmax(0, 1fr); gap: .2rem; }
   .brand span { display: none; }
-  .views a { padding: .45rem .5rem; font-size: .66rem; letter-spacing: .05em; }
+  .views { gap: 0; }
+  .views a { padding: .42rem .38rem; font-size: .62rem; letter-spacing: .02em; }
 }
 @media (prefers-reduced-motion: reduce) {
   .hero h1 span, .ticker .track { animation: none; }
@@ -331,6 +392,8 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
    "line": "",
    "threads": "",
    "insights": [],
+   "concepts": [],
+   "leftovers": [],
    "circle": [],
    "table": ""
   }
@@ -347,6 +410,52 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   }
  ],
  "letters": [],
+ "lexicon": [
+  {
+   "id": "c-place",
+   "term": "Place",
+   "term_de": "Ort",
+   "intro": ""
+  }
+ ],
+ "works": [
+  {
+   "id": "w-placed",
+   "author": "Sudhara Jayalath",
+   "type": "One-liner",
+   "title": "",
+   "text": "To be is to be placed.",
+   "lang": "en",
+   "date": "November 2026",
+   "session": "",
+   "concepts": [
+    "Place"
+   ]
+  },
+  {
+   "id": "w-each-other",
+   "author": "Sudhara Jayalath",
+   "type": "One-liner",
+   "title": "",
+   "text": "We are placed by each other.",
+   "lang": "en",
+   "date": "November 2026",
+   "session": "",
+   "concepts": [
+    "Place"
+   ]
+  }
+ ],
+ "rules": {
+  "items": [
+   "One question per evening.",
+   "Speak from your own life. No famous names needed.",
+   "Everyone gets the floor. Nobody has to take it.",
+   "Disagree with ideas, never with people.",
+   "What is said at the table stays at the table, unless you agree to be quoted.",
+   "Leave with a question, not only an answer."
+  ]
+ },
  "legal": {
   "name": "Sudhara Jayalath",
   "street": "",
@@ -379,7 +488,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   var assetEl = document.getElementById("toic-assets");
   var S;
   try { S = JSON.parse(dataEl.textContent); } catch (e) { S = {}; }
-  S.settings = S.settings || {}; S.sessions = S.sessions || []; S.members = S.members || []; S.letters = S.letters || []; S.founder = S.founder || {}; S.legal = S.legal || {};
+  S.settings = S.settings || {}; S.sessions = S.sessions || []; S.members = S.members || []; S.letters = S.letters || []; S.founder = S.founder || {}; S.legal = S.legal || {}; S.lexicon = S.lexicon || []; S.works = S.works || []; S.rules = S.rules || { items: [] };
   var A = JSON.parse(assetEl.textContent);
   var MARK = "data:image/png;base64," + A.mark, WORD = "data:image/png;base64," + A.word;
   var app = document.getElementById("app");
@@ -393,7 +502,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   function ext(href, label, cls) { return '<a class="' + cls + '" href="' + esc(href) + '" target="_blank" rel="noopener noreferrer">' + label + ' <span class="arr" aria-hidden="true">&#8599;</span></a>'; }
 
   var MEETUP_SEARCH = "https://www.meetup.com/find/?keywords=the%20ordinary%20inquiry%20club";
-  var VIEWS = [["club", "Club"], ["records", "Records"], ["chamber", "Chamber"], ["letter", "Letter"], ["founder", "About me"]];
+  var VIEWS = [["club", "Club"], ["records", "Records"], ["lexicon", "Lexicon"], ["chamber", "Chamber"], ["letter", "Letter"], ["founder", "About me"]];
   var ALL_VIEWS = VIEWS.map(function (v) { return v[0]; }).concat(["impressum", "datenschutz"]);
 
   function joinUrl() { return safeUrl(S.settings.meetupUrl) || MEETUP_SEARCH; }
@@ -464,6 +573,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
           '<li><span class="t">After</span><h3>The record</h3><p>The question, the threads and what we found go into the minute-book.</p></li>' +
         "</ol>" +
       "</div>" +
+      rulesBlock() +
       nextBlock +
 
       '<div class="inner section">' +
@@ -502,7 +612,8 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       '<div class="inner page-head"><p class="eyebrow">Records · ' + n + (n === 1 ? " session" : " sessions") + "</p><h2>The minute-book</h2>" +
       '<p class="intro">Every session is one question. Afterwards we write down the threads, what we found, and who was in the circle. Names appear only with consent.</p>' +
       '<button type="button" class="ed" data-act="add" data-kind="session">+ Add a session</button></div>' +
-      '<div class="inner rec-list">' + (list || '<div class="empty"><h3>No sessions yet</h3><p>The first record appears here after session No. 01.</p></div>') + "</div>"
+      '<div class="inner rec-list">' + (list || '<div class="empty"><h3>No sessions yet</h3><p>The first record appears here after session No. 01.</p></div>') + "</div>" +
+      leftoversAll()
     );
   }
 
@@ -529,6 +640,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
           '<h2 class="sess-q">' + esc(sessionTitle(x)) + "</h2>" +
           (x.topic && x.question ? '<p class="sess-topic">Theme: ' + esc(x.topic) + "</p>" : "") +
           '<p class="credit">' + (x.place ? "Hosted at <span>" + esc(x.place) + "</span>" : "Venue to be announced") + "</p>" +
+          tagChips(x) +
           (up ? '<div class="actions">' + joinButtons("btn ink", "btn", "RSVP") + "</div>" : "") +
         "</div></div>" +
         (x.line ? '<figure class="night"><figcaption class="eyebrow">Line of the night</figcaption><blockquote><p><mark>' + esc(x.line) + "</mark></p></blockquote></figure>" : "") +
@@ -543,6 +655,8 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
             '<p class="small">Names appear only with consent. Highlighted names have a page in the Chamber.</p>' +
           "</aside>" +
         "</div>" +
+        ((x.leftovers || []).filter(Boolean).length ? '<section class="leftovers"><p class="eyebrow">Leftovers \u00b7 questions we didn\u2019t answer</p><ul>' + x.leftovers.filter(Boolean).map(function (q) { return "<li>" + esc(q) + "</li>"; }).join("") + "</ul></section>" : "") +
+        (function () { var ws = S.works.filter(function (w) { return sessionByNo(w.session) === x; }); return ws.length ? '<section class="block"><p class="eyebrow">Written after this table</p><div class="works">' + ws.map(workCard).join("") + "</div></section>" : ""; })() +
         pager +
         '<button type="button" class="ed" data-act="edit" data-kind="session" data-id="' + esc(x.id) + '">Edit this record</button>' +
       "</div>"
@@ -556,12 +670,13 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       var sess = S.sessions.filter(function (x) { return circleNames(x).some(function (nm) { return slug(nm) === slug(m.name); }); });
       var foot = [m.since ? "Member since " + esc(m.since) : "", link ? '<a href="' + esc(link) + '" target="_blank" rel="noopener noreferrer">' + esc(link.replace(/^https?:\/\/(www\.)?/i, "").replace(/\/$/, "")) + "</a>" : ""].filter(Boolean).join(" · ");
       return (
-        '<article class="member" id="member-' + slug(m.name) + '">' +
-          '<div class="m-head"><div class="tile" aria-hidden="true">' + esc(initials(m.name)) + "</div><div><h3>" + esc(m.name) + "</h3>" + (m.line ? '<p class="m-line">' + esc(m.line) + "</p>" : "") + "</div></div>" +
+        '<article class="member">' +
+          '<div class="m-head"><div class="tile" aria-hidden="true">' + esc(initials(m.name)) + '</div><div><h3><a class="m-name" href="#' + memberId(m) + '">' + esc(m.name) + "</a></h3>" + (m.line ? '<p class="m-line">' + esc(m.line) + "</p>" : "") + "</div></div>" +
           (m.theory ? '<blockquote class="theory"><span class="eyebrow">Own theory</span><p>' + esc(m.theory) + "</p></blockquote>" : "") +
           (m.bio ? '<div class="prose">' + P(m.bio) + "</div>" : "") +
           (sess.length ? '<div class="m-sessions"><span class="eyebrow">At the table</span>' + sess.map(function (x) { return '<a href="#' + sessionId(x) + '">No. ' + esc(x.no) + " \u00b7 " + esc(sessionTitle(x)) + "</a>"; }).join("") + "</div>" : "") +
           (foot ? '<p class="m-foot">' + foot + "</p>" : "") +
+          '<a class="btn m-open" href="#' + memberId(m) + '">Open page' + (worksBy(m).length ? " \u00b7 " + plural(worksBy(m).length, "work", "works") : "") + ' <span class="arr" aria-hidden="true">\u2192</span></a>' +
           '<button type="button" class="ed" data-act="edit" data-kind="member" data-id="' + esc(m.id) + '">Edit member</button>' +
         "</article>"
       );
@@ -569,7 +684,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     var join =
       '<article class="member join"><p class="eyebrow">Your page here</p><h3>Join the chamber</h3>' +
       "<p>Came to a Thursday and want a place here? Send the organizer four things:</p>" +
-      "<ul><li>your name, as you'd like it shown</li><li>one line on what you do, by profession or by passion</li><li>your own theory, in one sentence</li><li>a short bio of up to 80 words</li></ul>" +
+      "<ul><li>your name, as you'd like it shown</li><li>one line on what you do, by profession or by passion</li><li>your own theory, in one sentence</li><li>a short bio of up to 80 words</li></ul><p>Later you can add one-liners, notes, poems or anything else you write about the concepts we discuss. They appear on your page and in the Lexicon.</p>" +
       '<p class="m-foot">Message us on ' + mainPlatform() + ' or bring it to the next session.</p></article>';
     return (
       '<div class="inner page-head"><p class="eyebrow">Chamber of Members · ' + n + "</p><h2>The people at the table</h2>" +
@@ -636,6 +751,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
         "<h3>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV</h3><p>" + need(L.name, "Name") + ", Anschrift wie oben</p>" +
         (L.note ? "<h3>Über dieses Angebot</h3>" + P(L.note) : "") +
         "<h3>Haftung für Links</h3><p>Diese Website enthält Links zu externen Websites, zum Beispiel zu Meetup. Auf deren Inhalte haben wir keinen Einfluss; für sie ist der jeweilige Anbieter verantwortlich. Zum Zeitpunkt der Verlinkung waren keine Rechtsverstöße erkennbar. Wenn wir von einer Rechtsverletzung erfahren, entfernen wir den Link umgehend.</p>" +
+        "<h3>Urheberrecht</h3><p>Beiträge von Mitgliedern (One-liners, Notizen, Gedichte, Texte) bleiben geistiges Eigentum ihrer Autor:innen und werden mit deren Erlaubnis veröffentlicht. Jede weitere Verwendung bedarf ihrer Zustimmung.</p>" +
         "<h3>Schriften</h3><p>Gloock, Newsreader, IBM Plex Mono und Stardos Stencil, lizenziert unter der SIL Open Font License 1.1. Die Schriften sind in die Seite eingebettet.</p>" +
         (L.updated ? '<p class="src">Stand: ' + esc(L.updated) + "</p>" : "") +
       "</div></div>";
@@ -654,7 +770,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
         '<p class="src">https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement</p>' +
         "<h3>4. Externe Links</h3><p>Diese Website verlinkt auf externe Angebote, etwa auf unsere Seiten bei Meetup oder Luma, auf einen Newsletter-Dienst oder auf den Blog des Gründers. Daten werden an diese Anbieter erst übertragen, wenn Sie einen solchen Link anklicken. Ab dann gilt die Datenschutzerklärung des jeweiligen Anbieters.</p>" +
         "<h3>5. Kontakt per E-Mail oder Nachricht</h3><p>Wenn Sie uns per E-Mail oder über Meetup schreiben, verarbeiten wir Ihre Angaben (zum Beispiel Name, E-Mail-Adresse und Inhalt der Nachricht), um Ihre Anfrage zu beantworten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO, bei Anfragen zur Teilnahme Art. 6 Abs. 1 lit. b DSGVO. Wir löschen die Angaben, sobald sie für diesen Zweck nicht mehr benötigt werden.</p>" +
-        "<h3>6. Chamber of Members und Sitzungsprotokolle</h3><p>In der „Chamber of Members“ veröffentlichen wir Name, Kurzbiografie, eine persönliche These und gegebenenfalls einen Link nur, wenn die betreffende Person uns diese Angaben selbst zur Veröffentlichung geschickt hat. In den Sitzungsprotokollen nennen wir Teilnehmende nur mit ihrer Einwilligung. Rechtsgrundlage ist Art. 6 Abs. 1 lit. a DSGVO.</p>" +
+        "<h3>6. Chamber of Members, Beiträge und Sitzungsprotokolle</h3><p>In der „Chamber of Members“ veröffentlichen wir Name, Kurzbiografie, eine persönliche These und gegebenenfalls einen Link, außerdem Beiträge wie One-liners, Notizen, Gedichte oder Texte, nur wenn die betreffende Person uns diese Angaben selbst zur Veröffentlichung geschickt hat. In den Sitzungsprotokollen nennen wir Teilnehmende nur mit ihrer Einwilligung. Rechtsgrundlage ist Art. 6 Abs. 1 lit. a DSGVO.</p>" +
         "<p>Sie können Ihre Einwilligung jederzeit mit Wirkung für die Zukunft widerrufen (Art. 7 Abs. 3 DSGVO). Eine kurze Nachricht genügt; wir entfernen Ihre Angaben dann von der Website. Da der Quelltext der Website in einem öffentlichen GitHub-Repository liegt, können frühere Fassungen in dessen Versionsgeschichte sichtbar bleiben. Auf Wunsch entfernen wir Ihre Angaben auch dort, soweit das technisch möglich ist.</p>" +
         "<h3>7. Ihre Rechte</h3><p>Sie haben das Recht auf</p><ul>" +
           "<li>Auskunft über Ihre gespeicherten Daten (Art. 15 DSGVO),</li>" +
@@ -667,6 +783,185 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
         "<h3>8. Keine automatisierten Entscheidungen</h3><p>Wir treffen keine automatisierten Entscheidungen im Sinne von Art. 22 DSGVO und erstellen keine Profile.</p>" +
         (L.updated ? '<p class="src">Stand: ' + esc(L.updated) + "</p>" : "") +
       "</div></div>";
+  }
+
+
+  /* ---------- lexicon, works and member pages ---------- */
+  function conceptFor(tag) { var k = slug(tag); return S.lexicon.filter(function (c) { return slug(c.term) === k || (c.term_de && slug(c.term_de) === k); })[0]; }
+  function conceptBySlug(k) { return S.lexicon.filter(function (c) { return slug(c.term) === k; })[0]; }
+  function conceptId(c) { return "concept-" + slug(c.term); }
+  function memberBySlug(k) { return S.members.filter(function (m) { return slug(m.name) === k; })[0]; }
+  function memberId(m) { return "member-" + slug(m.name); }
+  function workById(k) { return S.works.filter(function (w) { return slug(w.id) === k; })[0]; }
+  function workId(w) { return "work-" + slug(w.id); }
+  function tagsOf(x) { return (x.concepts || []).filter(Boolean); }
+  function hasConcept(x, c) { return tagsOf(x).some(function (t) { return conceptFor(t) === c; }); }
+  function isOneLiner(w) { return /one.?liner/i.test(w.type || ""); }
+  function sessionByNo(no) { return no ? S.sessions.filter(function (x) { return slug(x.no) === slug(no); })[0] : null; }
+  function worksBy(m) { return S.works.filter(function (w) { return slug(w.author) === slug(m.name); }); }
+  function attended(m) { return S.sessions.filter(function (x) { return circleNames(x).some(function (nm) { return slug(nm) === slug(m.name); }); }); }
+  function excerpt(t, n) { t = String(t || "").replace(/\s+/g, " ").trim(); return t.length > n ? t.slice(0, n - 1).replace(/\s+\S*$/, "") + "…" : t; }
+  function authorLink(name) { var m = memberByName(name); return m ? '<a href="#' + memberId(m) + '">' + esc(name) + "</a>" : esc(name); }
+  function tagChips(x) {
+    var t = tagsOf(x);
+    if (!t.length) return "";
+    return '<div class="tags">' + t.map(function (tag) {
+      var c = conceptFor(tag);
+      return c ? '<a class="tag" href="#' + conceptId(c) + '">' + esc(c.term) + "</a>" : '<span class="tag">' + esc(tag) + "</span>";
+    }).join("") + "</div>";
+  }
+  function langChip(w) { return w.lang === "de" ? " · Deutsch" : ""; }
+  function plural(n, one, many) { return n + " " + (n === 1 ? one : many); }
+
+  function workCard(w) {
+    return (
+      '<a class="work-card" href="#' + workId(w) + '">' +
+        '<span class="eyebrow">' + esc(w.type || "Work") + langChip(w) + "</span>" +
+        "<h3>" + esc(w.title || excerpt(w.text, 60)) + "</h3>" +
+        (w.title ? '<p class="w-ex">' + esc(excerpt(w.text, 140)) + "</p>" : "") +
+        '<p class="m-foot">' + esc(w.author || "") + (w.date ? " · " + esc(w.date) : "") + "</p>" +
+      "</a>"
+    );
+  }
+  function oneLinerList(ws, withAuthor) {
+    return '<ol class="cites">' + ws.map(function (w) {
+      var s = sessionByNo(w.session);
+      return "<li" + (w.lang === "de" ? ' lang="de"' : "") + "><blockquote>" + esc(w.text) + "</blockquote>" +
+        '<p class="cite-src">' + (withAuthor ? "— " + authorLink(w.author) + " · " : "") +
+        (s ? 'at <a href="#' + sessionId(s) + '">Table No. ' + esc(s.no) + "</a>" : esc(w.type || "One-liner")) +
+        (w.date ? " · " + esc(w.date) : "") + ' · <a href="#' + workId(w) + '">permalink</a></p></li>';
+    }).join("") + "</ol>";
+  }
+
+  function lexicon() {
+    var items = S.lexicon.slice().sort(function (a, b) { return a.term.localeCompare(b.term); });
+    var groups = {};
+    items.forEach(function (c) { var L = c.term.charAt(0).toUpperCase(); (groups[L] = groups[L] || []).push(c); });
+    var az = "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").map(function (L) {
+      return groups[L] ? '<button type="button" data-jump="az-' + L + '" aria-label="Jump to ' + L + '">' + L + "</button>" : '<span aria-hidden="true">' + L + "</span>";
+    }).join("");
+    var list = Object.keys(groups).sort().map(function (L) {
+      return '<div class="az-group" id="az-' + L + '"><div class="az-letter" aria-hidden="true">' + L + '</div><ul class="lex-list">' +
+        groups[L].map(function (c) {
+          var ns = S.sessions.filter(function (x) { return hasConcept(x, c); }).length;
+          var nw = S.works.filter(function (w) { return hasConcept(w, c); }).length;
+          return '<li><a href="#' + conceptId(c) + '"><span class="lex-term">' + esc(c.term) + "</span>" +
+            (c.term_de ? '<span class="lex-de" lang="de">' + esc(c.term_de) + "</span>" : "") +
+            '<span class="lex-count">' + plural(ns, "session", "sessions") + " · " + plural(nw, "work", "works") + "</span></a></li>";
+        }).join("") + "</ul></div>";
+    }).join("");
+    return (
+      '<div class="inner page-head"><p class="eyebrow">Lexicon · ' + plural(items.length, "concept", "concepts") + "</p><h2>Words we think with</h2>" +
+      '<p class="intro">The concepts that keep coming back to the table. Each entry gathers the sessions where it came up and the one-liners, notes and poems members wrote about it. Entries are in English, with the German word beside it.</p>' +
+      '<button type="button" class="ed" data-act="add" data-kind="lexicon">+ Add a Lexicon entry</button></div>' +
+      '<div class="inner"><nav class="az" aria-label="Jump to letter">' + az + "</nav>" +
+        (list || '<div class="empty"><h3>The Lexicon is empty</h3><p>Concepts are added after the sessions where they come up.</p></div>') +
+        '<p class="how lex-how">Want to add a one-liner, note or poem to a concept? Send it to the organizer and name the concept it belongs to.</p>' +
+      "</div>"
+    );
+  }
+
+  function conceptPage(c) {
+    var sess = S.sessions.filter(function (x) { return hasConcept(x, c); });
+    var works = S.works.filter(function (w) { return hasConcept(w, c); });
+    var ones = works.filter(isOneLiner), longer = works.filter(function (w) { return !isOneLiner(w); });
+    var lines = sess.filter(function (x) { return x.line; });
+    var people = [];
+    works.forEach(function (w) { if (w.author && people.indexOf(w.author) < 0) people.push(w.author); });
+    sess.forEach(function (x) { circleNames(x).forEach(function (n) { if (people.indexOf(n) < 0) people.push(n); }); });
+    var cites = (ones.length ? oneLinerList(ones, true).replace(/<\/ol>$/, "") : "") +
+      (lines.length ? (ones.length ? "" : '<ol class="cites">') + lines.map(function (x) {
+        return "<li><blockquote>" + esc(x.line) + '</blockquote><p class="cite-src">— Line of the night · <a href="#' + sessionId(x) + '">Table No. ' + esc(x.no) + "</a>" + (x.date ? " · " + esc(x.date) : "") + "</p></li>";
+      }).join("") : "") + (ones.length || lines.length ? "</ol>" : "");
+    return (
+      '<div class="inner sess">' +
+        '<a class="back eyebrow" href="#lexicon">← The Lexicon</a>' +
+        '<div class="concept-head"><p class="eyebrow">Lexicon entry</p><h2 class="concept-term">' + esc(c.term) + "</h2>" +
+          (c.term_de ? '<p class="concept-de" lang="de">Deutsch: ' + esc(c.term_de) + "</p>" : "") +
+          (c.intro ? '<div class="prose">' + P(c.intro) + "</div>" : "") +
+        "</div>" +
+        '<section class="block"><p class="eyebrow">Citations · in the words of the table</p>' +
+          (cites || '<p class="pending">No citations yet. One-liners and lines of the night that touch this concept will gather here.</p>') + "</section>" +
+        (longer.length ? '<section class="block"><p class="eyebrow">Works · ' + longer.length + '</p><div class="works">' + longer.map(workCard).join("") + "</div></section>" : "") +
+        (sess.length ? '<section class="block"><p class="eyebrow">At the table</p><div class="m-sessions">' + sess.map(function (x) { return '<a href="#' + sessionId(x) + '">No. ' + esc(x.no) + " · " + esc(sessionTitle(x)) + "</a>"; }).join("") + "</div></section>" : "") +
+        (people.length ? '<section class="block"><p class="eyebrow">People who worked on it</p><div class="tags">' + people.map(function (n) { var m = memberByName(n); return m ? '<a class="tag" href="#' + memberId(m) + '">' + esc(n) + "</a>" : '<span class="tag">' + esc(n) + "</span>"; }).join("") + "</div></section>" : "") +
+        '<div class="actions"><button type="button" class="ed" data-act="edit" data-kind="lexicon" data-id="' + esc(c.id) + '">Edit entry</button>' +
+        '<button type="button" class="ed" data-act="add" data-kind="work" data-concept="' + esc(c.term) + '">+ Add a work on this concept</button></div>' +
+      "</div>"
+    );
+  }
+
+  function workPage(w) {
+    var s = sessionByNo(w.session);
+    var m = memberByName(w.author);
+    var one = isOneLiner(w);
+    return (
+      '<div class="inner sess">' +
+        (m ? '<a class="back eyebrow" href="#' + memberId(m) + '">← ' + esc(m.name) + "</a>" : '<a class="back eyebrow" href="#lexicon">← The Lexicon</a>') +
+        '<article class="work"' + (w.lang === "de" ? ' lang="de"' : "") + ">" +
+          '<p class="eyebrow">' + esc(w.type || "Work") + langChip(w) + "</p>" +
+          (w.title ? '<h2 class="work-title">' + esc(w.title) + "</h2>" : "") +
+          '<div class="work-text' + (one ? " one" : "") + '">' + esc(w.text) + "</div>" +
+          '<p class="credit">by <span>' + authorLink(w.author) + "</span>" + (w.date ? " · " + esc(w.date) : "") + (s ? ' · from <a href="#' + sessionId(s) + '">Table No. ' + esc(s.no) + "</a>" : "") + "</p>" +
+          tagChips(w) +
+        "</article>" +
+        '<p class="small">© ' + esc(w.author) + ". Published with the author’s permission. All rights stay with the author.</p>" +
+        '<button type="button" class="ed" data-act="edit" data-kind="work" data-id="' + esc(w.id) + '">Edit this work</button>' +
+      "</div>"
+    );
+  }
+
+  function memberPage(m) {
+    var ws = worksBy(m), ones = ws.filter(isOneLiner), longer = ws.filter(function (w) { return !isOneLiner(w); });
+    var sess = attended(m);
+    var link = safeUrl(m.link);
+    var concepts = [];
+    ws.forEach(function (w) { tagsOf(w).forEach(function (t) { var c = conceptFor(t); if (c && concepts.indexOf(c) < 0) concepts.push(c); }); });
+    return (
+      '<div class="inner sess">' +
+        '<a class="back eyebrow" href="#chamber">← The Chamber</a>' +
+        '<div class="member-head"><div class="tile" aria-hidden="true">' + esc(initials(m.name)) + '</div><div class="sess-title"><p class="eyebrow">Chamber of Members' + (m.since ? " · since " + esc(m.since) : "") + '</p><h2 class="member-name">' + esc(m.name) + "</h2>" +
+          (m.line ? '<p class="m-line">' + esc(m.line) + "</p>" : "") +
+          (link ? '<p class="credit"><a href="' + esc(link) + '" target="_blank" rel="noopener noreferrer">' + esc(link.replace(/^https?:\/\/(www\.)?/i, "").replace(/\/$/, "")) + "</a></p>" : "") +
+        "</div></div>" +
+        '<div class="sess-body"><div class="block">' +
+          (m.theory ? '<blockquote class="theory"><span class="eyebrow">Own theory</span><p>' + esc(m.theory) + "</p></blockquote>" : "") +
+          (m.bio ? '<div class="prose">' + P(m.bio) + "</div>" : "") +
+          (ones.length ? '<section class="block"><p class="eyebrow">One-liners</p>' + oneLinerList(ones, false) + "</section>" : "") +
+          (longer.length ? '<section class="block"><p class="eyebrow">Works</p><div class="works">' + longer.map(workCard).join("") + "</div></section>" : "") +
+          (!ws.length ? '<p class="pending">No works yet.</p>' : "") +
+        "</div>" +
+        '<aside class="circle" aria-label="Connections">' +
+          '<p class="eyebrow">At the table</p>' + (sess.length ? '<div class="m-sessions">' + sess.map(function (x) { return '<a href="#' + sessionId(x) + '">No. ' + esc(x.no) + " · " + esc(sessionTitle(x)) + "</a>"; }).join("") + "</div>" : '<p class="pending">No sessions recorded yet.</p>') +
+          '<p class="eyebrow">Concepts</p>' + (concepts.length ? '<div class="tags">' + concepts.map(function (c) { return '<a class="tag" href="#' + conceptId(c) + '">' + esc(c.term) + "</a>"; }).join("") + "</div>" : '<p class="pending">None yet.</p>') +
+        "</aside></div>" +
+        '<div class="actions"><button type="button" class="ed" data-act="edit" data-kind="member" data-id="' + esc(m.id) + '">Edit member</button>' +
+        '<button type="button" class="ed" data-act="add" data-kind="work" data-author="' + esc(m.name) + '">+ Add a work by ' + esc(m.name) + "</button></div>" +
+      "</div>"
+    );
+  }
+
+  function rulesBlock() {
+    var r = (S.rules.items || []).filter(Boolean);
+    if (!r.length) return "";
+    return (
+      '<div class="inner section">' +
+        '<div class="lead"><p class="eyebrow">Table rules</p><h2>How we sit together</h2></div>' +
+        '<ul class="rules">' + r.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>" +
+        '<button type="button" class="ed" data-act="edit" data-kind="rules">Edit table rules</button>' +
+      "</div>"
+    );
+  }
+
+  function leftoversAll() {
+    var rows = [];
+    S.sessions.forEach(function (x) { (x.leftovers || []).filter(Boolean).forEach(function (q) { rows.push({ q: q, x: x }); }); });
+    if (!rows.length) return "";
+    return (
+      '<div class="inner section leftovers-all"><div class="lead"><p class="eyebrow">Leftovers</p><h2>Questions waiting for a table</h2>' +
+      '<p class="intro">What the evenings raised but didn’t answer. Some of them will become future sessions.</p></div>' +
+      '<ul class="left-list">' + rows.map(function (r) { return '<li><span class="q-text">' + esc(r.q) + '</span><a class="credit" href="#' + sessionId(r.x) + '">from No. ' + esc(r.x.no) + "</a></li>"; }).join("") + "</ul></div>"
+    );
   }
 
   function render() {
@@ -682,6 +977,10 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
         '<section data-view="club">' + club() + "</section>" +
         '<section data-view="records" hidden>' + records() + "</section>" +
         '<section data-view="session" hidden><div id="session-page"></div></section>' +
+        '<section data-view="lexicon" hidden>' + lexicon() + "</section>" +
+        '<section data-view="concept" hidden><div id="concept-page"></div></section>' +
+        '<section data-view="work" hidden><div id="work-page"></div></section>' +
+        '<section data-view="member" hidden><div id="member-page"></div></section>' +
         '<section data-view="chamber" hidden>' + chamber() + "</section>" +
         '<section data-view="letter" hidden>' + letter() + "</section>" +
         '<section data-view="founder" hidden>' + founder() + "</section>" +
@@ -703,7 +1002,9 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     var v, target = null, nav;
     var sess = /^session-/.test(h) ? S.sessions.filter(function (x) { return sessionId(x) === h; })[0] : null;
     if (sess) { v = "session"; nav = "records"; document.getElementById("session-page").innerHTML = sessionPage(sess); }
-    else if (/^member-/.test(h) && document.getElementById(h)) { v = "chamber"; target = document.getElementById(h); }
+    else if (/^member-/.test(h) && memberBySlug(h.slice(7))) { v = "member"; nav = "chamber"; document.getElementById("member-page").innerHTML = memberPage(memberBySlug(h.slice(7))); }
+    else if (/^concept-/.test(h) && conceptBySlug(h.slice(8))) { v = "concept"; nav = "lexicon"; document.getElementById("concept-page").innerHTML = conceptPage(conceptBySlug(h.slice(8))); }
+    else if (/^work-/.test(h) && workById(h.slice(5))) { v = "work"; nav = memberByName(workById(h.slice(5)).author) ? "chamber" : "lexicon"; document.getElementById("work-page").innerHTML = workPage(workById(h.slice(5))); }
     else v = ALL_VIEWS.indexOf(h) >= 0 ? h : "club";
     nav = nav || v;
     Array.prototype.forEach.call(document.querySelectorAll("[data-view]"), function (s) { s.hidden = s.getAttribute("data-view") !== v; });
@@ -756,6 +1057,8 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       ["line", "Line of the night (optional)", "text", "One sentence from the evening, quoted only with the speaker\u2019s consent."],
       ["threads", "Threads: what came up", "textarea", "Leave a blank line between paragraphs."],
       ["insights", "Insights", "lines", "One insight per line."],
+      ["concepts", "Concepts", "lines", "Lexicon terms this session touched, one per line."],
+      ["leftovers", "Leftovers", "lines", "Questions the evening raised but didn\u2019t answer, one per line."],
       ["circle", "The Circle", "lines", "One name per line, only people who agreed to be named. Names that match a Chamber member link to their entry."],
       ["table", "Note on the table (optional)", "text", "e.g. 7 people, 2 preferred not to be named"]
     ] },
@@ -782,6 +1085,24 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       ["blogUrl", "Blog link", "url", "A full address starting with https://"],
       ["blogNote", "One line about the blog", "text"]
     ] },
+    lexicon: { key: "lexicon", title: "Lexicon entry", append: true, fields: [
+      ["term", "Term (English)", "text"],
+      ["term_de", "Term (German)", "text"],
+      ["intro", "Short introduction (optional)", "textarea", "A sentence or two on why this concept matters to the club."]
+    ] },
+    work: { key: "works", title: "Work", fields: [
+      ["author", "Author", "text", "Use the exact name from the Chamber so the work appears on their page."],
+      ["type", "Kind", "text", "One-liner, Poem, Note, Essay, Letter \u2026 anything goes."],
+      ["title", "Title (optional)", "text"],
+      ["text", "Text", "textarea", "Line breaks are kept, so poems keep their shape."],
+      ["lang", "Language", "select", [["en", "English"], ["de", "Deutsch"]]],
+      ["date", "Date", "text", "e.g. November 2026"],
+      ["session", "Written after session (optional)", "text", "Session number, e.g. 01"],
+      ["concepts", "Concepts", "lines", "One Lexicon term per line. Terms not yet in the Lexicon show without a link."]
+    ] },
+    rules: { key: "rules", single: true, title: "Table rules", fields: [
+      ["items", "Rules", "lines", "One rule per line."]
+    ] },
     legal: { key: "legal", single: true, title: "Legal details", fields: [
       ["name", "Name (Impressum)", "text"],
       ["street", "Street and number", "text", "A postal address where you can receive letters."],
@@ -807,7 +1128,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     var ctl;
     if (type === "textarea") ctl = '<textarea id="' + id + '" name="' + name + '">' + esc(v || "") + "</textarea>";
     else if (type === "lines") ctl = '<textarea id="' + id + '" name="' + name + '">' + esc((v || []).join("\n")) + "</textarea>";
-    else if (type === "select") ctl = '<select id="' + id + '" name="' + name + '">' + extra.map(function (o) { return '<option value="' + o + '"' + (v === o ? " selected" : "") + ">" + o.charAt(0).toUpperCase() + o.slice(1) + "</option>"; }).join("") + "</select>";
+    else if (type === "select") ctl = '<select id="' + id + '" name="' + name + '">' + extra.map(function (o) { var val = Array.isArray(o) ? o[0] : o, lab = Array.isArray(o) ? o[1] : o.charAt(0).toUpperCase() + o.slice(1); return '<option value="' + val + '"' + (v === val ? " selected" : "") + ">" + lab + "</option>"; }).join("") + "</select>";
     else ctl = '<input id="' + id + '" name="' + name + '" type="' + (type === "url" ? "url" : "text") + '" value="' + esc(v || "") + '">';
     return '<div class="field"><label for="' + id + '">' + esc(label) + "</label>" + ctl + hint + "</div>";
   }
@@ -819,11 +1140,12 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   }
 
   var current = null;
-  function openForm(kind, id, isNew) {
+  function openForm(kind, id, isNew, prefill) {
     var sc = SCHEMA[kind];
     var obj;
     if (sc.single) obj = S[sc.key] || {};
-    else if (isNew) obj = kind === "session" ? { no: nextNo(), status: "upcoming", table: "Up to 8 people" } : kind === "letter" ? { no: String(S.letters.length + 1).padStart(2, "0") } : {};
+    else if (isNew) obj = kind === "session" ? { no: nextNo(), status: "upcoming", format: "Table" } : kind === "letter" ? { no: String(S.letters.length + 1).padStart(2, "0") } : kind === "work" ? { lang: "en", type: "One-liner" } : {};
+    if (isNew && prefill) Object.keys(prefill).forEach(function (k) { if (prefill[k]) obj[k] = prefill[k]; });
     else obj = S[sc.key].filter(function (x) { return x.id === id; })[0];
     if (!obj) return;
     current = { kind: kind, id: id, isNew: isNew };
@@ -869,9 +1191,14 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   });
 
   app.addEventListener("click", function (e) {
+    var j = e.target.closest("[data-jump]");
+    if (j) { var t = document.getElementById(j.getAttribute("data-jump")); if (t) t.scrollIntoView({ block: "start" }); return; }
     var b = e.target.closest("[data-act]");
     if (!b || !ART) return;
-    openForm(b.getAttribute("data-kind"), b.getAttribute("data-id"), b.getAttribute("data-act") === "add");
+    var pre = {};
+    if (b.getAttribute("data-author")) pre.author = b.getAttribute("data-author");
+    if (b.getAttribute("data-concept")) pre.concepts = [b.getAttribute("data-concept")];
+    openForm(b.getAttribute("data-kind"), b.getAttribute("data-id"), b.getAttribute("data-act") === "add", pre);
   });
 
   var SKELETON = '<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>';

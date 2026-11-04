@@ -161,6 +161,47 @@ h3 { font-size: 1.5rem; line-height: 1.15; }
 .ins li { position: relative; padding-left: 1.4rem; }
 .ins li::before { content: ""; position: absolute; left: 0; top: .62em; width: .55rem; height: .55rem; background: var(--jupiter); }
 
+/* records index and session pages */
+.rec-list { display: grid; padding-bottom: 3rem; }
+.rec-card { display: grid; grid-template-columns: 9rem minmax(0, 1fr) auto; gap: 1.5rem; padding-block: 2.25rem; border-bottom: 1px solid var(--rule); text-decoration: none; color: inherit; align-items: start; }
+.rec-card .num { font-family: var(--stencil); font-weight: 700; font-size: clamp(3.5rem, 7vw, 5rem); line-height: .82; font-variant-numeric: tabular-nums; }
+.rec-card:hover .rq { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .18em; }
+.rec-card .go { font-family: var(--mono); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding-top: .3rem; white-space: nowrap; }
+.rq { font-size: clamp(1.55rem, 3vw, 2.25rem); line-height: 1.12; }
+.line { font-style: italic; font-size: 1.15rem; color: var(--muted); }
+.credit { font-family: var(--mono); font-size: .78rem; color: var(--muted); }
+.credit span { color: var(--ink); }
+.sess { display: grid; gap: 2.25rem; padding-block: 2.25rem 4.5rem; }
+.back { text-decoration: none; justify-self: start; }
+.back:hover { color: var(--ink); }
+.sess-head { display: grid; grid-template-columns: 9rem minmax(0, 1fr); gap: 1.5rem; padding-bottom: 2rem; border-bottom: 2px solid var(--ink); }
+.sess-head .num { font-family: var(--stencil); font-weight: 700; font-size: clamp(4rem, 9vw, 6.5rem); line-height: .8; }
+.sess-title { display: grid; gap: .9rem; min-width: 0; }
+.sess-q { font-size: clamp(2.2rem, 5vw, 3.8rem); line-height: 1.04; }
+.sess-topic { font-family: var(--mono); font-size: .8rem; color: var(--muted); }
+.night { margin: 0; display: grid; gap: .6rem; max-width: 44rem; }
+.night blockquote { margin: 0; }
+.night p { font-family: var(--display); font-size: clamp(1.6rem, 3.4vw, 2.5rem); line-height: 1.15; }
+.night p::before { content: "\201C"; } .night p::after { content: "\201D"; }
+.night mark { background: linear-gradient(transparent 58%, var(--hl) 58%); color: inherit; }
+.sess-body { display: grid; grid-template-columns: minmax(0, 1.6fr) minmax(0, 1fr); gap: 2.5rem 4rem; align-items: start; }
+.circle { display: grid; gap: .9rem; padding: 1.4rem; border: 1.5px solid var(--ink); min-width: 0; }
+.circle ul { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: .5rem; }
+.circle li > a, .circle li > span { display: inline-flex; align-items: center; gap: .5rem; font-family: var(--mono); font-size: .78rem; padding: .3rem .65rem .3rem .3rem; border: 1px solid var(--rule); text-decoration: none; }
+.circle li > a:hover { border-color: var(--ink); }
+.circle .ini { width: 1.7rem; height: 1.7rem; display: grid; place-items: center; background: var(--jupiter); color: var(--on-jupiter); font-family: var(--stencil); font-weight: 700; font-size: .72rem; }
+.circle li > span .ini { background: var(--paper-2); color: var(--ink); }
+.pager { display: flex; justify-content: space-between; gap: 1.5rem; border-top: 1px solid var(--rule); padding-top: 1.25rem; }
+.pager a { display: grid; gap: .3rem; text-decoration: none; max-width: 48%; }
+.pager a > span:last-child { font-family: var(--display); font-size: 1.25rem; line-height: 1.15; }
+.pager a:hover > span:last-child { text-decoration: underline; text-decoration-thickness: 1px; }
+.pager .older { margin-left: auto; text-align: right; }
+.next h3 a { text-decoration: none; } .next h3 a:hover { text-decoration: underline; text-decoration-thickness: 1px; }
+.m-sessions { display: grid; gap: .3rem; }
+.m-sessions a { font-size: .98rem; }
+.member { scroll-margin-top: 7rem; }
+.member.flash { outline: 3px solid var(--jupiter); outline-offset: 4px; }
+
 /* chamber */
 .members { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: 1.5rem; padding-block: 2.5rem 4rem; }
 .member { border: 1.5px solid var(--ink); padding: 1.6rem; display: grid; gap: 1rem; align-content: start; min-width: 0; }
@@ -250,12 +291,15 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   .next .inner { grid-template-columns: auto minmax(0, 1fr); }
   .next .inner .btn { grid-column: 1 / -1; justify-self: start; }
   .founder { grid-template-columns: minmax(0, 1fr); }
+  .sess-body { grid-template-columns: minmax(0, 1fr); }
   .f-side { grid-template-columns: 7rem minmax(0, 1fr); align-items: end; }
   .f-tile { font-size: 3rem; }
 }
 @media (max-width: 560px) {
   .timeline { grid-template-columns: minmax(0, 1fr); }
-  .rec, .letter { grid-template-columns: minmax(0, 1fr); gap: .75rem; }
+  .rec, .letter, .rec-card, .sess-head { grid-template-columns: minmax(0, 1fr); gap: .75rem; }
+  .rec-card .go { display: none; }
+  .pager { flex-direction: column; } .pager a { max-width: 100%; } .pager .older { margin-left: 0; text-align: left; }
   .fields > div { grid-template-columns: minmax(0, 1fr); gap: .2rem; }
   .brand span { display: none; }
   .views a { padding: .45rem .5rem; font-size: .66rem; letter-spacing: .05em; }
@@ -269,6 +313,8 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
 <script type="application/json" id="toic-data">{
  "settings": {
   "meetupUrl": "",
+  "lumaUrl": "",
+  "primary": "meetup",
   "letterUrl": "",
   "when": "Thursdays 18:00–20:00"
  },
@@ -278,12 +324,15 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
    "no": "01",
    "status": "upcoming",
    "date": "Thursday, 18:00–20:00 · date to be announced",
-   "place": "A café in St. Pauli · venue to be confirmed",
+   "format": "Table",
+   "place": "",
    "topic": "",
    "question": "",
+   "line": "",
    "threads": "",
    "insights": [],
-   "table": "Up to 8 people"
+   "circle": [],
+   "table": ""
   }
  ],
  "members": [
@@ -349,6 +398,27 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
 
   function joinUrl() { return safeUrl(S.settings.meetupUrl) || MEETUP_SEARCH; }
   function letterUrl() { return safeUrl(S.settings.letterUrl); }
+  function lumaUrl() { return safeUrl(S.settings.lumaUrl); }
+  function platforms() {
+    var meet = { name: "Meetup", url: joinUrl() };
+    var luma = lumaUrl() ? { name: "Luma", url: lumaUrl() } : null;
+    if (S.settings.primary === "luma" && luma) return safeUrl(S.settings.meetupUrl) ? [luma, meet] : [luma];
+    return luma ? [meet, luma] : [meet];
+  }
+  function mainPlatform() { return platforms()[0].name; }
+  function joinButtons(c1, c2, verb) {
+    return platforms().map(function (p, i) { return ext(p.url, (verb || "Join") + " on " + p.name, i ? c2 : c1); }).join("");
+  }
+  function slug(n) { return String(n || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "x"; }
+  function memberByName(name) { var k = slug(name); return S.members.filter(function (m) { return slug(m.name) === k; })[0]; }
+  function sessionTitle(x) { return x.question || x.topic || "Question to be announced"; }
+  function sessionId(x) { return "session-" + slug(x.no || x.id); }
+  function circleNames(x) { return (x.circle || []).filter(Boolean); }
+  function metaLine(x) {
+    var up = x.status === "upcoming";
+    return '<div class="rec-meta"><span class="chip' + (up ? " up" : "") + '">' + (up ? "Upcoming" : "Recorded") + "</span><span>No. " + esc(x.no) + "</span>" +
+      (x.date ? "<span>" + esc(x.date) + "</span>" : "") + (x.format ? "<span>" + esc(x.format) + "</span>" : "") + "</div>";
+  }
 
   /* ---------- views ---------- */
   function club() {
@@ -359,9 +429,9 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     var nextBlock = next ? (
       '<div class="next"><div class="inner">' +
         '<div class="num" aria-hidden="true">' + esc(next.no) + "</div>" +
-        '<div class="body"><p class="eyebrow">Next at the table</p><h3>' + (next.topic ? esc(next.topic) : "Topic to be announced") + "</h3>" +
-        '<p class="meta">' + esc([next.date, next.place].filter(Boolean).join(" · ")) + "</p></div>" +
-        ext(joinUrl(), "RSVP on Meetup", "btn ink") +
+        '<div class="body"><p class="eyebrow">Next at the table</p><h3><a href="#' + sessionId(next) + '">' + esc(sessionTitle(next)) + "</a></h3>" +
+        '<p class="meta">' + esc([next.date, next.place ? "Hosted at " + next.place : ""].filter(Boolean).join(" · ")) + "</p></div>" +
+        '<div class="actions">' + joinButtons("btn ink", "btn", "RSVP") + "</div>" +
       "</div></div>") : "";
     return (
       '<div class="hero"><div class="inner">' +
@@ -369,7 +439,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
           '<p class="eyebrow">Hamburg · St. Pauli · Thursdays</p>' +
           '<h1><span style="--i:0">Do you have</span> <span style="--i:1">your own</span> <span style="--i:2">theory?</span></h1>' +
           '<p class="lede">A small table for free thinkers. Once a week, up to eight people sit down with one question and think out loud, in their own words.</p>' +
-          '<div class="actions">' + ext(joinUrl(), "Join on Meetup", "btn solid") + '<a class="btn" href="#records">Read the records</a></div>' +
+          '<div class="actions">' + joinButtons("btn solid", "btn", "Join") + '<a class="btn" href="#records">Read the records</a></div>' +
         "</div>" +
         '<div class="hero-mark"><img class="mark" src="' + MARK + '" alt="The club mark: IO above 1O"><img class="word" src="' + WORD + '" alt="1he 0dinary 1nquiry 0lub"></div>' +
       "</div></div>" +
@@ -389,7 +459,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
         '<div class="lead"><p class="eyebrow">A Thursday at the table</p><h2>Two hours, one question</h2></div>' +
         '<ol class="timeline">' +
           '<li><span class="t">18:00</span><h3>We sit down</h3><p>One table in a St. Pauli café, up to eight people. A drink or two is plenty.</p></li>' +
-          '<li><span class="t">18:10</span><h3>One question</h3><p>A focused topic, announced a few days before on Meetup.</p></li>' +
+          '<li><span class="t">18:10</span><h3>One question</h3><p>A focused question, announced a few days before on ' + mainPlatform() + '.</p></li>' +
           '<li><span class="t">→20:00</span><h3>Your own words</h3><p>Everyone thinks from their own life. No famous names needed to make a point.</p></li>' +
           '<li><span class="t">After</span><h3>The record</h3><p>The question, the threads and what we found go into the minute-book.</p></li>' +
         "</ol>" +
@@ -407,7 +477,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
 
       '<div class="band"><div class="inner">' +
         '<div class="copy"><p class="eyebrow">The Thursday Letter</p><h2>One short letter after each session</h2><p>The question we asked, the threads worth keeping, and the next topic. Nothing else.</p></div>' +
-        '<div class="actions">' + (letterUrl() ? ext(letterUrl(), "Subscribe", "btn jup") : ext(joinUrl(), "Get it via Meetup", "btn jup")) + '<a class="btn" href="#letter">Past letters</a></div>' +
+        '<div class="actions">' + (letterUrl() ? ext(letterUrl(), "Subscribe", "btn jup") : lumaUrl() ? ext(lumaUrl(), "Subscribe on Luma", "btn jup") : ext(joinUrl(), "Get it via Meetup", "btn jup")) + '<a class="btn" href="#letter">Past letters</a></div>' +
       "</div></div>"
     );
   }
@@ -415,30 +485,67 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   function records() {
     var n = S.sessions.length;
     var list = S.sessions.map(function (x) {
-      var ins = (x.insights || []).filter(Boolean);
-      var up = x.status === "upcoming";
+      var c = circleNames(x).length;
       return (
-        '<article class="rec" id="session-' + esc(x.no) + '">' +
+        '<a class="rec-card" href="#' + sessionId(x) + '">' +
           '<div class="num" aria-hidden="true">' + esc(x.no) + "</div>" +
-          '<div class="rec-body">' +
-            '<div class="rec-meta"><span class="chip' + (up ? " up" : "") + '">' + (up ? "Upcoming" : "Recorded") + "</span><span>No. " + esc(x.no) + "</span>" + (x.date ? "<span>" + esc(x.date) + "</span>" : "") + (x.place ? "<span>" + esc(x.place) + "</span>" : "") + "</div>" +
-            "<h3>" + (x.topic ? esc(x.topic) : "Topic to be announced") + "</h3>" +
-            (x.question ? '<p class="q">' + esc(x.question) + "</p>" : "") +
-            '<dl class="fields">' +
-              "<div><dt>Threads</dt><dd>" + (x.threads ? P(x.threads) : pend(up ? "Written up after the session" : "Not recorded")) + "</dd></div>" +
-              "<div><dt>Insights</dt><dd>" + (ins.length ? '<ul class="ins">' + ins.map(function (i) { return "<li>" + esc(i) + "</li>"; }).join("") + "</ul>" : pend(up ? "Written up after the session" : "Not recorded")) + "</dd></div>" +
-              "<div><dt>At the table</dt><dd>" + (x.table ? esc(x.table) : pend("Up to 8")) + "</dd></div>" +
-            "</dl>" +
-            '<button type="button" class="ed" data-act="edit" data-kind="session" data-id="' + esc(x.id) + '">Edit this record</button>' +
+          '<div class="rec-body">' + metaLine(x) +
+            '<h3 class="rq">' + esc(sessionTitle(x)) + "</h3>" +
+            (x.line ? '<p class="line">“' + esc(x.line) + "”</p>" : "") +
+            '<p class="credit">' + (x.place ? "Hosted at <span>" + esc(x.place) + "</span>" : "Venue to be announced") + (c ? " · " + c + " in the circle" : "") + "</p>" +
           "</div>" +
-        "</article>"
+          '<span class="go" aria-hidden="true">Open →</span>' +
+        "</a>"
       );
     }).join("");
     return (
       '<div class="inner page-head"><p class="eyebrow">Records · ' + n + (n === 1 ? " session" : " sessions") + "</p><h2>The minute-book</h2>" +
-      '<p class="intro">After each session we write down the question, the threads that came up and what we found. Names appear only with consent.</p>' +
+      '<p class="intro">Every session is one question. Afterwards we write down the threads, what we found, and who was in the circle. Names appear only with consent.</p>' +
       '<button type="button" class="ed" data-act="add" data-kind="session">+ Add a session</button></div>' +
-      '<div class="inner recs">' + (list || '<div class="empty"><h3>No sessions yet</h3><p>The first record appears here after session No. 01.</p></div>') + "</div>"
+      '<div class="inner rec-list">' + (list || '<div class="empty"><h3>No sessions yet</h3><p>The first record appears here after session No. 01.</p></div>') + "</div>"
+    );
+  }
+
+  function sessionPage(x) {
+    var up = x.status === "upcoming";
+    var ins = (x.insights || []).filter(Boolean);
+    var names = circleNames(x);
+    var i = S.sessions.indexOf(x);
+    var newer = i > 0 ? S.sessions[i - 1] : null, older = S.sessions[i + 1] || null;
+    var circle = names.map(function (nm) {
+      var m = memberByName(nm);
+      var inner = '<span class="ini" aria-hidden="true">' + esc(initials(nm)) + "</span>" + esc(nm);
+      return "<li>" + (m ? '<a href="#member-' + slug(m.name) + '">' + inner + "</a>" : "<span>" + inner + "</span>") + "</li>";
+    }).join("");
+    var pager = (newer || older) ? (
+      '<nav class="pager" aria-label="More sessions">' +
+        (newer ? '<a href="#' + sessionId(newer) + '"><span class="eyebrow">← Newer · No. ' + esc(newer.no) + "</span><span>" + esc(sessionTitle(newer)) + "</span></a>" : "") +
+        (older ? '<a class="older" href="#' + sessionId(older) + '"><span class="eyebrow">Older · No. ' + esc(older.no) + " →</span><span>" + esc(sessionTitle(older)) + "</span></a>" : "") +
+      "</nav>") : "";
+    return (
+      '<div class="inner sess">' +
+        '<a class="back eyebrow" href="#records">← The minute-book</a>' +
+        '<div class="sess-head"><div class="num" aria-hidden="true">' + esc(x.no) + '</div><div class="sess-title">' + metaLine(x) +
+          '<h2 class="sess-q">' + esc(sessionTitle(x)) + "</h2>" +
+          (x.topic && x.question ? '<p class="sess-topic">Theme: ' + esc(x.topic) + "</p>" : "") +
+          '<p class="credit">' + (x.place ? "Hosted at <span>" + esc(x.place) + "</span>" : "Venue to be announced") + "</p>" +
+          (up ? '<div class="actions">' + joinButtons("btn ink", "btn", "RSVP") + "</div>" : "") +
+        "</div></div>" +
+        (x.line ? '<figure class="night"><figcaption class="eyebrow">Line of the night</figcaption><blockquote><p><mark>' + esc(x.line) + "</mark></p></blockquote></figure>" : "") +
+        '<div class="sess-body">' +
+          '<dl class="fields">' +
+            "<div><dt>Threads</dt><dd>" + (x.threads ? P(x.threads) : pend(up ? "Written up after the session" : "Not recorded")) + "</dd></div>" +
+            "<div><dt>Insights</dt><dd>" + (ins.length ? '<ul class="ins">' + ins.map(function (t) { return "<li>" + esc(t) + "</li>"; }).join("") + "</ul>" : pend(up ? "Written up after the session" : "Not recorded")) + "</dd></div>" +
+            (x.table ? "<div><dt>At the table</dt><dd>" + esc(x.table) + "</dd></div>" : "") +
+          "</dl>" +
+          '<aside class="circle" aria-label="The Circle"><p class="eyebrow">The Circle' + (names.length ? " · " + names.length : "") + "</p>" +
+            (names.length ? "<ul>" + circle + "</ul>" : '<p class="pending">' + (up ? "The circle forms on the night." : "No names recorded.") + "</p>") +
+            '<p class="small">Names appear only with consent. Highlighted names have a page in the Chamber.</p>' +
+          "</aside>" +
+        "</div>" +
+        pager +
+        '<button type="button" class="ed" data-act="edit" data-kind="session" data-id="' + esc(x.id) + '">Edit this record</button>' +
+      "</div>"
     );
   }
 
@@ -446,12 +553,14 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     var n = S.members.length;
     var cards = S.members.map(function (m) {
       var link = safeUrl(m.link);
+      var sess = S.sessions.filter(function (x) { return circleNames(x).some(function (nm) { return slug(nm) === slug(m.name); }); });
       var foot = [m.since ? "Member since " + esc(m.since) : "", link ? '<a href="' + esc(link) + '" target="_blank" rel="noopener noreferrer">' + esc(link.replace(/^https?:\/\/(www\.)?/i, "").replace(/\/$/, "")) + "</a>" : ""].filter(Boolean).join(" · ");
       return (
-        '<article class="member">' +
+        '<article class="member" id="member-' + slug(m.name) + '">' +
           '<div class="m-head"><div class="tile" aria-hidden="true">' + esc(initials(m.name)) + "</div><div><h3>" + esc(m.name) + "</h3>" + (m.line ? '<p class="m-line">' + esc(m.line) + "</p>" : "") + "</div></div>" +
           (m.theory ? '<blockquote class="theory"><span class="eyebrow">Own theory</span><p>' + esc(m.theory) + "</p></blockquote>" : "") +
           (m.bio ? '<div class="prose">' + P(m.bio) + "</div>" : "") +
+          (sess.length ? '<div class="m-sessions"><span class="eyebrow">At the table</span>' + sess.map(function (x) { return '<a href="#' + sessionId(x) + '">No. ' + esc(x.no) + " \u00b7 " + esc(sessionTitle(x)) + "</a>"; }).join("") + "</div>" : "") +
           (foot ? '<p class="m-foot">' + foot + "</p>" : "") +
           '<button type="button" class="ed" data-act="edit" data-kind="member" data-id="' + esc(m.id) + '">Edit member</button>' +
         "</article>"
@@ -461,7 +570,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       '<article class="member join"><p class="eyebrow">Your page here</p><h3>Join the chamber</h3>' +
       "<p>Came to a Thursday and want a place here? Send the organizer four things:</p>" +
       "<ul><li>your name, as you'd like it shown</li><li>one line on what you do, by profession or by passion</li><li>your own theory, in one sentence</li><li>a short bio of up to 80 words</li></ul>" +
-      '<p class="m-foot">Message us on Meetup or bring it to the next session.</p></article>';
+      '<p class="m-foot">Message us on ' + mainPlatform() + ' or bring it to the next session.</p></article>';
     return (
       '<div class="inner page-head"><p class="eyebrow">Chamber of Members · ' + n + "</p><h2>The people at the table</h2>" +
       '<p class="intro">Short biographies of the people who think with us. Each one names a theory of their own.</p>' +
@@ -478,12 +587,12 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
         '<button type="button" class="ed" data-act="edit" data-kind="letter" data-id="' + esc(l.id) + '">Edit letter</button></div></article>'
       );
     }).join("");
-    var sub = letterUrl() ? ext(letterUrl(), "Subscribe to the letter", "btn ink") : ext(joinUrl(), "Join on Meetup to receive it", "btn ink");
+    var sub = letterUrl() ? ext(letterUrl(), "Subscribe to the letter", "btn ink") : lumaUrl() ? ext(lumaUrl(), "Subscribe on Luma", "btn ink") : ext(joinUrl(), "Join on Meetup to receive it", "btn ink");
     return (
       '<div class="inner page-head"><p class="eyebrow">The Thursday Letter</p><h2>Letters from the table</h2>' +
       '<p class="intro">After each session, one short letter: the question we asked, the threads worth keeping, and the next topic.</p>' +
       '<div class="actions">' + sub + "</div>" +
-      '<p class="how">' + (letterUrl() ? "Subscribing opens our newsletter page in a new tab. Every letter is also archived here." : "Until the email list opens, every letter goes out to members of our Meetup group and is archived here.") + "</p>" +
+      '<p class="how">' + (letterUrl() ? "Subscribing opens our newsletter page in a new tab. Every letter is also archived here." : lumaUrl() ? "Subscribe to our Luma calendar and each letter arrives by email. Every letter is also archived here." : "Until the email list opens, every letter goes out to members of our Meetup group and is archived here.") + "</p>" +
       '<button type="button" class="ed" data-act="add" data-kind="letter">+ Add a letter</button></div>' +
       '<div class="inner letters">' + (list || '<div class="empty"><h3>No letters yet</h3><p>The first letter goes out after session No. 01.</p></div>') + "</div>"
     );
@@ -543,7 +652,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
         "<p>Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO. Unser berechtigtes Interesse liegt in einer sicheren und zuverlässigen Bereitstellung der Website.</p>" +
         "<p>Dabei können Daten in die USA übermittelt werden. GitHub erklärt, das EU-U.S. Data Privacy Framework einzuhalten; die Übermittlung stützt sich damit auf den Angemessenheitsbeschluss der EU-Kommission nach Art. 45 DSGVO. Weitere Informationen gibt das GitHub General Privacy Statement:</p>" +
         '<p class="src">https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement</p>' +
-        "<h3>4. Externe Links</h3><p>Diese Website verlinkt auf externe Angebote, etwa auf unsere Meetup-Gruppe, auf einen Newsletter-Dienst oder auf den Blog des Gründers. Daten werden an diese Anbieter erst übertragen, wenn Sie einen solchen Link anklicken. Ab dann gilt die Datenschutzerklärung des jeweiligen Anbieters.</p>" +
+        "<h3>4. Externe Links</h3><p>Diese Website verlinkt auf externe Angebote, etwa auf unsere Seiten bei Meetup oder Luma, auf einen Newsletter-Dienst oder auf den Blog des Gründers. Daten werden an diese Anbieter erst übertragen, wenn Sie einen solchen Link anklicken. Ab dann gilt die Datenschutzerklärung des jeweiligen Anbieters.</p>" +
         "<h3>5. Kontakt per E-Mail oder Nachricht</h3><p>Wenn Sie uns per E-Mail oder über Meetup schreiben, verarbeiten wir Ihre Angaben (zum Beispiel Name, E-Mail-Adresse und Inhalt der Nachricht), um Ihre Anfrage zu beantworten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO, bei Anfragen zur Teilnahme Art. 6 Abs. 1 lit. b DSGVO. Wir löschen die Angaben, sobald sie für diesen Zweck nicht mehr benötigt werden.</p>" +
         "<h3>6. Chamber of Members und Sitzungsprotokolle</h3><p>In der „Chamber of Members“ veröffentlichen wir Name, Kurzbiografie, eine persönliche These und gegebenenfalls einen Link nur, wenn die betreffende Person uns diese Angaben selbst zur Veröffentlichung geschickt hat. In den Sitzungsprotokollen nennen wir Teilnehmende nur mit ihrer Einwilligung. Rechtsgrundlage ist Art. 6 Abs. 1 lit. a DSGVO.</p>" +
         "<p>Sie können Ihre Einwilligung jederzeit mit Wirkung für die Zukunft widerrufen (Art. 7 Abs. 3 DSGVO). Eine kurze Nachricht genügt; wir entfernen Ihre Angaben dann von der Website. Da der Quelltext der Website in einem öffentlichen GitHub-Repository liegt, können frühere Fassungen in dessen Versionsgeschichte sichtbar bleiben. Auf Wunsch entfernen wir Ihre Angaben auch dort, soweit das technisch möglich ist.</p>" +
@@ -572,6 +681,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       "<main>" +
         '<section data-view="club">' + club() + "</section>" +
         '<section data-view="records" hidden>' + records() + "</section>" +
+        '<section data-view="session" hidden><div id="session-page"></div></section>' +
         '<section data-view="chamber" hidden>' + chamber() + "</section>" +
         '<section data-view="letter" hidden>' + letter() + "</section>" +
         '<section data-view="founder" hidden>' + founder() + "</section>" +
@@ -590,10 +700,17 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   /* ---------- routing ---------- */
   function route(scroll) {
     var h = location.hash.replace(/^#/, "");
-    var v = ALL_VIEWS.indexOf(h) >= 0 ? h : "club";
+    var v, target = null, nav;
+    var sess = /^session-/.test(h) ? S.sessions.filter(function (x) { return sessionId(x) === h; })[0] : null;
+    if (sess) { v = "session"; nav = "records"; document.getElementById("session-page").innerHTML = sessionPage(sess); }
+    else if (/^member-/.test(h) && document.getElementById(h)) { v = "chamber"; target = document.getElementById(h); }
+    else v = ALL_VIEWS.indexOf(h) >= 0 ? h : "club";
+    nav = nav || v;
     Array.prototype.forEach.call(document.querySelectorAll("[data-view]"), function (s) { s.hidden = s.getAttribute("data-view") !== v; });
-    Array.prototype.forEach.call(document.querySelectorAll(".views a"), function (a) { if (a.getAttribute("data-v") === v) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
-    if (scroll) window.scrollTo(0, 0);
+    Array.prototype.forEach.call(document.querySelectorAll(".views a"), function (a) { if (a.getAttribute("data-v") === nav) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
+    Array.prototype.forEach.call(document.querySelectorAll(".member.flash"), function (el) { el.classList.remove("flash"); });
+    if (target) { target.classList.add("flash"); target.scrollIntoView({ block: "start" }); }
+    else if (scroll) window.scrollTo(0, 0);
   }
 
   render();
@@ -631,13 +748,16 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     session: { key: "sessions", title: "Session record", fields: [
       ["no", "Number", "text", "Two digits, e.g. 02"],
       ["status", "Status", "select", ["upcoming", "recorded"]],
+      ["question", "The question", "textarea", "This is the title of the session, e.g. When does work actually end?"],
       ["date", "Date and time", "text", "e.g. Thursday 13 November 2026, 18:00–20:00"],
-      ["place", "Place", "text", "e.g. Kaffee Stark, St. Pauli"],
-      ["topic", "Topic", "text"],
-      ["question", "Opening question", "textarea"],
+      ["format", "Format", "text", "e.g. Table, Walk, Guest table"],
+      ["place", "Venue", "text", "Shown as \u201cHosted at \u2026\u201d, e.g. Kaffee Stark, St. Pauli"],
+      ["topic", "Theme (optional)", "text"],
+      ["line", "Line of the night (optional)", "text", "One sentence from the evening, quoted only with the speaker\u2019s consent."],
       ["threads", "Threads: what came up", "textarea", "Leave a blank line between paragraphs."],
       ["insights", "Insights", "lines", "One insight per line."],
-      ["table", "At the table", "text", "e.g. 7 people · names only with consent"]
+      ["circle", "The Circle", "lines", "One name per line, only people who agreed to be named. Names that match a Chamber member link to their entry."],
+      ["table", "Note on the table (optional)", "text", "e.g. 7 people, 2 preferred not to be named"]
     ] },
     member: { key: "members", title: "Member", append: true, fields: [
       ["name", "Name", "text"],
@@ -672,8 +792,10 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       ["updated", "Last updated", "text", "e.g. November 2026"]
     ] },
     settings: { key: "settings", single: true, title: "Links & schedule", fields: [
-      ["meetupUrl", "Meetup group link", "url", "Used by every Join and RSVP button. Without it they open a Meetup search."],
-      ["letterUrl", "Newsletter sign-up link (optional)", "url", "e.g. a Buttondown or Substack page. Without it, the letter points to Meetup."],
+      ["meetupUrl", "Meetup group link", "url", "Without it, the Meetup buttons open a Meetup search."],
+      ["lumaUrl", "Luma calendar link", "url", "e.g. https://luma.com/your-calendar. Luma buttons appear once this is set."],
+      ["primary", "Main platform for joining", "select", ["meetup", "luma"]],
+      ["letterUrl", "Newsletter sign-up link (optional)", "url", "Leave empty to use the Luma calendar (Luma sends newsletters to its subscribers), or Meetup if there is no Luma link."],
       ["when", "When (shown in the ticker)", "text", "e.g. Thursdays 18:00–20:00"]
     ] }
   };

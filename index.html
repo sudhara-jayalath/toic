@@ -1199,7 +1199,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       { fn: asanoha, hf: 0.62, ar: 0.42 }, { fn: moonstone, hf: 0.3, ar: 2 }
     ];
     var active = [], lastSpawn = 0, mi = Math.floor(Math.random() * MOTIFS.length);
-    var DRAW = 4200, HOLD = 4500, FADE = 2200;
+    var DRAW = 6500, HOLD = 6500, FADE = 4200;
 
     function slots() { return W < 700 ? [0.1, 0.9] : [0.05, 0.34, 0.6, 0.94]; }
     function build(m, xc) {
@@ -1245,13 +1245,13 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       if (visible && !wasVisible) { active = []; lastSpawn = 0; }
       wasVisible = visible;
       if (visible) {
-        if (!lastSpawn || (now - lastSpawn > 2600 && active.length < (W < 700 ? 1 : 3))) { spawn(now); lastSpawn = now; }
+        if (!lastSpawn || (now - lastSpawn > 4400 && active.length < (W < 700 ? 1 : 3))) { spawn(now); lastSpawn = now; }
         ctx.clearRect(0, 0, W, H);
         active = active.filter(function (b) {
           var age = now - b.t0;
           if (age > DRAW + HOLD + FADE) return false;
-          var p = Math.min(1, age / DRAW), e = 1 - Math.pow(1 - p, 2);
-          var a = age < DRAW + HOLD ? 1 : 1 - (age - DRAW - HOLD) / FADE;
+          var p = Math.min(1, age / DRAW), e = p * p * (3 - 2 * p);
+          var fo = (age - DRAW - HOLD) / FADE, a = age < DRAW + HOLD ? 1 : 1 - fo * fo * (3 - 2 * fo);
           drawPartial(b, e, a);
           return true;
         });

@@ -256,6 +256,11 @@ a.tag:hover { background: var(--jupiter); color: var(--on-jupiter); border-color
 .left-list li { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: .3rem 1.5rem; padding-block: 1rem; border-bottom: 1px solid var(--rule); }
 .left-list .q-text { font-family: var(--display); font-size: 1.35rem; line-height: 1.25; flex: 1 1 20rem; min-width: 0; }
 
+/* faq */
+.faq { display: grid; padding-bottom: 4rem; }
+.faq-item { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 1rem 3rem; padding-block: 2rem; border-bottom: 1px solid var(--rule); }
+.faq-item h3 { font-size: clamp(1.4rem, 2.6vw, 1.9rem); line-height: 1.15; }
+
 /* chamber */
 .members { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: 1.5rem; padding-block: 2.5rem 4rem; }
 .member { border: 1.5px solid var(--ink); padding: 1.6rem; display: grid; gap: 1rem; align-content: start; min-width: 0; }
@@ -347,6 +352,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   .founder { grid-template-columns: minmax(0, 1fr); }
   .sess-body { grid-template-columns: minmax(0, 1fr); }
   .rules { grid-template-columns: minmax(0, 1fr); }
+  .faq-item { grid-template-columns: minmax(0, 1fr); gap: .8rem; }
   .f-side { grid-template-columns: 7rem minmax(0, 1fr); align-items: end; }
   .f-tile { font-size: 3rem; }
 }
@@ -486,6 +492,53 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
    ]
   }
  ],
+ "faq": [
+  {
+   "id": "f-philosophy",
+   "q": "Do I need to know anything about philosophy?",
+   "a": "No. You don't need to have read anything. What philosophy is, for us, is something we are still discovering together, at the table.\n\nBring your life, your curiosity and your own way of putting things."
+  },
+  {
+   "id": "f-cost",
+   "q": "What does it cost?",
+   "a": "Nothing. The table is free. You only pay for your own drinks at the café; one or two is plenty."
+  },
+  {
+   "id": "f-language",
+   "q": "What language do we speak?",
+   "a": "English. Whatever your accent or level, you're welcome. Say it your way; the table will help you find the words."
+  },
+  {
+   "id": "f-listen",
+   "q": "Can I just listen?",
+   "a": "Yes. Nobody has to speak. But we would love to hear at least one thought from you by the end of the evening. The short closing round is a good moment for it."
+  },
+  {
+   "id": "f-archive",
+   "q": "What happens to what I say?",
+   "a": "It stays at the table unless you agree otherwise. After each session we write a short record: the question, the threads and what we found.\n\nYou decide whether you take part in that archive: whether your name appears in the Circle, whether a line of yours is quoted, and whether you add your own one-liners, notes or poems. You can change your mind later, and we will remove your name or your words."
+  },
+  {
+   "id": "f-size",
+   "q": "What if more than eight people want to come?",
+   "a": "The Thursday table is made for five to eight people, so everyone has room to think out loud. When it is full, there is a waitlist.\n\nIn the future we may organise bigger events. The Thursday table will stay small."
+  },
+  {
+   "id": "f-friend",
+   "q": "Can I bring a friend?",
+   "a": "Not to the Thursday table. Places are limited, and everyone signs up on their own so the table stays balanced. Your friend is very welcome to RSVP too."
+  },
+  {
+   "id": "f-religion",
+   "q": "Is it religious or political?",
+   "a": "Yes. No. Both. Neither.\n\nThe club belongs to no religion and no party. But people bring their beliefs with them, and how we hold them is part of the conversation."
+  },
+  {
+   "id": "f-conspiracy",
+   "q": "Is this a place for conspiracy theories?",
+   "a": "No. “Your own theory” here means your own way of making sense of life: how you understand time, home, knowledge, love. It doesn't mean your own version of the facts.\n\nQuestions that can be measured, like the shape of the Earth or whether a vaccine works, are answered by evidence, not by a conversation in a café. We don't re-decide them at our table.\n\nThere is also a difference in spirit. At TOIC you bring a thought so that others can shape it, and you will probably leave with it changed. A conspiracy theory is built the other way round: nothing is allowed to change it. If you come to win, to convince or to recruit, this isn't your table. If you come to think with others and be changed by them, you are very welcome."
+  }
+ ],
  "rules": {
   "items": [
    "One question per evening.",
@@ -493,7 +546,8 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
    "Everyone gets the floor. Nobody has to take it.",
    "Disagree with ideas, never with people.",
    "What is said at the table stays at the table, unless you agree to be quoted.",
-   "Leave with a question, not only an answer."
+   "Leave with a question, not only an answer.",
+   "Come to think with others, not to win."
   ]
  },
  "legal": {
@@ -528,7 +582,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   var assetEl = document.getElementById("toic-assets");
   var S;
   try { S = JSON.parse(dataEl.textContent); } catch (e) { S = {}; }
-  S.settings = S.settings || {}; S.sessions = S.sessions || []; S.members = S.members || []; S.letters = S.letters || []; S.founder = S.founder || {}; S.legal = S.legal || {}; S.lexicon = S.lexicon || []; S.works = S.works || []; S.rules = S.rules || { items: [] };
+  S.settings = S.settings || {}; S.sessions = S.sessions || []; S.members = S.members || []; S.letters = S.letters || []; S.founder = S.founder || {}; S.legal = S.legal || {}; S.lexicon = S.lexicon || []; S.works = S.works || []; S.rules = S.rules || { items: [] }; S.faq = S.faq || [];
   var A = JSON.parse(assetEl.textContent);
   var MARK = "data:image/png;base64," + A.mark, WORD = "data:image/png;base64," + A.word;
   var app = document.getElementById("app");
@@ -543,7 +597,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
 
   var MEETUP_SEARCH = "https://www.meetup.com/find/?keywords=the%20ordinary%20inquiry%20club";
   var VIEWS = [["club", "Club"], ["records", "Records"], ["lexicon", "Lexicon"], ["chamber", "Chamber"], ["letter", "Letter"], ["founder", "About me"]];
-  var ALL_VIEWS = VIEWS.map(function (v) { return v[0]; }).concat(["impressum", "datenschutz"]);
+  var ALL_VIEWS = VIEWS.map(function (v) { return v[0]; }).concat(["faq", "impressum", "datenschutz"]);
 
   function joinUrl() { return safeUrl(S.settings.meetupUrl) || MEETUP_SEARCH; }
   function letterUrl() { return safeUrl(S.settings.letterUrl); }
@@ -988,7 +1042,8 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       '<div class="inner section">' +
         '<div class="lead"><p class="eyebrow">Table rules</p><h2>How we sit together</h2></div>' +
         '<ul class="rules">' + r.map(function (x) { return "<li>" + esc(x) + "</li>"; }).join("") + "</ul>" +
-        '<button type="button" class="ed" data-act="edit" data-kind="rules">Edit table rules</button>' +
+        '<div class="actions"><a class="btn" href="#faq">Questions? Read the FAQ <span class="arr" aria-hidden="true">\u2192</span></a>' +
+        '<button type="button" class="ed" data-act="edit" data-kind="rules">Edit table rules</button></div>' +
       "</div>"
     );
   }
@@ -1001,6 +1056,20 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       '<div class="inner section leftovers-all"><div class="lead"><p class="eyebrow">Leftovers</p><h2>Questions waiting for a table</h2>' +
       '<p class="intro">What the evenings raised but didn’t answer. Some of them will become future sessions.</p></div>' +
       '<ul class="left-list">' + rows.map(function (r) { return '<li><span class="q-text">' + esc(r.q) + '</span><a class="credit" href="#' + sessionId(r.x) + '">from No. ' + esc(r.x.no) + "</a></li>"; }).join("") + "</ul></div>"
+    );
+  }
+
+
+  function faq() {
+    var items = S.faq.map(function (f) {
+      return '<article class="faq-item"><h3>' + esc(f.q) + '</h3><div class="prose">' + P(f.a) +
+        '<button type="button" class="ed" data-act="edit" data-kind="faq" data-id="' + esc(f.id) + '">Edit</button></div></article>';
+    }).join("");
+    return (
+      '<div class="inner page-head"><p class="eyebrow">FAQ</p><h2>Questions people ask</h2>' +
+      '<p class="intro">Before your first Thursday. If your question isn\u2019t here, ask us on ' + mainPlatform() + '.</p>' +
+      '<button type="button" class="ed" data-act="add" data-kind="faq">+ Add a question</button></div>' +
+      '<div class="inner"><div class="faq">' + (items || '<p class="pending">No questions yet.</p>') + "</div></div>"
     );
   }
 
@@ -1025,11 +1094,12 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
         '<section data-view="chamber" hidden>' + chamber() + "</section>" +
         '<section data-view="letter" hidden>' + letter() + "</section>" +
         '<section data-view="founder" hidden>' + founder() + "</section>" +
+        '<section data-view="faq" hidden>' + faq() + "</section>" +
         '<section data-view="impressum" hidden>' + impressum() + "</section>" +
         '<section data-view="datenschutz" hidden>' + datenschutz() + "</section>" +
       "</main>" +
       '<footer><div class="inner foot">' +
-        '<div><img class="word" src="' + WORD + '" alt="1he 0dinary 1nquiry 0lub"><p class="small">Hamburg · St. Pauli · founded November 2026</p><nav class="legal-links" aria-label="Legal"><a href="#impressum">Impressum</a><a href="#datenschutz">Datenschutz</a></nav></div>' +
+        '<div><img class="word" src="' + WORD + '" alt="1he 0dinary 1nquiry 0lub"><p class="small">Hamburg · St. Pauli · founded November 2026</p><nav class="legal-links" aria-label="More"><a href="#faq">FAQ</a><a href="#impressum">Impressum</a><a href="#datenschutz">Datenschutz</a></nav></div>' +
         '<p class="small guru">&#x2643;&#xFE0E; Thursday is Guruvāra in Sanskrit: the day of Bṛhaspati, teacher of the gods and lord of speech.</p>' +
       "</div></footer>" +
       '<button type="button" class="fab" id="fab" hidden>Edit site</button>' +
@@ -1347,6 +1417,10 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       ["date", "Date", "text", "e.g. November 2026"],
       ["session", "Written after session (optional)", "text", "Session number, e.g. 01"],
       ["concepts", "Concepts", "lines", "One Lexicon term per line. Terms not yet in the Lexicon show without a link."]
+    ] },
+    faq: { key: "faq", title: "FAQ entry", append: true, fields: [
+      ["q", "Question", "text"],
+      ["a", "Answer", "textarea", "Leave a blank line between paragraphs."]
     ] },
     rules: { key: "rules", single: true, title: "Table rules", fields: [
       ["items", "Rules", "lines", "One rule per line."]

@@ -1134,7 +1134,8 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   /* ---------- hero line drawings: columns and patterns that draw themselves, rest, and fade ---------- */
   function heroLines() {
     var hero = document.querySelector(".hero");
-    if (!hero || (S.settings.lines || "off") !== "on") return;
+    var mode = S.settings.lines || "off";
+    if (!hero || mode === "off") return;
     var cv = document.createElement("canvas");
     cv.className = "hero-lines"; cv.setAttribute("aria-hidden", "true");
     hero.insertBefore(cv, hero.firstChild);
@@ -1268,11 +1269,128 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       return s;
     }
 
+
+    /* ---- wisdom figures: line-art busts on plinths, drawn on a 100 x 140 grid (ground at 140) ---- */
+    function pathPts(d) {
+      var tk = d.match(/[MLCQO]|-?\d*\.?\d+/g) || [], out = [], cur = null, i = 0, x = 0, y = 0;
+      function num() { return parseFloat(tk[i++]); }
+      while (i < tk.length) {
+        var c = tk[i++];
+        if (c === "M") { x = num(); y = num(); cur = [[x, y]]; out.push(cur); }
+        else if (c === "L") { x = num(); y = num(); cur.push([x, y]); }
+        else if (c === "C") { var a = [x, y], b = [num(), num()], e = [num(), num()], f = [num(), num()]; for (var k = 1; k <= 14; k++) { var t = k / 14, u = 1 - t; cur.push([u * u * u * a[0] + 3 * u * u * t * b[0] + 3 * u * t * t * e[0] + t * t * t * f[0], u * u * u * a[1] + 3 * u * u * t * b[1] + 3 * u * t * t * e[1] + t * t * t * f[1]]); } x = f[0]; y = f[1]; }
+        else if (c === "Q") { var q0 = [x, y], q1 = [num(), num()], q2 = [num(), num()]; for (var m = 1; m <= 10; m++) { var s = m / 10, v = 1 - s; cur.push([v * v * q0[0] + 2 * v * s * q1[0] + s * s * q2[0], v * v * q0[1] + 2 * v * s * q1[1] + s * s * q2[1]]); } x = q2[0]; y = q2[1]; }
+        else if (c === "O") { var cx = num(), cy = num(), r = num(), o = []; for (var n = 0; n <= 28; n++) { var an = n / 28 * Math.PI * 2; o.push([cx + r * Math.cos(an), cy + r * Math.sin(an)]); } out.push(o); cur = o; }
+      }
+      return out;
+    }
+    function mirror(d) { return d.replace(/([MLCQ])|(-?\d*\.?\d+)(\s+)(-?\d*\.?\d+)/g, function (all, cmd, a, sp, b) { return cmd ? cmd : (100 - parseFloat(a)) + " " + b; }); }
+    function figure(paths) {
+      return function (w, h) {
+        var sc = Math.min(w / 100, h / 140), ox = (w - 100 * sc) / 2, oy = h - 140 * sc, segs = [];
+        paths.forEach(function (d) { pathPts(d).forEach(function (pl) { segs.push(pl.map(function (p) { return [ox + p[0] * sc, oy + p[1] * sc]; })); }); });
+        return segs;
+      };
+    }
+    function sym(list) { var r = []; list.forEach(function (d) { r.push(d, mirror(d)); }); return r; }
+    var PLINTH = ["M18 140 L82 140 L82 128 L18 128 L18 140", "M22 128 L78 128"];
+
+    /* Ganesha: crown, fan ears, curling trunk, one whole tusk and one broken (he broke it to keep writing) */
+    var ganesha = figure(PLINTH.concat(sym([
+      "M38 46 C24 34 8 42 10 60 C11 76 26 84 40 72",
+      "M16 52 C14 60 18 70 26 74",
+      "M38 44 C37 54 38 64 41 70",
+      "M41 56 Q44 53 47 56 Q44 58 41 56",
+      "M40 74 C30 82 22 92 20 110 L20 128"
+    ]), [
+      "M36 42 L64 42 L62 36 L38 36 L36 42", "O44 39 1.2", "O50 39 1.2", "O56 39 1.2",
+      "M39 36 C40 30 44 27 50 27 C56 27 60 30 61 36", "M42 33 Q46 30 50 32 Q54 30 58 33",
+      "M44 27 C45 21 48 18 50 18 C52 18 55 21 56 27", "M50 18 L50 13", "O50 11 2",
+      "M50 47 L50 52",
+      "M46 62 C44 82 47 98 58 103 C66 106 71 99 66 94 C63 92 61 95 63 97",
+      "M54 62 C54 78 56 89 64 92",
+      "M45 70 Q49 72 54 70", "M45 78 Q49 80 55 78", "M46 86 Q50 88 57 86",
+      "M44 71 C41 75 39 79 36 83 C38 80 40 77 42 74",
+      "M56 71 L60 76 L62 73 L58 69",
+      "M30 106 C33 126 67 126 70 106",
+      "M33 90 C42 98 58 98 67 90"
+    ]));
+
+    /* Odin: wide-brimmed hat, one eye given for wisdom, long beard, and the ravens Huginn (thought) and Muninn (memory) */
+    function raven(x, y, dir) {
+      function X(v) { return x + dir * v * 1.1; }
+      return [
+        "O" + X(4) + " " + (y + 3) + " 3",
+        "M" + X(1.5) + " " + (y + 2.5) + " L" + X(-3.5) + " " + (y + 4) + " L" + X(1.5) + " " + (y + 4.6),
+        "M" + X(6) + " " + (y + 2) + " C" + X(14) + " " + (y + 1) + " " + X(20) + " " + (y + 5) + " " + X(25) + " " + (y + 3),
+        "M" + X(6) + " " + (y + 6) + " C" + X(12) + " " + (y + 11) + " " + X(19) + " " + (y + 9) + " " + X(25) + " " + (y + 5),
+        "M" + X(25) + " " + (y + 3) + " L" + X(30) + " " + (y + 2) + " L" + X(28) + " " + (y + 4.5) + " L" + X(30) + " " + (y + 7) + " L" + X(25) + " " + (y + 5),
+        "M" + X(9) + " " + (y + 4.5) + " C" + X(13) + " " + (y + 3.5) + " " + X(18) + " " + (y + 5.5) + " " + X(22) + " " + (y + 5),
+        "M" + X(12) + " " + (y + 9) + " L" + X(12) + " " + (y + 13), "M" + X(15) + " " + (y + 9.5) + " L" + X(15) + " " + (y + 13)
+      ];
+    }
+    var odin = figure(PLINTH.concat([
+      "M8 40 C28 31 72 31 92 40 C72 47 28 47 8 40",
+      "M32 37 C32 22 41 11 54 10 C62 10 67 21 68 37",
+      "M32 32 C44 29 56 29 68 32",
+      "M35 45 C34 52 35 58 37 63", "M65 45 C66 52 65 58 63 63",
+      "M38 53 Q42 51 46 53", "M41 48 L44 58",
+      "M54 53 Q58 50 62 53 Q58 56 54 53",
+      "M50 50 L48 62 L53 63",
+      "M50 66 C45 64 39 66 35 71", "M50 66 C55 64 61 66 65 71",
+      "M36 63 C34 90 42 108 50 117 C58 108 66 90 64 63",
+      "M44 70 C42 84 46 96 45 108", "M50 70 C49 86 52 100 50 113", "M56 70 C58 84 54 96 55 108",
+      "M36 84 C26 86 14 92 12 128", "M64 84 C74 86 86 92 88 128"
+    ], raven(32, 76, -1), raven(68, 76, 1)));
+
+    /* Athena: profile with a Corinthian helmet pushed up, crest, and her owl on the plinth */
+    var athena = figure(PLINTH.concat([
+      "M30 50 C29 29 47 20 62 25 C74 29 79 41 77 52",
+      "M30 50 C28 58 30 66 35 71",
+      "M50 22 L51 16",
+      "M24 36 C20 12 50 0 78 14 C70 12 60 13 51 16 C42 19 32 26 24 36",
+      "M30 27 C36 18 46 13 56 12", "M36 22 C44 15 54 12 64 12", "M27 31 C33 22 42 17 51 15",
+      "M64 44 C68 46 72 50 73 54", "M73 42 L77 52",
+      "M73 54 L79 64 L75 66 L76 69 L74 71 L75 73 L72 78 C68 81 64 82 61 82 L60 96",
+      "M65 58 Q68 56 71 58",
+      "M41 72 L44 96",
+      "M35 62 C33 70 37 76 35 84", "M39 64 C38 72 41 78 39 86",
+      "M44 96 C31 100 23 112 22 128", "M60 96 C72 100 79 112 80 128",
+      "M36 106 C40 112 44 118 46 128", "M66 106 C62 113 58 119 57 128", "M50 100 C52 110 51 118 52 128",
+      "M25 101 C23 93 25 86 31 85 C37 86 39 93 37 101",
+      "O28 90 2.2", "O34 90 2.2", "M30 93 L31 95 L32 93",
+      "M26 86 L27 82 L29 85", "M36 86 L35 82 L33 85", "M27 101 L27 103", "M35 101 L35 103"
+    ]));
+
+    /* Wenchang Wang: scholar-official's winged hat, long beard, cross-collared robe, brush and scroll */
+    var wenchang = figure(PLINTH.concat(sym([
+      "M36 31 L8 29 Q5 31 8 33 L36 34",
+      "M38 74 C24 79 16 92 16 128",
+      "M43 54 L47 53", "M42 50 Q45 48 48 50",
+      "M50 63 C46 63 42 65 40 69"
+    ]), [
+      "M36 40 C35 21 65 21 64 40 L36 40",
+      "M42 30 C46 25 54 25 58 30",
+      "M38 42 C36 62 44 72 50 72 C56 72 64 62 62 42",
+      "M50 53 L49 60 L52 60",
+      "M48 72 C47 80 47 86 46 92", "M50 72 C50 82 51 90 50 97", "M52 72 C53 80 53 86 54 92",
+      "M40 76 L50 96 L60 76", "M44 76 L52 92",
+      "M24 104 C40 108 60 108 76 104",
+      "M65 94 L65 119", "M67 94 L67 119", "M64.5 119 C63 123 65 128 66 131 C67 128 69 123 67.5 119 L64.5 119",
+      "M28 112 L52 112 L52 120 L28 120 L28 112", "O28 116 4", "O52 116 4"
+    ]));
+
+    var WISDOM = [
+      { fn: ganesha, hf: 0.56, ar: 0.72 }, { fn: odin, hf: 0.56, ar: 0.72 },
+      { fn: athena, hf: 0.56, ar: 0.72 }, { fn: wenchang, hf: 0.56, ar: 0.72 }
+    ];
+
     var MOTIFS = [
       { fn: doric, hf: 0.78, ar: 0.2 }, { fn: ionic, hf: 0.8, ar: 0.24 }, { fn: corinthian, hf: 0.82, ar: 0.24 },
       { fn: lotusStalk, hf: 0.72, ar: 0.3 }, { fn: kandyan, hf: 0.8, ar: 0.3 },
       { fn: asanoha, hf: 0.62, ar: 0.42 }, { fn: moonstone, hf: 0.3, ar: 2 }
     ];
+    if (mode === "wisdom") MOTIFS = WISDOM;
     var active = [], lastSpawn = 0, mi = Math.floor(Math.random() * MOTIFS.length);
     var DRAW = 6500, HOLD = 6500, FADE = 4200;
 
@@ -1309,7 +1427,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       W = r.width; H = r.height; cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr);
       ctx.setTransform(dpr, 0, 0, dpr, 0, 0); ctx.lineWidth = 1.1; ctx.lineJoin = "round"; ctx.lineCap = "round";
       active = [];
-      if (reduce) { ctx.clearRect(0, 0, W, H); slots().forEach(function (x, i) { drawPartial(Object.assign(build(MOTIFS[(i * 2) % MOTIFS.length], x)), 1, 0.8); }); }
+      if (reduce) { ctx.clearRect(0, 0, W, H); slots().forEach(function (x, i) { drawPartial(build(MOTIFS[(i * (MOTIFS.length > 4 ? 2 : 1)) % MOTIFS.length], x), 1, 0.8); }); }
     }
     size();
     if (window.ResizeObserver) new ResizeObserver(function () { var r = hero.getBoundingClientRect(); if (Math.abs(r.width - W) > 2 || Math.abs(r.height - H) > 2) size(); }).observe(hero);
@@ -1443,7 +1561,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       ["meetupUrl", "Meetup group link", "url", "Without it, the Meetup buttons open a Meetup search."],
       ["lumaUrl", "Luma calendar link", "url", "e.g. https://luma.com/your-calendar. Luma buttons appear once this is set."],
       ["primary", "Main platform for joining", "select", ["meetup", "luma"]],
-      ["lines", "Drawings in the hero", "select", [["off", "Off"], ["on", "On: columns and patterns"]]],
+      ["lines", "Drawings in the hero", "select", [["off", "Off"], ["on", "Columns and patterns"], ["wisdom", "Figures of wisdom"]]],
       ["theme", "Look", "select", [["neon", "Neon (St. Pauli at night)"], ["yellow", "Jupiter yellow (special seasons)"]]],
       ["letterUrl", "Newsletter sign-up link (optional)", "url", "Leave empty to use the Luma calendar (Luma sends newsletters to its subscribers), or Meetup if there is no Luma link."],
       ["when", "When (shown in the ticker)", "text", "e.g. Thursdays 18:00–20:00"]

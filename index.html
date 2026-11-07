@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>The Ordinary Inquiry Club</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="A small table for free thinkers in Hamburg St. Pauli. Thursdays, 18:00–20:00: one question, up to eight people, your own theory.">
+<meta name="description" content="A small table for thinking out loud, together. Hamburg St. Pauli, Thursdays 18:00–20:00: one question, up to eight people, your own words.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="The Ordinary Inquiry Club">
-<meta property="og:description" content="A small table for free thinkers in Hamburg St. Pauli. Thursdays, 18:00–20:00: one question, up to eight people, your own theory.">
+<meta property="og:description" content="A small table for thinking out loud, together. Hamburg St. Pauli, Thursdays 18:00–20:00: one question, up to eight people, your own words.">
 <meta property="og:url" content="https://sudhara-jayalath.github.io/toic/">
 <meta property="og:image" content="https://sudhara-jayalath.github.io/toic/og.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -541,7 +541,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   {
    "id": "f-conspiracy",
    "q": "Is this a place for conspiracy theories?",
-   "a": "No. “Your own theory” here means your own way of making sense of life: how you understand time, home, knowledge, love. It doesn't mean your own version of the facts.\n\nQuestions that can be measured, like the shape of the Earth or whether a vaccine works, are answered by evidence, not by a conversation in a café. We don't re-decide them at our table.\n\nThere is also a difference in spirit. At TOIC you bring a thought so that others can shape it, and you will probably leave with it changed. A conspiracy theory is built the other way round: nothing is allowed to change it. If you come to win, to convince or to recruit, this isn't your table. If you come to think with others and be changed by them, you are very welcome."
+   "a": "No. Thinking “in your own words” here means your own way of making sense of life: how you understand time, home, knowledge, love. It doesn't mean your own version of the facts.\n\nQuestions that can be measured, like the shape of the Earth or whether a vaccine works, are answered by evidence, not by a conversation in a café. We don't re-decide them at our table.\n\nThere is also a difference in spirit. At TOIC you bring a thought so that others can shape it, and you will probably leave with it changed. A conspiracy theory is built the other way round: nothing is allowed to change it. If you come to win, to convince or to recruit, this isn't your table. If you come to think with others and be changed by them, you are very welcome."
   }
  ],
  "rules": {
@@ -632,7 +632,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   function club() {
     var s = S.settings;
     var next = S.sessions.filter(function (x) { return x.status === "upcoming"; })[0];
-    var tickItems = [s.when || "Thursdays 18:00–20:00", "St. Pauli, Hamburg", "Up to 8 at the table", "One question", "No history lessons", "Bring your own theory", "Guruvāra: the day of the teacher"];
+    var tickItems = [s.when || "Thursdays 18:00–20:00", "St. Pauli, Hamburg", "Up to 8 at the table", "One question", "No history lessons", "Bring your own question", "Guruvāra: the day of the teacher"];
     var tick = tickItems.map(function (t) { return "<span>" + esc(t) + "</span><span><b>&#x2643;&#xFE0E;</b></span>"; }).join("");
     var nextBlock = next ? (
       '<div class="next"><div class="inner">' +
@@ -645,8 +645,8 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       '<div class="hero"><div class="inner">' +
         '<div class="hero-copy">' +
           '<p class="eyebrow">Hamburg · St. Pauli · Thursdays</p>' +
-          '<h1><span style="--i:0">Do you have</span> <span style="--i:1">your own</span> <span style="--i:2">theory?</span></h1>' +
-          '<p class="lede">A small table for free thinkers. Once a week, up to eight people sit down with one question and think out loud, in their own words.</p>' +
+          '<h1><span style="--i:0">Yes. No.</span> <span style="--i:1">Both. Neither.</span> <span style="--i:2">Let\u2019s talk.</span></h1>' +
+          '<p class="lede">A small table for thinking out loud, together. Once a week, up to eight people sit down with one question and think it through in their own words.</p>' +
           '<div class="actions">' + joinButtons("btn solid", "btn", "Join") + '<a class="btn" href="#records">Read the records</a></div>' +
         "</div>" +
         '<div class="hero-mark"><img class="mark" src="' + MARK + '" alt="The club mark: IO above 1O"><img class="word" src="' + WORD + '" alt="1he 0dinary 1nquiry 0lub"></div>' +
@@ -656,7 +656,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       '<div class="inner section manifesto">' +
         '<div class="lead"><p class="eyebrow">The idea</p><h2>Philosophers by life, by vocation, by passion</h2></div>' +
         '<div class="prose">' +
-          "<p>Are you a free thinker, a philosopher on your own terms? If you're enchanted by life and its mysteries, if you like to analyze and describe the world and existence in your own way, and if you're curious how the people around you creatively make sense of it, this club is for you.</p>" +
+          "<p>Do you wonder about life, and enjoy hearing how others see it? If you're enchanted by life and its mysteries, if you like to describe the world and existence in your own way, and if you're curious how the people around you creatively make sense of it, this club is for you.</p>" +
           "<p>You don't need to be a philosopher by profession. It's enough to be one by life, by vocation, and by passion.</p>" +
           "<p>We meet in small groups of up to eight people to explore one focused topic at a time. We won't dive into the history of philosophy, and we're not concerned with how philosophy is practiced in institutions. Here, your own thinking is the starting point.</p>" +
         "</div>" +
@@ -771,7 +771,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       return (
         '<article class="member">' +
           '<div class="m-head"><div class="tile" aria-hidden="true">' + esc(initials(m.name)) + '</div><div><h3><a class="m-name" href="#' + memberId(m) + '">' + esc(m.name) + "</a></h3>" + (m.line ? '<p class="m-line">' + esc(m.line) + "</p>" : "") + "</div></div>" +
-          (m.theory ? '<blockquote class="theory"><span class="eyebrow">Own theory</span><p>' + esc(m.theory) + "</p></blockquote>" : "") +
+          (m.theory ? '<blockquote class="theory"><span class="eyebrow">In their words</span><p>' + esc(m.theory) + "</p></blockquote>" : "") +
           (m.bio ? '<div class="prose">' + P(m.bio) + "</div>" : "") +
           (sess.length ? '<div class="m-sessions"><span class="eyebrow">At the table</span>' + sess.map(function (x) { return '<a href="#' + sessionId(x) + '">No. ' + esc(x.no) + " \u00b7 " + esc(sessionTitle(x)) + "</a>"; }).join("") + "</div>" : "") +
           (foot ? '<p class="m-foot">' + foot + "</p>" : "") +
@@ -783,11 +783,11 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     var join =
       '<article class="member join"><p class="eyebrow">Your page here</p><h3>Join the chamber</h3>' +
       "<p>Came to a Thursday and want a place here? Send the organizer four things:</p>" +
-      "<ul><li>your name, as you'd like it shown</li><li>one line on what you do, by profession or by passion</li><li>your own theory, in one sentence</li><li>a short bio of up to 80 words</li></ul><p>Later you can add one-liners, notes, poems or anything else you write about the concepts we discuss. They appear on your page and in the Lexicon.</p>" +
+      "<ul><li>your name, as you'd like it shown</li><li>one line on what you do, by profession or by passion</li><li>a thought of your own, in one sentence</li><li>a short bio of up to 80 words</li></ul><p>Later you can add one-liners, notes, poems or anything else you write about the concepts we discuss. They appear on your page and in the Lexicon.</p>" +
       '<p class="m-foot">Message us on ' + mainPlatform() + ' or bring it to the next session.</p></article>';
     return (
       '<div class="inner page-head"><p class="eyebrow">Chamber of Members · ' + n + "</p><h2>The people at the table</h2>" +
-      '<p class="intro">Short biographies of the people who think with us. Each one names a theory of their own.</p>' +
+      '<p class="intro">Short biographies of the people who think with us. Each one shares a thought in their own words.</p>' +
       '<button type="button" class="ed" data-act="add" data-kind="member">+ Add a member</button></div>' +
       '<div class="inner"><div class="members">' + cards + join + "</div></div>"
     );
@@ -821,7 +821,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
         '<div class="f-main">' +
           "<h2>" + esc(f.name) + "</h2>" + (f.role ? '<p class="f-role">' + esc(f.role) + "</p>" : "") +
           '<div class="prose">' + P(f.body) + "</div>" +
-          (th.length ? '<p class="eyebrow">Some of my own theories</p><ul class="theories">' + th.map(function (t) { return "<li><span>" + esc(t) + "</span></li>"; }).join("") + "</ul>" : "") +
+          (th.length ? '<p class="eyebrow">Some thoughts of mine</p><ul class="theories">' + th.map(function (t) { return "<li><span>" + esc(t) + "</span></li>"; }).join("") + "</ul>" : "") +
           (safeUrl(f.blogUrl) ? '<div class="elsewhere"><p class="eyebrow">Elsewhere \u00b7 my blog</p><h3>' + esc(f.blogName || "My blog") + "</h3>" + (f.blogNote ? "<p>" + esc(f.blogNote) + "</p>" : "") + '<div class="actions">' + ext(safeUrl(f.blogUrl), "Read " + esc(f.blogName || "the blog"), "btn ink") + "</div></div>" : "") +
           '<button type="button" class="ed" data-act="edit" data-kind="founder">Edit about me</button>' +
         "</div>" +
@@ -1024,7 +1024,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
           (link ? '<p class="credit"><a href="' + esc(link) + '" target="_blank" rel="noopener noreferrer">' + esc(link.replace(/^https?:\/\/(www\.)?/i, "").replace(/\/$/, "")) + "</a></p>" : "") +
         "</div></div>" +
         '<div class="sess-body"><div class="block">' +
-          (m.theory ? '<blockquote class="theory"><span class="eyebrow">Own theory</span><p>' + esc(m.theory) + "</p></blockquote>" : "") +
+          (m.theory ? '<blockquote class="theory"><span class="eyebrow">In their words</span><p>' + esc(m.theory) + "</p></blockquote>" : "") +
           (m.bio ? '<div class="prose">' + P(m.bio) + "</div>" : "") +
           (ones.length ? '<section class="block"><p class="eyebrow">One-liners</p>' + oneLinerList(ones, false) + "</section>" : "") +
           (longer.length ? '<section class="block"><p class="eyebrow">Works</p><div class="works">' + longer.map(workCard).join("") + "</div></section>" : "") +
@@ -1506,7 +1506,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     member: { key: "members", title: "Member", append: true, fields: [
       ["name", "Name", "text"],
       ["line", "One line", "text", "What they do, by profession or by passion"],
-      ["theory", "Own theory, in one sentence", "text"],
+      ["theory", "A thought of their own, in one sentence", "text"],
       ["bio", "Short bio", "textarea", "Up to about 80 words."],
       ["link", "Link (optional)", "url", "A full address starting with https://"],
       ["since", "Member since", "text", "e.g. November 2026"]

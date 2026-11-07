@@ -273,6 +273,8 @@ a.tag:hover { background: var(--jupiter); color: var(--on-jupiter); border-color
 .faq-item { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.5fr); gap: 1rem 3rem; padding-block: 2rem; border-bottom: 1px solid var(--rule); }
 .faq-item h3 { font-size: clamp(1.4rem, 2.6vw, 1.9rem); line-height: 1.15; }
 
+.m-note { justify-self: start; font-family: var(--mono); font-size: .74rem; line-height: 1.5; color: var(--muted); border: 1px dashed var(--muted); padding: .45rem .65rem; max-width: 40rem; }
+
 /* chamber */
 .members { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 19rem), 1fr)); gap: 1.5rem; padding-block: 2.5rem 4rem; }
 .member { border: 1.5px solid var(--ink); padding: 1.6rem; display: grid; gap: 1rem; align-content: start; min-width: 0; }
@@ -465,7 +467,8 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
    "theory": "To be is to be placed.",
    "bio": "Landscape architect from Sri Lanka, working in Hamburg. Thinks about place, awe, and how we are placed by each other. Started the ordinary inquiry club in November 2026.",
    "link": "",
-   "since": "November 2026"
+   "since": "November 2026",
+   "note": "Placeholder: I have put myself here as a template, to show what a member’s entry and page can look like."
   }
  ],
  "letters": [],
@@ -797,6 +800,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       return (
         '<article class="member">' +
           '<div class="m-head"><div class="tile" aria-hidden="true">' + esc(initials(m.name)) + '</div><div><h3><a class="m-name" href="#' + memberId(m) + '">' + esc(m.name) + "</a></h3>" + (m.line ? '<p class="m-line">' + esc(m.line) + "</p>" : "") + "</div></div>" +
+          (m.note ? '<p class="m-note">' + esc(m.note) + "</p>" : "") +
           (m.theory ? '<blockquote class="theory"><span class="eyebrow">In their words</span><p>' + esc(m.theory) + "</p></blockquote>" : "") +
           (m.bio ? '<div class="prose">' + P(m.bio) + "</div>" : "") +
           (sess.length ? '<div class="m-sessions"><span class="eyebrow">At the table</span>' + sess.map(function (x) { return '<a href="#' + sessionId(x) + '">No. ' + esc(x.no) + " \u00b7 " + esc(sessionTitle(x)) + "</a>"; }).join("") + "</div>" : "") +
@@ -1049,6 +1053,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
           (m.line ? '<p class="m-line">' + esc(m.line) + "</p>" : "") +
           (link ? '<p class="credit"><a href="' + esc(link) + '" target="_blank" rel="noopener noreferrer">' + esc(link.replace(/^https?:\/\/(www\.)?/i, "").replace(/\/$/, "")) + "</a></p>" : "") +
         "</div></div>" +
+        (m.note ? '<p class="m-note">' + esc(m.note) + "</p>" : "") +
         '<div class="sess-body"><div class="block">' +
           (m.theory ? '<blockquote class="theory"><span class="eyebrow">In their words</span><p>' + esc(m.theory) + "</p></blockquote>" : "") +
           (m.bio ? '<div class="prose">' + P(m.bio) + "</div>" : "") +
@@ -1555,7 +1560,8 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       ["theory", "A thought of their own, in one sentence", "text"],
       ["bio", "Short bio", "textarea", "Up to about 80 words."],
       ["link", "Link (optional)", "url", "A full address starting with https://"],
-      ["since", "Member since", "text", "e.g. November 2026"]
+      ["since", "Member since", "text", "e.g. November 2026"],
+      ["note", "Note (optional)", "text", "Shown in small print, e.g. that an entry is a placeholder."]
     ] },
     letter: { key: "letters", title: "Thursday Letter", fields: [
       ["no", "Number", "text", "e.g. 01"],

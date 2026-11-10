@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>The Ordinary Inquiry Club</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="A small table for thinking out loud, together. Hamburg St. Pauli, Thursdays 18:00–20:00: one question, up to five people, your own words.">
+<meta name="description" content="A small table for thinking out loud, together. Hamburg, Thursdays 18:00–20:00: one question, up to five people, your own words.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="The Ordinary Inquiry Club">
-<meta property="og:description" content="A small table for thinking out loud, together. Hamburg St. Pauli, Thursdays 18:00–20:00: one question, up to five people, your own words.">
+<meta property="og:description" content="A small table for thinking out loud, together. Hamburg, Thursdays 18:00–20:00: one question, up to five people, your own words.">
 <meta property="og:url" content="https://sudhara-jayalath.github.io/toic/">
 <meta property="og:image" content="https://sudhara-jayalath.github.io/toic/og.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -396,7 +396,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
 .hero .inner { position: relative; }
 .hero-lines { position: absolute; inset: 0; width: 100%; height: 100%; z-index: -1; pointer-events: none; }
 
-/* ===== Themes: "neon" (default, St. Pauli at night) and "yellow" (Jupiter, for special seasons).
+/* ===== Themes: "neon" (default, Hamburg at night) and "yellow" (Jupiter, for special seasons).
    The yellow look is the base above; .t-neon on <html> layers the neon over it. ===== */
 :root { --neon-1: #ff2bd6; --neon-2: #00e1ff; --neon-3: #8a3cff; --neon-4: #ffb21e; --night: #0b0a12; --night-ink: #f7f3ff;
   --neon-line: linear-gradient(100deg, var(--neon-1), var(--neon-4) 45%, var(--neon-2)); }
@@ -660,7 +660,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   function club() {
     var s = S.settings;
     var next = S.sessions.filter(function (x) { return x.status === "upcoming"; })[0];
-    var tickItems = [s.when || "Thursdays 18:00–20:00", "St. Pauli, Hamburg", "Five at the table", "One question", "No history lessons", "Bring your own question", "Guruvāra: the day of the teacher"];
+    var tickItems = [s.when || "Thursdays 18:00–20:00", "Hamburg", "Five at the table", "One question", "No history lessons", "Bring your own question", "Guruvāra: the day of the teacher"];
     var tick = tickItems.map(function (t) { return "<span>" + esc(t) + "</span><span><b>&#x2643;&#xFE0E;</b></span>"; }).join("");
     var nextBlock = next ? (
       '<div class="next"><div class="inner">' +
@@ -672,7 +672,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     return (
       '<div class="hero"><div class="inner">' +
         '<div class="hero-copy">' +
-          '<p class="eyebrow">Hamburg · St. Pauli · Thursdays</p>' +
+          '<p class="eyebrow">Hamburg · Thursdays</p>' +
           '<h1><span style="--i:0">Yes. No.</span> <span style="--i:1">Both. Neither.</span> <span style="--i:2">Let\u2019s talk! :)</span></h1>' +
           '<p class="lede">A small table for thinking out loud, together. Once a week, up to five people sit down with one question and think it through in their own words.</p>' +
           '<div class="actions">' + joinButtons("btn solid", "btn", "Join") + '<a class="btn" href="#records">Read the records</a></div>' +
@@ -694,7 +694,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       '<div class="inner section">' +
         '<div class="lead"><p class="eyebrow">A Thursday at the table</p><h2>Two hours, one question</h2></div>' +
         '<ol class="timeline">' +
-          '<li><span class="t">18:00</span><h3>We sit down</h3><p>One table in a St. Pauli café, up to five people. A drink or two is plenty.</p></li>' +
+          '<li><span class="t">18:00</span><h3>We sit down</h3><p>One table in a Hamburg café, up to five people. A drink or two is plenty.</p></li>' +
           '<li><span class="t">18:10</span><h3>One question</h3><p>A focused question, announced a few days before on ' + mainPlatform() + '.</p></li>' +
           '<li><span class="t">→20:00</span><h3>Your own words</h3><p>Everyone thinks from their own life. No famous names needed to make a point.</p></li>' +
           '<li><span class="t">After</span><h3>The record</h3><p>The question, the threads and what we found go into the minute-book.</p></li>' +
@@ -1155,7 +1155,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
         '<section data-view="datenschutz" hidden>' + datenschutz() + "</section>" +
       "</main>" +
       '<footer><div class="inner foot">' +
-        '<div><img class="word" src="' + WORD + '" alt="1he 0dinary 1nquiry 0lub"><p class="small">Hamburg · St. Pauli · founded November 2026</p><nav class="legal-links" aria-label="More"><a href="#faq">FAQ</a><a href="#impressum">Impressum</a><a href="#datenschutz">Datenschutz</a></nav></div>' +
+        '<div><img class="word" src="' + WORD + '" alt="1he 0dinary 1nquiry 0lub"><p class="small">Hamburg · founded November 2026</p><nav class="legal-links" aria-label="More"><a href="#faq">FAQ</a><a href="#impressum">Impressum</a><a href="#datenschutz">Datenschutz</a></nav></div>' +
         '<p class="small guru">&#x2643;&#xFE0E; Thursday is Guruvāra in Sanskrit: the day of Bṛhaspati, teacher of the gods and lord of speech.</p>' +
       "</div></footer>" +
       '<button type="button" class="fab" id="fab" hidden>Edit site</button>' +
@@ -1544,7 +1544,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       ["question", "The question", "textarea", "This is the title of the session, e.g. When does work actually end?"],
       ["date", "Date and time", "text", "e.g. Thursday 13 November 2026, 18:00–20:00"],
       ["format", "Format", "text", "e.g. Table, Walk, Guest table"],
-      ["place", "Venue", "text", "Shown as \u201cHosted at \u2026\u201d, e.g. Kaffee Stark, St. Pauli"],
+      ["place", "Venue", "text", "Shown as \u201cHosted at \u2026\u201d, e.g. Peter Pane, Schäferkampsallee 1"],
       ["topic", "Theme (optional)", "text"],
       ["line", "Line of the night (optional)", "text", "One sentence from the evening, quoted only with the speaker\u2019s consent."],
       ["threads", "Threads: what came up", "textarea", "Leave a blank line between paragraphs."],
@@ -1618,7 +1618,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       ["lumaUrl", "Luma calendar link", "url", "e.g. https://luma.com/your-calendar. Luma buttons appear once this is set."],
       ["primary", "Main platform for joining", "select", ["meetup", "luma"]],
       ["lines", "Drawings in the hero", "select", [["off", "Off"], ["on", "Columns and patterns"], ["wisdom", "Figures of wisdom"]]],
-      ["theme", "Look", "select", [["neon", "Neon (St. Pauli at night)"], ["yellow", "Jupiter yellow (special seasons)"]]],
+      ["theme", "Look", "select", [["neon", "Neon (Hamburg at night)"], ["yellow", "Jupiter yellow (special seasons)"]]],
       ["letterUrl", "Newsletter sign-up link (optional)", "url", "Leave empty to use the Luma calendar (Luma sends newsletters to its subscribers), or Meetup if there is no Luma link."],
       ["when", "When (shown in the ticker)", "text", "e.g. Thursdays 18:00–20:00"]
     ] }

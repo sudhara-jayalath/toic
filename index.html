@@ -466,6 +466,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
    "date": "Thursday, 12 November 2026 · 18:00–20:00",
    "format": "Table",
    "place": "Peter Pane, Schäferkampsallee 1, Hamburg (U Schlump)",
+   "rsvpUrl": "https://meetu.ps/e/QnQKf/16kDq2/i",
    "topic": "",
    "question": "What is philosophy? And what is not?",
    "line": "",
@@ -667,7 +668,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   function rsvpButtons(x) {
     var u = (x && x.rsvpUrl || "").trim();
     if (!u) return joinButtons("btn ink", "btn", "RSVP");
-    var name = /luma\.com|lu\.ma/.test(u) ? "Luma" : /meetup\.com/.test(u) ? "Meetup" : "";
+    var name = /luma\.com|lu\.ma/.test(u) ? "Luma" : /meetup\.com|meetu\.ps/.test(u) ? "Meetup" : "";
     return ext(u, name ? "RSVP on " + name : "RSVP", "btn ink");
   }
   function slug(n) { return String(n || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "x"; }

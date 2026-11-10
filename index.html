@@ -442,6 +442,24 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
  },
  "sessions": [
   {
+   "id": "s02",
+   "no": "02",
+   "status": "upcoming",
+   "date": "Thursday, 26 November 2026 · 18:00–20:00",
+   "format": "Open table",
+   "place": "Peter Pane, Schäferkampsallee 1, Hamburg (U Schlump)",
+   "rsvpUrl": "https://luma.com/buuo1l5w",
+   "topic": "",
+   "question": "Bring your own question",
+   "line": "",
+   "threads": "",
+   "insights": [],
+   "concepts": [],
+   "leftovers": [],
+   "circle": [],
+   "table": ""
+  },
+  {
    "id": "s01",
    "no": "01",
    "status": "upcoming",
@@ -645,6 +663,13 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   function joinButtons(c1, c2, verb) {
     return platforms().map(function (p, i) { return ext(p.url, (verb || "Join") + " on " + p.name, i ? c2 : c1); }).join("");
   }
+  /* a session with its own RSVP link (e.g. one Luma event) gets a single button to it */
+  function rsvpButtons(x) {
+    var u = (x && x.rsvpUrl || "").trim();
+    if (!u) return joinButtons("btn ink", "btn", "RSVP");
+    var name = /luma\.com|lu\.ma/.test(u) ? "Luma" : /meetup\.com/.test(u) ? "Meetup" : "";
+    return ext(u, name ? "RSVP on " + name : "RSVP", "btn ink");
+  }
   function slug(n) { return String(n || "").toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "") || "x"; }
   function memberByName(name) { var k = slug(name); return S.members.filter(function (m) { return slug(m.name) === k; })[0]; }
   function sessionTitle(x) { return x.question || x.topic || "Question to be announced"; }
@@ -659,7 +684,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   /* ---------- views ---------- */
   function club() {
     var s = S.settings;
-    var next = S.sessions.filter(function (x) { return x.status === "upcoming"; })[0];
+    var ups = S.sessions.filter(function (x) { return x.status === "upcoming"; }), next = ups[ups.length - 1];
     var tickItems = [s.when || "Thursdays 18:00–20:00", "Hamburg", "Five at the table", "One question", "No history lessons", "Bring your own question", "Guruvāra: the day of the teacher"];
     var tick = tickItems.map(function (t) { return "<span>" + esc(t) + "</span><span><b>&#x2643;&#xFE0E;</b></span>"; }).join("");
     var nextBlock = next ? (
@@ -667,7 +692,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
         '<div class="num" aria-hidden="true">' + esc(next.no) + "</div>" +
         '<div class="body"><p class="eyebrow">Next at the table</p><h3><a href="#' + sessionId(next) + '">' + esc(sessionTitle(next)) + "</a></h3>" +
         '<p class="meta">' + esc([next.date, next.place ? "Hosted at " + next.place : ""].filter(Boolean).join(" · ")) + "</p></div>" +
-        '<div class="actions">' + joinButtons("btn ink", "btn", "RSVP") + "</div>" +
+        '<div class="actions">' + rsvpButtons(next) + "</div>" +
       "</div></div>") : "";
     return (
       '<div class="hero"><div class="inner">' +
@@ -769,7 +794,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
           (x.topic && x.question ? '<p class="sess-topic">Theme: ' + esc(x.topic) + "</p>" : "") +
           '<p class="credit">' + (x.place ? "Hosted at <span>" + esc(x.place) + "</span>" : "Venue to be announced") + "</p>" +
           tagChips(x) +
-          (up ? '<div class="actions">' + joinButtons("btn ink", "btn", "RSVP") + "</div>" : "") +
+          (up ? '<div class="actions">' + rsvpButtons(x) + "</div>" : "") +
         "</div></div>" +
         (x.line ? '<figure class="night"><figcaption class="eyebrow">Line of the night</figcaption><blockquote><p><mark>' + esc(x.line) + "</mark></p></blockquote></figure>" : "") +
         '<div class="sess-body">' +
@@ -1545,6 +1570,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       ["date", "Date and time", "text", "e.g. Thursday 13 November 2026, 18:00–20:00"],
       ["format", "Format", "text", "e.g. Table, Walk, Guest table"],
       ["place", "Venue", "text", "Shown as \u201cHosted at \u2026\u201d, e.g. Peter Pane, Schäferkampsallee 1"],
+      ["rsvpUrl", "RSVP link (optional)", "text", "The event\u2019s own page on Luma or Meetup. Leave empty to show the club\u2019s Meetup and Luma buttons."],
       ["topic", "Theme (optional)", "text"],
       ["line", "Line of the night (optional)", "text", "One sentence from the evening, quoted only with the speaker\u2019s consent."],
       ["threads", "Threads: what came up", "textarea", "Leave a blank line between paragraphs."],

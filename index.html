@@ -124,6 +124,7 @@ h3 { font-size: 1.5rem; line-height: 1.15; }
 
 .next { background: var(--paper-2); }
 .next .inner { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 1.5rem 2.5rem; align-items: center; padding-block: 2.5rem; }
+.next .inner + .inner { border-top: 1px solid var(--rule); }
 .next .num { font-family: var(--stencil); font-weight: 700; font-size: clamp(4rem, 9vw, 6.5rem); line-height: .8; }
 .next .body { display: grid; gap: .4rem; min-width: 0; }
 .next .meta { font-family: var(--mono); font-size: .8rem; color: var(--muted); }
@@ -447,7 +448,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
    "status": "upcoming",
    "date": "Thursday, 26 November 2026 · 18:00–20:00",
    "format": "Open table",
-   "place": "Peter Pane, Schäferkampsallee 1, Hamburg (U Schlump)",
+   "place": "Peter Pane, Schäferkampsallee 1, Hamburg (U Schlump)",
    "rsvpUrl": "https://luma.com/buuo1l5w",
    "topic": "",
    "question": "Bring your own question",
@@ -465,7 +466,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
    "status": "upcoming",
    "date": "Thursday, 12 November 2026 · 18:00–20:00",
    "format": "Table",
-   "place": "Peter Pane, Schäferkampsallee 1, Hamburg (U Schlump)",
+   "place": "Peter Pane, Schäferkampsallee 1, Hamburg (U Schlump)",
    "rsvpUrl": "https://meetu.ps/e/QnQKf/16kDq2/i",
    "topic": "",
    "question": "What is philosophy? And what is not?",
@@ -685,16 +686,19 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   /* ---------- views ---------- */
   function club() {
     var s = S.settings;
-    var ups = S.sessions.filter(function (x) { return x.status === "upcoming"; }), next = ups[ups.length - 1];
+    /* every upcoming table, soonest first (the minute-book lists newest first) */
+    var ups = S.sessions.filter(function (x) { return x.status === "upcoming"; }).reverse();
     var tickItems = [s.when || "Thursdays 18:00–20:00", "Hamburg", "Five at the table", "One question", "No history lessons", "Bring your own question", "Guruvāra: the day of the teacher"];
     var tick = tickItems.map(function (t) { return "<span>" + esc(t) + "</span><span><b>&#x2643;&#xFE0E;</b></span>"; }).join("");
-    var nextBlock = next ? (
-      '<div class="next"><div class="inner">' +
-        '<div class="num" aria-hidden="true">' + esc(next.no) + "</div>" +
-        '<div class="body"><p class="eyebrow">Next at the table</p><h3><a href="#' + sessionId(next) + '">' + esc(sessionTitle(next)) + "</a></h3>" +
-        '<p class="meta">' + esc([next.date, next.place ? "Hosted at " + next.place : ""].filter(Boolean).join(" · ")) + "</p></div>" +
-        '<div class="actions">' + rsvpButtons(next) + "</div>" +
-      "</div></div>") : "";
+    var nextBlock = ups.length ? (
+      '<div class="next">' + ups.map(function (next, i) {
+        return '<div class="inner">' +
+          '<div class="num" aria-hidden="true">' + esc(next.no) + "</div>" +
+          '<div class="body"><p class="eyebrow">' + (i ? "After that" : "Next at the table") + '</p><h3><a href="#' + sessionId(next) + '">' + esc(sessionTitle(next)) + "</a></h3>" +
+          '<p class="meta">' + esc([next.date, next.place ? "Hosted at " + next.place : ""].filter(Boolean).join(" · ")) + "</p></div>" +
+          '<div class="actions">' + rsvpButtons(next) + "</div>" +
+        "</div>";
+      }).join("") + "</div>") : "";
     return (
       '<div class="hero"><div class="inner">' +
         '<div class="hero-copy">' +

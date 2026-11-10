@@ -129,14 +129,30 @@ h3 { font-size: 1.5rem; line-height: 1.15; }
 .vote .lead { display: grid; gap: 1rem; max-width: 46rem; }
 .vote .intro { margin: 0; }
 .topics { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr)); gap: 1rem; }
-.topic { display: grid; align-content: space-between; gap: 1.25rem; min-height: 11rem; height: 100%; box-sizing: border-box; padding: 1.25rem 1.25rem 1.1rem; border: 1.5px solid var(--ink); color: var(--ink); background: var(--paper); text-decoration: none; transition: transform .15s ease, background-color .15s ease; }
-.topic:hover { transform: translateY(-2px); background: var(--paper-2); }
+.topic { --card-bg: var(--paper); --level: 0; position: relative; overflow: hidden; isolation: isolate; display: grid; align-content: space-between; gap: 1.25rem; min-height: 11rem; height: 100%; box-sizing: border-box; padding: 1.25rem 1.25rem 1.1rem; border: 1.5px solid var(--ink); color: var(--ink); background: var(--card-bg); text-decoration: none; transition: transform .15s ease; }
+.topic:hover { transform: translateY(-2px); --card-bg: var(--paper-2); }
+/* the liquid: a neon gradient behind the card, covered from the top by "air" that drains as votes come in */
+.topic .liquid { position: absolute; inset: 0; z-index: -2; background: linear-gradient(to top, var(--neon-1) 0%, var(--neon-3) 38%, var(--neon-2) 100%); opacity: .6; }
+.topic .air { position: absolute; top: 0; left: 0; right: 0; z-index: -1; height: calc((1 - var(--level)) * 100%); background: var(--card-bg); transition: height 2.2s cubic-bezier(.2, .7, .2, 1); }
+.topic .air::before, .topic .air::after { content: ""; position: absolute; left: 0; top: 100%; height: 12px; background: var(--card-bg);
+  -webkit-mask-repeat: repeat-x; mask-repeat: repeat-x; }
+.topic .air::after { width: calc(100% + 120px); -webkit-mask-image: var(--wave-a); mask-image: var(--wave-a); -webkit-mask-size: 120px 12px; mask-size: 120px 12px; animation: toic-drift-a 6s linear infinite; }
+.topic .air::before { width: calc(100% + 90px); opacity: .55; -webkit-mask-image: var(--wave-b); mask-image: var(--wave-b); -webkit-mask-size: 90px 12px; mask-size: 90px 12px; animation: toic-drift-b 4.5s linear infinite reverse; }
+.topics { --wave-a: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='12'%3E%3Cpath d='M0 0H120V6Q105 12 90 6T60 6T30 6T0 6Z'/%3E%3C/svg%3E");
+  --wave-b: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='12'%3E%3Cpath d='M0 0H90V5Q79 11 67.5 5T45 5T22.5 5T0 5Z'/%3E%3C/svg%3E"); }
+.topics.is-in .topic { --level: var(--to, 0); }
+.topic .tq, .topic .go { position: relative; }
+@keyframes toic-drift-a { to { transform: translateX(-120px); } }
+@keyframes toic-drift-b { to { transform: translateX(-90px); } }
+@media (prefers-reduced-motion: reduce) { .topic .air { transition: none; } .topic .air::before, .topic .air::after { animation: none; } }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .topic .liquid { opacity: .42; } }
+:root[data-theme="dark"] .topic .liquid { opacity: .42; }
 .topic:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 .topic .tq { display: grid; gap: .5rem; }
 .topic h3 { font-size: 1.5rem; line-height: 1.1; }
-.topic p { margin: 0; font-size: 1rem; line-height: 1.4; color: var(--muted); }
+.topic p { margin: 0; font-size: 1rem; line-height: 1.4; color: var(--ink); opacity: .78; }
 .topic .go { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; font-family: var(--mono); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; }
-.topic .count { color: var(--muted); }
+.topic .count { font-weight: 500; }
 .suggest { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: .75rem; align-items: stretch; border-top: 2px solid var(--ink); padding-top: 1.25rem; max-width: 46rem; }
 .suggest label { grid-column: 1 / -1; font-family: var(--mono); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); }
 .suggest input { font: inherit; font-size: 1.05rem; padding: .8rem 1rem; border: 1.5px solid var(--ink); border-radius: 0; background: var(--paper); color: var(--ink); min-width: 0; }
@@ -647,6 +663,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
  },
  "vote": {
   "url": "",
+  "goal": "10",
   "topics": [
    "Eastern Philosophy | What do the old traditions of South and East Asia have to say to us today?",
    "Space and Time | Are they things out there, or the way we meet the world?",
@@ -1161,10 +1178,15 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       return { name: p[0], q: p[1] || "", n: parseInt(p[2], 10) || 0 };
     }).filter(function (t) { return t.name; });
     if (!topics.length && !url) return "";
+    var goal = Math.max(1, parseInt(V.goal, 10) || 10);
+    var full = Math.max(goal, Math.max.apply(null, topics.map(function (t) { return t.n; }).concat([0])));
     function mailto(subject, body) { return "mailto:" + mail + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body); }
     var cards = topics.map(function (t) {
       var href = url || (mail ? mailto("TOIC vote: " + t.name, "I'd like a table on: " + t.name + "\n\n") : "#");
-      return '<li><a class="topic" href="' + esc(href) + '"' + (url ? ' target="_blank" rel="noopener noreferrer"' : "") + ">" +
+      var level = Math.min(1, t.n / full);
+      return '<li><a class="topic" style="--to:' + level.toFixed(3) + '" href="' + esc(href) + '"' + (url ? ' target="_blank" rel="noopener noreferrer"' : "") +
+        (t.n ? ' aria-label="' + esc(t.name + ", " + t.n + (t.n === 1 ? " vote" : " votes") + ". Vote") + '"' : "") + ">" +
+        '<span class="liquid" aria-hidden="true"></span><span class="air" aria-hidden="true"></span>' +
         '<div class="tq"><h3>' + esc(t.name) + "</h3>" + (t.q ? "<p>" + esc(t.q) + "</p>" : "") + "</div>" +
         '<div class="go"><span class="count">' + (t.n ? t.n + (t.n === 1 ? " vote" : " votes") : "") + "</span><span>Vote " + (url ? "&#8599;" : "&rarr;") + "</span></div></a></li>";
     }).join("");
@@ -1177,7 +1199,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       : "Voting opens an email to the host in your own mail app. This website itself sends and stores nothing.";
     return '<div class="inner section vote">' +
       '<div class="lead"><p class="eyebrow">Vote for the next topic</p><h2>What should we sit down with next?</h2>' +
-      '<p class="intro">Pick the topic you\u2019d most like to think through, or suggest your own. The most wanted ones become future tables.</p></div>' +
+      '<p class="intro">Pick the topic you\u2019d most like to think through, or suggest your own. Each box fills up as its votes come in, and the fullest ones become future tables.</p></div>' +
       '<ul class="topics">' + cards + "</ul>" + suggest +
       '<p class="small">' + note + "</p>" +
       '<button type="button" class="ed" data-act="edit" data-kind="vote">Edit the vote</button></div>';
@@ -1261,6 +1283,18 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       '<button type="button" class="fab" id="fab" hidden>Edit site</button>' +
       '<dialog id="dlg" aria-labelledby="dlg-title"><form id="dlg-form" class="dlg"></form></dialog>' +
       '<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>';
+  }
+
+  /* the vote boxes fill up once they scroll into view */
+  function armVote() {
+    var el = app.querySelector(".topics");
+    if (!el) return;
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (reduce || !("IntersectionObserver" in window)) { el.classList.add("is-in"); return; }
+    var io = new IntersectionObserver(function (es) {
+      es.forEach(function (e) { if (e.isIntersecting) { el.classList.add("is-in"); io.disconnect(); } });
+    }, { threshold: 0.35 });
+    io.observe(el);
   }
 
   /* ---------- routing ---------- */
@@ -1608,6 +1642,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   render();
   route(false);
   heroLines();
+  armVote();
   window.addEventListener("hashchange", function () { route(true); });
 
   /* ---------- editing (owner and editors only) ---------- */
@@ -1704,7 +1739,8 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     ] },
     vote: { key: "vote", single: true, title: "Vote for the next topic", fields: [
       ["topics", "Topics", "lines", "One per line. Optionally add | and a short question, then | and the votes so far, e.g. Landscape | Is a landscape out there? | 3"],
-      ["url", "Poll link (optional)", "url", "e.g. a Nuudel poll. Leave empty and votes arrive by email at the address in Legal details."]
+      ["url", "Poll link (optional)", "url", "e.g. a Nuudel poll. Leave empty and votes arrive by email at the address in Legal details."],
+      ["goal", "Votes to fill a box", "text", "e.g. 10. A box fills up as its votes get closer to this number; once one passes it, the fullest box sets the scale."]
     ] },
     rules: { key: "rules", single: true, title: "Table rules", fields: [
       ["items", "Rules", "lines", "One rule per line."]

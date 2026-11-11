@@ -329,6 +329,27 @@ a.tag:hover { background: var(--jupiter); color: var(--on-jupiter); border-color
 .m-foot { font-family: var(--mono); font-size: .74rem; color: var(--muted); }
 .member.join { border-style: dashed; background: var(--paper-2); border-color: var(--muted); }
 .member.join ul { margin: 0; padding-left: 1.1rem; display: grid; gap: .3rem; }
+.member.join .m-open { justify-self: start; cursor: pointer; }
+/* Chamber application form */
+.apply { display: grid; gap: 1.5rem; padding-block: 0 4.5rem; scroll-margin-top: 4.5rem; }
+.apply-head { display: grid; gap: .9rem; max-width: 46rem; border-top: 2px solid var(--ink); padding-top: 2.5rem; }
+.apply-head .intro { margin: 0; }
+.apply-form { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1.2rem 1.5rem; max-width: 52rem; }
+.apply-form .wide { grid-column: 1 / -1; }
+.apply-form .field label { font-size: .7rem; color: var(--ink); }
+.apply-form .field input, .apply-form .field textarea, .apply-form .field select { border: 1.5px solid var(--ink); padding: .75rem .85rem; font-size: 1.05rem; }
+.apply-form .field { align-content: start; }
+.apply-form .field input, .apply-form .field select { height: 3.3rem; }
+.apply-form .field input:focus-visible, .apply-form .field textarea:focus-visible, .apply-form .field select:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+.apply-form .hint.over { color: #b3261e; }
+.consent { display: flex; gap: .75rem; align-items: flex-start; font-size: 1rem; line-height: 1.5; cursor: pointer; }
+.consent input { flex: none; width: 1.15rem; height: 1.15rem; margin: .2rem 0 0; accent-color: var(--ink); }
+.apply-error { margin: 0; font-family: var(--mono); font-size: .82rem; color: #b3261e; }
+.apply-error[hidden], .apply-done[hidden] { display: none; }
+.apply-done { display: grid; gap: .6rem; padding: 1.1rem 1.25rem; border: 1.5px dashed var(--muted); background: var(--paper-2); }
+.apply-done p { margin: 0; }
+.copy-fallback { width: 100%; box-sizing: border-box; margin-top: .6rem; font: inherit; font-size: .9rem; padding: .6rem; border: 1px solid var(--rule); background: var(--paper); color: var(--ink); }
+@media (max-width: 640px) { .apply-form { grid-template-columns: minmax(0, 1fr); } }
 
 /* letters */
 .letters { display: grid; padding-block: 1rem 4rem; }
@@ -916,18 +937,101 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
         "</article>"
       );
     }).join("");
+    var mail = (S.legal.email || "").trim();
     var join =
       '<article class="member join"><p class="eyebrow">Your page here</p><h3>Join the chamber</h3>' +
-      "<p>Came to a Thursday and want a place here? Send the organizer four things:</p>" +
+      "<p>Came to a Thursday and want a place here? Apply with the short form below. It asks for four things:</p>" +
       "<ul><li>your name, as you'd like it shown</li><li>one line on what you do, by profession or by passion</li><li>a thought of your own, in one sentence</li><li>a short bio of up to 80 words</li></ul><p>Later you can add one-liners, notes, poems or anything else you write about the concepts we discuss. They appear on your page and in the Lexicon.</p>" +
-      '<p class="m-foot">Message us on ' + mainPlatform() + ' or bring it to the next session.</p></article>';
+      (mail ? '<button type="button" class="btn ink m-open" data-jump="apply">Apply below <span class="arr" aria-hidden="true">\u2193</span></button>' : "") +
+      '<p class="m-foot">Prefer to talk first? Bring it to the next table.</p></article>';
     return (
       '<div class="inner page-head"><p class="eyebrow">Chamber of Members · ' + n + "</p><h2>The people at the table</h2>" +
       '<p class="intro">Short biographies of the people who think with us. Each one shares a thought in their own words.</p>' +
       '<button type="button" class="ed" data-act="add" data-kind="member">+ Add a member</button></div>' +
-      '<div class="inner"><div class="members">' + cards + join + "</div></div>"
+      '<div class="inner"><div class="members">' + cards + join + "</div></div>" +
+      (mail ? applyBlock(mail) : "")
     );
   }
+
+  /* the Chamber application: a plain form that turns into a ready-to-send email in the applicant's own mail app */
+  function applyBlock(mail) {
+    var tables = S.sessions.filter(function (x) { return !isSoon(x); }).slice().reverse().map(function (x) {
+      var label = "No. " + x.no + " \u00b7 " + sessionTitle(x);
+      return '<option value="' + esc(label) + '">' + esc(label) + "</option>";
+    }).join("");
+    function field(id, label, input, hint, wide) {
+      return '<div class="field' + (wide ? " wide" : "") + '"><label for="' + id + '">' + label + "</label>" + input + (hint ? '<span class="hint" id="' + id + '-hint">' + hint + "</span>" : "") + "</div>";
+    }
+    return (
+      '<section class="inner apply" id="apply" aria-labelledby="apply-title">' +
+        '<div class="apply-head"><p class="eyebrow">Join the chamber</p><h2 id="apply-title">Apply for your page</h2>' +
+        '<p class="intro">Fill this in and press send. Your mail app opens with everything ready, addressed to the host. We read every application and add you by hand.</p></div>' +
+        '<form class="apply-form" data-mail="' + esc(mail) + '" novalidate>' +
+          field("ap-name", "Your name, as you\u2019d like it shown", '<input id="ap-name" name="name" type="text" maxlength="60" autocomplete="name" required>') +
+          field("ap-table", "Which table did you join?", '<select id="ap-table" name="table">' + tables + '<option value="Not yet, but I would like to">Not yet, but I\u2019d like to</option></select>') +
+          field("ap-line", "One line on what you do", '<input id="ap-line" name="line" type="text" maxlength="90" placeholder="e.g. Nurse, and birdwatcher by passion" required>', "By profession or by passion.", true) +
+          field("ap-thought", "A thought of your own, in one sentence", '<input id="ap-thought" name="thought" type="text" maxlength="180" required>', "It appears on your card as \u201cIn their words\u201d.", true) +
+          field("ap-bio", "A short bio", '<textarea id="ap-bio" name="bio" rows="5" maxlength="700" required></textarea>', "Up to 80 words.", true) +
+          field("ap-link", "A link (optional)", '<input id="ap-link" name="link" type="url" inputmode="url" placeholder="https://">', "Your website or a profile you\u2019d like to show.", true) +
+          '<label class="consent wide"><input type="checkbox" name="consent" required><span>I agree that my name, line, thought, bio and link may be shown in the Chamber on this website. I can ask for changes or removal at any time.</span></label>' +
+          '<p class="apply-error wide" role="alert" hidden></p>' +
+          '<div class="apply-actions wide"><button class="btn ink" type="submit">Send my application <span class="arr" aria-hidden="true">\u2192</span></button></div>' +
+          '<div class="apply-done wide" role="status" hidden><p>Your mail app should now be open with your application. Just press send.</p>' +
+            '<p>Nothing opened? Copy your application and email it to <a href="mailto:' + esc(mail) + '">' + esc(mail) + "</a>.</p>" +
+            '<div><button type="button" class="btn copy-app">Copy my application</button></div></div>' +
+        "</form>" +
+        '<p class="small">Your application goes to the host as an email from your own mail app. This website doesn\u2019t send or store anything.</p>' +
+      "</section>"
+    );
+  }
+  function applyText(f) {
+    var v = function (n) { var el = f.elements[n]; return el ? String(el.value || "").trim() : ""; };
+    var body = [
+      "Hello,", "", "I'd like a page in the Chamber of Members.", "",
+      "Name: " + v("name"),
+      "Table: " + v("table"),
+      "What I do: " + v("line"),
+      "A thought of my own: " + v("thought"),
+      "", "Bio:", v("bio"), "",
+      "Link: " + (v("link") || "none"), "",
+      "I agree that these details may be shown in the Chamber on the website, and I can ask for changes or removal at any time."
+    ].join("\n");
+    return { subject: "Chamber application: " + v("name"), body: body };
+  }
+  function wordCount(t) { return (String(t || "").trim().match(/\S+/g) || []).length; }
+  document.addEventListener("input", function (e) {
+    if (!e.target || e.target.id !== "ap-bio") return;
+    var n = wordCount(e.target.value), h = document.getElementById("ap-bio-hint");
+    if (h) { h.textContent = "Up to 80 words \u00b7 " + n + (n === 1 ? " word" : " words") + (n > 80 ? " \u2014 please shorten it a little" : ""); h.classList.toggle("over", n > 80); }
+  });
+  document.addEventListener("submit", function (e) {
+    var f = e.target;
+    if (!f || !f.classList || !f.classList.contains("apply-form")) return;
+    e.preventDefault();
+    var err = f.querySelector(".apply-error"), problems = [];
+    if (!f.elements.name.value.trim()) problems.push("your name");
+    if (!f.elements.line.value.trim()) problems.push("one line on what you do");
+    if (!f.elements.thought.value.trim()) problems.push("a thought of your own");
+    if (!f.elements.bio.value.trim()) problems.push("a short bio");
+    var msg = problems.length ? "Please add " + problems.join(", ") + "." : "";
+    if (!msg && wordCount(f.elements.bio.value) > 80) msg = "Your bio is a little long. Please keep it to 80 words.";
+    var link = f.elements.link.value.trim();
+    if (!msg && link && !/^https?:\/\/\S+\.\S+/i.test(link)) msg = "Please give the link as a full address, starting with https://";
+    if (!msg && !f.elements.consent.checked) msg = "Please tick the box to agree that your details may be shown in the Chamber.";
+    err.textContent = msg; err.hidden = !msg;
+    if (msg) { err.scrollIntoView({ block: "nearest" }); return; }
+    var t = applyText(f);
+    f.querySelector(".apply-done").hidden = false;
+    location.href = "mailto:" + f.getAttribute("data-mail") + "?subject=" + encodeURIComponent(t.subject) + "&body=" + encodeURIComponent(t.body);
+  });
+  document.addEventListener("click", function (e) {
+    var b = e.target.closest && e.target.closest(".copy-app");
+    if (!b) return;
+    var f = b.closest("form"), t = applyText(f), text = "To: " + f.getAttribute("data-mail") + "\nSubject: " + t.subject + "\n\n" + t.body;
+    function done(ok) { b.textContent = ok ? "Copied" : "Select and copy it from the box below"; if (!ok) { var ta = document.createElement("textarea"); ta.value = text; ta.className = "copy-fallback"; ta.rows = 10; b.parentNode.appendChild(ta); ta.select(); } }
+    if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(false); });
+    else done(false);
+  });
 
   function letter() {
     var list = S.letters.map(function (l) {
@@ -1006,7 +1110,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
         "<h3>4. Externe Links</h3><p>Diese Website verlinkt auf externe Angebote, etwa auf unsere Seiten bei Meetup oder Luma, auf einen Newsletter-Dienst oder auf den Blog des Gründers. Daten werden an diese Anbieter erst übertragen, wenn Sie einen solchen Link anklicken. Ab dann gilt die Datenschutzerklärung des jeweiligen Anbieters.</p>" +
         "<h3>5. Kontakt per E-Mail oder Nachricht</h3><p>Wenn Sie uns per E-Mail oder über Meetup schreiben, verarbeiten wir Ihre Angaben (zum Beispiel Name, E-Mail-Adresse und Inhalt der Nachricht), um Ihre Anfrage zu beantworten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO, bei Anfragen zur Teilnahme Art. 6 Abs. 1 lit. b DSGVO. Wir löschen die Angaben, sobald sie für diesen Zweck nicht mehr benötigt werden.</p>" +
         (voteLive() ? "<p><strong>Abstimmung über das nächste Thema.</strong> Erst wenn Sie auf der Startseite ein Thema anklicken, „See the votes“ wählen oder einen Themenvorschlag senden, verbindet sich Ihr Browser mit unserer Datenbank bei Supabase (Supabase Inc.; Speicherort der Datenbank: Frankfurt am Main, EU). Gespeichert werden nur das gewählte Thema mit seiner Stimmenzahl bzw. der Text Ihres Vorschlags, ohne Namen oder IP-Adresse. Supabase verarbeitet dabei technisch notwendige Verbindungsdaten wie Ihre IP-Adresse in Server-Protokollen. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO; unser berechtigtes Interesse ist eine einfache Abstimmung über künftige Themen. Mehr dazu in der <a href=\"https://supabase.com/privacy\" target=\"_blank\" rel=\"noopener noreferrer\">Datenschutzerklärung von Supabase</a>.</p><p>Damit niemand versehentlich doppelt abstimmt, merkt sich Ihr Browser im lokalen Speicher (Local Storage), für welche Themen Sie gestimmt haben. Diese Angabe verlässt Ihr Gerät nicht und ist für die von Ihnen gewünschte Abstimmung erforderlich (§ 25 Abs. 2 Nr. 2 TDDDG). Sie können sie jederzeit über die Einstellungen Ihres Browsers löschen.</p>" : S.vote && (S.vote.url || "").trim() ? "<p>Für die Abstimmung über das nächste Thema verlinken wir auf eine externe Umfrage (" + esc(hostOf(S.vote.url)) + "). Erst wenn Sie den Link anklicken, verlassen Sie diese Website; dort gilt die Datenschutzerklärung des Anbieters.</p>" : "<p>Das gilt auch für Stimmen und Themenvorschläge auf der Startseite: Ein Klick öffnet Ihr eigenes E-Mail-Programm. Die Website selbst überträgt oder speichert dabei nichts.</p>") +
-        "<h3>6. Chamber of Members, Beiträge und Sitzungsprotokolle</h3><p>In der „Chamber of Members“ veröffentlichen wir Name, Kurzbiografie, eine persönliche These und gegebenenfalls einen Link, außerdem Beiträge wie One-liners, Notizen, Gedichte oder Texte, nur wenn die betreffende Person uns diese Angaben selbst zur Veröffentlichung geschickt hat. In den Sitzungsprotokollen nennen wir Teilnehmende nur mit ihrer Einwilligung. Rechtsgrundlage ist Art. 6 Abs. 1 lit. a DSGVO.</p>" +
+        "<h3>6. Chamber of Members, Beiträge und Sitzungsprotokolle</h3><p>In der „Chamber of Members“ veröffentlichen wir Name, Kurzbiografie, eine persönliche These und gegebenenfalls einen Link, außerdem Beiträge wie One-liners, Notizen, Gedichte oder Texte, nur wenn die betreffende Person uns diese Angaben selbst zur Veröffentlichung geschickt hat. In den Sitzungsprotokollen nennen wir Teilnehmende nur mit ihrer Einwilligung. Rechtsgrundlage ist Art. 6 Abs. 1 lit. a DSGVO.</p><p>Das Bewerbungsformular auf der Chamber-Seite erstellt nur eine E-Mail in Ihrem eigenen E-Mail-Programm; erst wenn Sie diese absenden, erhalten wir Ihre Angaben. Die Website selbst überträgt oder speichert dabei nichts. Ihre Einwilligung zur Veröffentlichung können Sie jederzeit per E-Mail widerrufen; wir entfernen Ihre Angaben dann.</p>" +
         "<p>Sie können Ihre Einwilligung jederzeit mit Wirkung für die Zukunft widerrufen (Art. 7 Abs. 3 DSGVO). Eine kurze Nachricht genügt; wir entfernen Ihre Angaben dann von der Website. Da der Quelltext der Website in einem öffentlichen GitHub-Repository liegt, können frühere Fassungen in dessen Versionsgeschichte sichtbar bleiben. Auf Wunsch entfernen wir Ihre Angaben auch dort, soweit das technisch möglich ist.</p>" +
         "<h3>7. Ihre Rechte</h3><p>Sie haben das Recht auf</p><ul>" +
           "<li>Auskunft über Ihre gespeicherten Daten (Art. 15 DSGVO),</li>" +

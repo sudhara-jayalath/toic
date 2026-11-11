@@ -1,0 +1,21 @@
+# Free Supabase projects pause after a week without activity.
+# This pings the vote database every three days so the vote on the website keeps working.
+name: Keep the vote database awake
+on:
+  schedule:
+    - cron: "17 6 */3 * *"
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Ping the vote database named in the site settings
+        run: |
+          url=$(grep -o '"supabaseUrl": *"https://[^"]*"' index.html | head -1 | sed -E 's/.*"(https:[^"]*)"/\1/')
+          key=$(grep -o '"supabaseKey": *"[^"]*"' index.html | head -1 | sed -E 's/.*: *"([^"]*)"/\1/')
+          if [ -z "$url" ] || [ -z "$key" ]; then echo "No vote database set yet."; exit 0; fi
+          curl -fsS "${url%/}/rest/v1/toic_votes?select=topic&limit=1" -H "apikey: $key" > /dev/null
+          echo "Pinged the vote database."

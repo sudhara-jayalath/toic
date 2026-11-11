@@ -142,6 +142,12 @@ h3 { font-size: 1.5rem; line-height: 1.15; }
   --wave-b: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='90' height='12'%3E%3Cpath d='M0 0H90V5Q79 11 67.5 5T45 5T22.5 5T0 5Z'/%3E%3C/svg%3E"); }
 .topics.is-in .topic { --level: var(--to, 0); }
 .topic .tq, .topic .go { position: relative; }
+button.topic { width: 100%; font: inherit; text-align: left; cursor: pointer; -webkit-appearance: none; appearance: none; }
+.topic.busy { cursor: progress; }
+.topic.voted { box-shadow: inset 0 0 0 1.5px var(--ink); }
+.vote-bar { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: .5rem 1.5rem; }
+.vote-status { margin: 0; font-family: var(--mono); font-size: .8rem; line-height: 1.5; min-height: 1.2em; }
+.see-votes { font: inherit; font-family: var(--mono); font-size: .76rem; letter-spacing: .08em; text-transform: uppercase; background: none; border: 0; padding: .25rem 0; color: var(--ink); text-decoration: underline; text-underline-offset: 3px; cursor: pointer; }
 @keyframes toic-drift-a { to { transform: translateX(-120px); } }
 @keyframes toic-drift-b { to { transform: translateX(-90px); } }
 @media (prefers-reduced-motion: reduce) { .topic .air { transition: none; } .topic .air::before, .topic .air::after { animation: none; } }
@@ -663,6 +669,8 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
  },
  "vote": {
   "url": "",
+  "supabaseUrl": "",
+  "supabaseKey": "",
   "goal": "10",
   "topics": [
    "Eastern Philosophy | What do the old traditions of South and East Asia have to say to us today?",
@@ -967,7 +975,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     return legalHead("Datenschutz · Privacy", "Datenschutzerklärung", 'Wie diese Website mit personenbezogenen Daten umgeht. <span lang="en">This page is in German, as German law requires.</span>') +
       '<div class="inner"><div class="legal" lang="de">' +
         "<h3>1. Verantwortlicher</h3><p>" + addressLines() + "<br>E-Mail: " + need(L.email, "E-Mail-Adresse") + "</p>" +
-        "<h3>2. Das Wichtigste in Kürze</h3><p>Diese Website ist eine statische Seite. Sie setzt keine Cookies, verwendet keine Analyse- oder Tracking-Werkzeuge, hat kein Kontaktformular und lädt keine Inhalte von Drittanbietern nach. Auch die Schriften sind in die Seite eingebettet, sodass beim Aufruf keine Verbindung zu Google oder anderen Schriftanbietern entsteht.</p>" +
+        "<h3>2. Das Wichtigste in Kürze</h3><p>Diese Website ist eine statische Seite. Sie setzt keine Cookies, verwendet keine Analyse- oder Tracking-Werkzeuge, hat kein Kontaktformular und lädt beim Aufruf keine Inhalte von Drittanbietern nach. Auch die Schriften sind in die Seite eingebettet, sodass beim Aufruf keine Verbindung zu Google oder anderen Schriftanbietern entsteht." + (voteLive() ? " Nur wenn Sie bei der Themenabstimmung selbst klicken, verbindet sich Ihr Browser mit unserer Abstimmungs-Datenbank in der EU (siehe Abschnitt 5)." : "") + "</p>" +
         "<h3>3. Hosting über GitHub Pages</h3>" +
         "<p>Die Website wird über GitHub Pages ausgeliefert. Anbieter ist die GitHub, Inc., 88 Colin P. Kelly Jr. Street, San Francisco, CA 94107, USA.</p>" +
         "<p>Beim Aufruf der Seite verarbeitet GitHub technisch notwendige Daten, die Ihr Browser automatisch übermittelt: insbesondere Ihre IP-Adresse, Datum und Uhrzeit des Abrufs, die aufgerufene Seite, die zuvor besuchte Seite (Referrer) sowie Angaben zu Browser und Betriebssystem. Diese Daten werden benötigt, um die Seite auszuliefern und den Dienst sicher und stabil zu betreiben. Wir selbst haben keinen Zugriff auf diese Protokolle und werten sie nicht aus.</p>" +
@@ -976,7 +984,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
         '<p class="src">https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement</p>' +
         "<h3>4. Externe Links</h3><p>Diese Website verlinkt auf externe Angebote, etwa auf unsere Seiten bei Meetup oder Luma, auf einen Newsletter-Dienst oder auf den Blog des Gründers. Daten werden an diese Anbieter erst übertragen, wenn Sie einen solchen Link anklicken. Ab dann gilt die Datenschutzerklärung des jeweiligen Anbieters.</p>" +
         "<h3>5. Kontakt per E-Mail oder Nachricht</h3><p>Wenn Sie uns per E-Mail oder über Meetup schreiben, verarbeiten wir Ihre Angaben (zum Beispiel Name, E-Mail-Adresse und Inhalt der Nachricht), um Ihre Anfrage zu beantworten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO, bei Anfragen zur Teilnahme Art. 6 Abs. 1 lit. b DSGVO. Wir löschen die Angaben, sobald sie für diesen Zweck nicht mehr benötigt werden.</p>" +
-        (S.vote && (S.vote.url || "").trim() ? "<p>Für die Abstimmung über das nächste Thema verlinken wir auf eine externe Umfrage (" + esc(hostOf(S.vote.url)) + "). Erst wenn Sie den Link anklicken, verlassen Sie diese Website; dort gilt die Datenschutzerklärung des Anbieters.</p>" : "<p>Das gilt auch für Stimmen und Themenvorschläge auf der Startseite: Ein Klick öffnet Ihr eigenes E-Mail-Programm. Die Website selbst überträgt oder speichert dabei nichts.</p>") +
+        (voteLive() ? "<p><strong>Abstimmung über das nächste Thema.</strong> Erst wenn Sie auf der Startseite ein Thema anklicken, „See the votes“ wählen oder einen Themenvorschlag senden, verbindet sich Ihr Browser mit unserer Datenbank bei Supabase (Supabase Inc.; Speicherort der Datenbank: Frankfurt am Main, EU). Gespeichert werden nur das gewählte Thema mit seiner Stimmenzahl bzw. der Text Ihres Vorschlags, ohne Namen oder IP-Adresse. Supabase verarbeitet dabei technisch notwendige Verbindungsdaten wie Ihre IP-Adresse in Server-Protokollen. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO; unser berechtigtes Interesse ist eine einfache Abstimmung über künftige Themen. Mehr dazu in der <a href=\"https://supabase.com/privacy\" target=\"_blank\" rel=\"noopener noreferrer\">Datenschutzerklärung von Supabase</a>.</p><p>Damit niemand versehentlich doppelt abstimmt, merkt sich Ihr Browser im lokalen Speicher (Local Storage), für welche Themen Sie gestimmt haben. Diese Angabe verlässt Ihr Gerät nicht und ist für die von Ihnen gewünschte Abstimmung erforderlich (§ 25 Abs. 2 Nr. 2 TDDDG). Sie können sie jederzeit über die Einstellungen Ihres Browsers löschen.</p>" : S.vote && (S.vote.url || "").trim() ? "<p>Für die Abstimmung über das nächste Thema verlinken wir auf eine externe Umfrage (" + esc(hostOf(S.vote.url)) + "). Erst wenn Sie den Link anklicken, verlassen Sie diese Website; dort gilt die Datenschutzerklärung des Anbieters.</p>" : "<p>Das gilt auch für Stimmen und Themenvorschläge auf der Startseite: Ein Klick öffnet Ihr eigenes E-Mail-Programm. Die Website selbst überträgt oder speichert dabei nichts.</p>") +
         "<h3>6. Chamber of Members, Beiträge und Sitzungsprotokolle</h3><p>In der „Chamber of Members“ veröffentlichen wir Name, Kurzbiografie, eine persönliche These und gegebenenfalls einen Link, außerdem Beiträge wie One-liners, Notizen, Gedichte oder Texte, nur wenn die betreffende Person uns diese Angaben selbst zur Veröffentlichung geschickt hat. In den Sitzungsprotokollen nennen wir Teilnehmende nur mit ihrer Einwilligung. Rechtsgrundlage ist Art. 6 Abs. 1 lit. a DSGVO.</p>" +
         "<p>Sie können Ihre Einwilligung jederzeit mit Wirkung für die Zukunft widerrufen (Art. 7 Abs. 3 DSGVO). Eine kurze Nachricht genügt; wir entfernen Ihre Angaben dann von der Website. Da der Quelltext der Website in einem öffentlichen GitHub-Repository liegt, können frühere Fassungen in dessen Versionsgeschichte sichtbar bleiben. Auf Wunsch entfernen wir Ihre Angaben auch dort, soweit das technisch möglich ist.</p>" +
         "<h3>7. Ihre Rechte</h3><p>Sie haben das Recht auf</p><ul>" +
@@ -1171,45 +1179,121 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
 
   /* vote for the next topic: a poll link if one is set, otherwise an email from the visitor's own mail app */
   function hostOf(u) { var m = String(u || "").match(/^https?:\/\/([^\/?#]+)/i); return m ? m[1].replace(/^www\./, "") : ""; }
-  function voteBlock() {
-    var V = S.vote || {}, url = (V.url || "").trim(), mail = (S.legal.email || "").trim();
-    var topics = (V.topics || []).filter(Boolean).map(function (line) {
+  function voteLive() { var V = S.vote || {}; return !!((V.supabaseUrl || "").trim() && (V.supabaseKey || "").trim()); }
+  function voteTopics() {
+    return ((S.vote || {}).topics || []).filter(Boolean).map(function (line) {
       var p = String(line).split("|").map(function (t) { return t.trim(); });
       return { name: p[0], q: p[1] || "", n: parseInt(p[2], 10) || 0 };
     }).filter(function (t) { return t.name; });
+  }
+  function voteGoal() { return Math.max(1, parseInt((S.vote || {}).goal, 10) || 10); }
+  function votesLabel(n) { return n ? n + (n === 1 ? " vote" : " votes") : ""; }
+  function voteBlock() {
+    var V = S.vote || {}, url = (V.url || "").trim(), mail = (S.legal.email || "").trim(), live = voteLive();
+    var topics = voteTopics();
     if (!topics.length && !url) return "";
-    var goal = Math.max(1, parseInt(V.goal, 10) || 10);
-    var full = Math.max(goal, Math.max.apply(null, topics.map(function (t) { return t.n; }).concat([0])));
+    var full = Math.max(voteGoal(), Math.max.apply(null, topics.map(function (t) { return t.n; }).concat([0])));
     function mailto(subject, body) { return "mailto:" + mail + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body); }
     var cards = topics.map(function (t) {
+      var inner = '<span class="liquid" aria-hidden="true"></span><span class="air" aria-hidden="true"></span>' +
+        '<div class="tq"><h3>' + esc(t.name) + "</h3>" + (t.q ? "<p>" + esc(t.q) + "</p>" : "") + "</div>";
+      if (live) {
+        return '<li><button type="button" class="topic" data-topic="' + esc(t.name) + '" style="--to:0">' + inner +
+          '<div class="go"><span class="count"></span><span class="act">Vote &rarr;</span></div></button></li>';
+      }
       var href = url || (mail ? mailto("TOIC vote: " + t.name, "I'd like a table on: " + t.name + "\n\n") : "#");
       var level = Math.min(1, t.n / full);
       return '<li><a class="topic" style="--to:' + level.toFixed(3) + '" href="' + esc(href) + '"' + (url ? ' target="_blank" rel="noopener noreferrer"' : "") +
-        (t.n ? ' aria-label="' + esc(t.name + ", " + t.n + (t.n === 1 ? " vote" : " votes") + ". Vote") + '"' : "") + ">" +
-        '<span class="liquid" aria-hidden="true"></span><span class="air" aria-hidden="true"></span>' +
-        '<div class="tq"><h3>' + esc(t.name) + "</h3>" + (t.q ? "<p>" + esc(t.q) + "</p>" : "") + "</div>" +
-        '<div class="go"><span class="count">' + (t.n ? t.n + (t.n === 1 ? " vote" : " votes") : "") + "</span><span>Vote " + (url ? "&#8599;" : "&rarr;") + "</span></div></a></li>";
+        (t.n ? ' aria-label="' + esc(t.name + ", " + votesLabel(t.n) + ". Vote") + '"' : "") + ">" + inner +
+        '<div class="go"><span class="count">' + votesLabel(t.n) + "</span><span>Vote " + (url ? "&#8599;" : "&rarr;") + "</span></div></a></li>";
     }).join("");
-    var suggest = url
-      ? '<div class="suggest-link">' + ext(url, "Suggest your own", "btn") + '<p class="small">Add your own topic in the poll\u2019s comments.</p></div>'
-      : mail ? '<form class="suggest" data-mail="' + esc(mail) + '"><label for="suggest-in">Or suggest your own topic</label>' +
-          '<input id="suggest-in" name="topic" type="text" maxlength="140" placeholder="e.g. Friendship, Silence, Money\u2026" required>' +
-          '<button class="btn ink" type="submit">Suggest &rarr;</button></form>' : "";
-    var note = url ? "The vote opens a poll at " + esc(hostOf(url)) + ". Details are on the Datenschutz page."
+    var form = function (attr) {
+      return '<form class="suggest"' + attr + '><label for="suggest-in">Or suggest your own topic</label>' +
+        '<input id="suggest-in" name="topic" type="text" maxlength="140" placeholder="e.g. Friendship, Silence, Money…" required>' +
+        '<button class="btn ink" type="submit">Suggest &rarr;</button></form>';
+    };
+    var suggest = live ? form(' data-live="1"')
+      : url ? '<div class="suggest-link">' + ext(url, "Suggest your own", "btn") + '<p class="small">Add your own topic in the poll’s comments.</p></div>'
+      : mail ? form(' data-mail="' + esc(mail) + '"') : "";
+    var note = live ? "Click a topic to vote and see how full every box is. Nothing is sent anywhere until you click; votes are counted in a small database in the EU (details on the Datenschutz page)."
+      : url ? "The vote opens a poll at " + esc(hostOf(url)) + ". Details are on the Datenschutz page."
       : "Voting opens an email to the host in your own mail app. This website itself sends and stores nothing.";
     return '<div class="inner section vote">' +
       '<div class="lead"><p class="eyebrow">Vote for the next topic</p><h2>What should we sit down with next?</h2>' +
-      '<p class="intro">Pick the topic you\u2019d most like to think through, or suggest your own. Each box fills up as its votes come in, and the fullest ones become future tables.</p></div>' +
-      '<ul class="topics">' + cards + "</ul>" + suggest +
+      '<p class="intro">' + (live ? "Click the topics you’d like to think through, or suggest your own. Each box fills up as its votes come in, and the fullest ones become future tables."
+        : "Pick the topic you’d most like to think through, or suggest your own. Each box fills up as its votes come in, and the fullest ones become future tables.") + "</p></div>" +
+      '<ul class="topics">' + cards + "</ul>" +
+      (live ? '<div class="vote-bar"><p class="vote-status" role="status" aria-live="polite"></p><button type="button" class="see-votes">See the votes</button></div>' : "") +
+      suggest +
       '<p class="small">' + note + "</p>" +
       '<button type="button" class="ed" data-act="edit" data-kind="vote">Edit the vote</button></div>';
   }
+
+  /* live voting: a tiny Supabase database (EU). The site only talks to it after a visitor clicks. */
+  var VOTE_LS = "toic-voted";
+  function votedList() { try { var a = JSON.parse(localStorage.getItem(VOTE_LS) || "[]"); return Array.isArray(a) ? a : []; } catch (e) { return []; } }
+  function rememberVote(t) { try { var a = votedList(); if (a.indexOf(t) < 0) { a.push(t); localStorage.setItem(VOTE_LS, JSON.stringify(a)); } } catch (e) {} }
+  function sb(path, body) {
+    var V = S.vote, key = V.supabaseKey.trim(), base = V.supabaseUrl.trim().replace(/\/+$/, "");
+    var h = { "apikey": key, "Content-Type": "application/json" };
+    if (/^eyJ/.test(key)) h.Authorization = "Bearer " + key; /* legacy anon keys are JWTs; new publishable keys go in apikey only */
+    var ctl = window.AbortController ? new AbortController() : null, timer = ctl ? setTimeout(function () { ctl.abort(); }, 9000) : null;
+    return fetch(base + path, { method: body ? "POST" : "GET", headers: h, body: body ? JSON.stringify(body) : undefined, signal: ctl ? ctl.signal : undefined })
+      .then(function (r) { if (timer) clearTimeout(timer); if (!r.ok) throw new Error("http " + r.status); return r.status === 204 ? null : r.text().then(function (t) { return t ? JSON.parse(t) : null; }); });
+  }
+  function voteStatus(msg) { var el = app.querySelector(".vote-status"); if (el) el.textContent = msg || ""; }
+  function showVotes(rows) {
+    var counts = {}; (rows || []).forEach(function (r) { counts[r.topic] = r.votes; });
+    var cards = [].slice.call(app.querySelectorAll(".topic[data-topic]"));
+    var ns = cards.map(function (c) { return counts[c.getAttribute("data-topic")] || 0; });
+    var full = Math.max(voteGoal(), Math.max.apply(null, ns.concat([0]))), mine = votedList();
+    var list = app.querySelector(".topics"); if (list) list.classList.add("is-in");
+    cards.forEach(function (c, i) {
+      var t = c.getAttribute("data-topic"), n = ns[i], voted = mine.indexOf(t) >= 0;
+      c.style.setProperty("--to", Math.min(1, n / full).toFixed(3));
+      c.querySelector(".count").textContent = votesLabel(n) || "No votes yet";
+      c.querySelector(".act").innerHTML = voted ? "Voted &#10003;" : "Vote &rarr;";
+      c.classList.toggle("voted", voted);
+      c.setAttribute("aria-label", t + ", " + (votesLabel(n) || "no votes yet") + (voted ? ". You voted for this." : ". Vote"));
+    });
+    var see = app.querySelector(".see-votes"); if (see) see.textContent = "Refresh the votes";
+  }
+  function loadVotes() { return sb("/rest/v1/toic_votes?select=topic,votes").then(showVotes); }
+  var voteBusy = false;
+  app.addEventListener("click", function (e) {
+    if (!voteLive()) return;
+    var see = e.target.closest(".see-votes");
+    var card = e.target.closest(".topic[data-topic]");
+    if ((!see && !card) || voteBusy) return;
+    voteBusy = true;
+    var job;
+    if (see) { voteStatus("Loading the votes…"); job = loadVotes().then(function () { voteStatus(""); }); }
+    else {
+      var t = card.getAttribute("data-topic");
+      if (votedList().indexOf(t) >= 0) { voteStatus("You’ve already voted for " + t + ". Here is how the boxes stand."); job = loadVotes(); }
+      else {
+        card.classList.add("busy"); voteStatus("Counting your vote…");
+        job = sb("/rest/v1/rpc/toic_vote", { topic_name: t }).then(function () { rememberVote(t); return loadVotes(); })
+          .then(function () { voteStatus("Thank you! Your vote for " + t + " is in."); });
+      }
+    }
+    job.catch(function () { voteStatus("The vote can’t be reached right now. Please try again in a moment."); })
+      .then(function () { voteBusy = false; [].forEach.call(app.querySelectorAll(".topic.busy"), function (c) { c.classList.remove("busy"); }); });
+  });
   document.addEventListener("submit", function (e) {
     var f = e.target;
     if (!f || !f.classList || !f.classList.contains("suggest")) return;
     e.preventDefault();
-    var v = (f.querySelector("input").value || "").trim();
+    var input = f.querySelector("input"), v = (input.value || "").trim();
     if (!v) return;
+    if (f.getAttribute("data-live") && voteLive()) {
+      var btn = f.querySelector("button"); btn.disabled = true;
+      sb("/rest/v1/rpc/toic_suggest", { suggestion_text: v })
+        .then(function () { input.value = ""; voteStatus("Thank you! Your suggestion “" + v + "” is in."); })
+        .catch(function () { voteStatus("Your suggestion couldn’t be sent right now. Please try again in a moment."); })
+        .then(function () { btn.disabled = false; });
+      return;
+    }
     location.href = "mailto:" + f.getAttribute("data-mail") + "?subject=" + encodeURIComponent("TOIC topic suggestion: " + v) + "&body=" + encodeURIComponent("My suggestion for a future table: " + v + "\n\n");
   });
 
@@ -1290,9 +1374,14 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     var el = app.querySelector(".topics");
     if (!el) return;
     var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    if (reduce || !("IntersectionObserver" in window)) { el.classList.add("is-in"); return; }
+    if (reduce || !("IntersectionObserver" in window)) { el.classList.add("is-in"); if (voteLive() && votedList().length) loadVotes().catch(function () {}); return; }
     var io = new IntersectionObserver(function (es) {
-      es.forEach(function (e) { if (e.isIntersecting) { el.classList.add("is-in"); io.disconnect(); } });
+      es.forEach(function (e) {
+        if (!e.isIntersecting) return;
+        el.classList.add("is-in"); io.disconnect();
+        /* someone who has voted before chose to talk to the vote database, so show them where it stands */
+        if (voteLive() && votedList().length) loadVotes().catch(function () {});
+      });
     }, { threshold: 0.35 });
     io.observe(el);
   }
@@ -1740,6 +1829,8 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     vote: { key: "vote", single: true, title: "Vote for the next topic", fields: [
       ["topics", "Topics", "lines", "One per line. Optionally add | and a short question, then | and the votes so far, e.g. Landscape | Is a landscape out there? | 3"],
       ["url", "Poll link (optional)", "url", "e.g. a Nuudel poll. Leave empty and votes arrive by email at the address in Legal details."],
+      ["supabaseUrl", "Vote database URL (Supabase)", "url", "e.g. https://abcd1234.supabase.co. With this and the key, clicking a box votes directly."],
+      ["supabaseKey", "Vote database key (publishable)", "text", "The publishable (or anon) key. Never the secret key."],
       ["goal", "Votes to fill a box", "text", "e.g. 10. A box fills up as its votes get closer to this number; once one passes it, the fullest box sets the scale."]
     ] },
     rules: { key: "rules", single: true, title: "Table rules", fields: [

@@ -208,7 +208,13 @@ button.topic { width: 100%; font: inherit; text-align: left; cursor: pointer; -w
 .rec-list { display: grid; padding-bottom: 3rem; }
 .rec-card { display: grid; grid-template-columns: 9rem minmax(0, 1fr) auto; gap: 1.5rem; padding-block: 2.25rem; border-bottom: 1px solid var(--rule); text-decoration: none; color: inherit; align-items: start; }
 .rec-card .num { font-family: var(--stencil); font-weight: 700; font-size: clamp(3.5rem, 7vw, 5rem); line-height: .82; font-variant-numeric: tabular-nums; }
+.rec-card { position: relative; }
+.rec-card .rq a { color: inherit; text-decoration: none; }
+.rec-card .rec-link::after { content: ""; position: absolute; inset: 0; } /* the whole card opens the session */
 .rec-card:hover .rq { text-decoration: underline; text-decoration-thickness: 1px; text-underline-offset: .18em; }
+.rec-card .rec-link:focus-visible { outline: none; }
+.rec-card:has(.rec-link:focus-visible) { outline: 2px solid var(--ink); outline-offset: 4px; }
+.rec-actions { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: .6rem; }
 .rec-card .go { font-family: var(--mono); font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); padding-top: .3rem; white-space: nowrap; }
 .rq { font-size: clamp(1.55rem, 3vw, 2.25rem); line-height: 1.12; }
 .line { font-style: italic; font-size: 1.15rem; color: var(--muted); }
@@ -761,8 +767,16 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   }
   /* a session with its own RSVP link (e.g. one Luma event) gets a single button to it */
   function isSoon(x) { return !!(x && x.soon && x.status === "upcoming"); }
+  /* an upcoming table whose date has passed (but isn't recorded yet) stops taking RSVPs by itself */
+  var MONTHS = ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"];
+  function isPast(x) {
+    if (!x || x.status !== "upcoming") return false;
+    var m = String(x.date || "").toLowerCase().match(/(\d{1,2})\.?\s+([a-z]+)\s+(\d{4})/);
+    if (!m || MONTHS.indexOf(m[2]) < 0) return false;
+    return Date.now() > new Date(+m[3], MONTHS.indexOf(m[2]), +m[1], 23, 59).getTime();
+  }
   function rsvpButtons(x) {
-    if (isSoon(x)) return "";
+    if (isSoon(x) || isPast(x)) return "";
     var u = (x && x.rsvpUrl || "").trim();
     if (!u) return joinButtons("btn ink", "btn", "RSVP");
     var name = /luma\.com|lu\.ma/.test(u) ? "Luma" : /meetup\.com|meetu\.ps/.test(u) ? "Meetup" : "";
@@ -775,7 +789,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   function circleNames(x) { return (x.circle || []).filter(Boolean); }
   function metaLine(x) {
     var up = x.status === "upcoming";
-    return '<div class="rec-meta"><span class="chip' + (up ? " up" : "") + '">' + (up ? (isSoon(x) ? "Coming soon" : "Upcoming") : "Recorded") + "</span><span>No. " + esc(x.no) + "</span>" +
+    return '<div class="rec-meta"><span class="chip' + (up ? " up" : "") + '">' + (up ? (isSoon(x) ? "Coming soon" : isPast(x) ? "Record coming" : "Upcoming") : "Recorded") + "</span><span>No. " + esc(x.no) + "</span>" +
       (x.date ? "<span>" + esc(x.date) + "</span>" : "") + (x.format ? "<span>" + esc(x.format) + "</span>" : "") + "</div>";
   }
 
@@ -783,7 +797,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   function club() {
     var s = S.settings;
     /* every upcoming table, soonest first (the minute-book lists newest first) */
-    var ups = S.sessions.filter(function (x) { return x.status === "upcoming"; }).reverse();
+    var ups = S.sessions.filter(function (x) { return x.status === "upcoming" && !isPast(x); }).reverse();
     var tickItems = [s.when || "Thursdays & Saturdays", "Hamburg", "Five at the table", "One question", "No history lessons", "Bring your own question", "Guruvāra: the day of the teacher"];
     var tick = tickItems.map(function (t) { return "<span>" + esc(t) + "</span><span><b>&#x2643;&#xFE0E;</b></span>"; }).join("");
     var nextBlock = ups.length ? (
@@ -800,7 +814,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
         '<div class="hero-copy">' +
           '<p class="eyebrow">Hamburg · Thursdays &amp; Saturdays</p>' +
           '<h1><span style="--i:0">Yes. No.</span> <span style="--i:1">Both. Neither.</span> <span style="--i:2">Let\u2019s talk! :)</span></h1>' +
-          '<p class="lede">A small table for thinking out loud, together. Once a week, up to five people sit down with one question and think it through in their own words.</p>' +
+          '<p class="lede">A small table for thinking out loud, together. Up to five people sit down with one question and think it through in their own words.</p>' +
           '<div class="actions">' + joinButtons("btn solid", "btn", "Join") + '<a class="btn" href="#records">Read the records</a></div>' +
         "</div>" +
         '<div class="hero-mark"><img class="mark" src="' + MARK + '" alt="The club mark: IO above 1O"><img class="word" src="' + WORD + '" alt="1he 0dinary 1nquiry 0lub"></div>' +
@@ -852,15 +866,16 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     var list = S.sessions.map(function (x) {
       var c = circleNames(x).length;
       return (
-        '<a class="rec-card" href="#' + sessionId(x) + '">' +
+        '<article class="rec-card">' +
           '<div class="num" aria-hidden="true">' + esc(x.no) + "</div>" +
           '<div class="rec-body">' + metaLine(x) +
-            '<h3 class="rq">' + esc(sessionTitle(x)) + "</h3>" +
+            '<h3 class="rq"><a class="rec-link" href="#' + sessionId(x) + '">' + esc(sessionTitle(x)) + "</a></h3>" +
             (x.line ? '<p class="line">“' + esc(x.line) + "”</p>" : "") +
             '<p class="credit">' + (x.place ? "Hosted at <span>" + esc(x.place) + "</span>" : isSoon(x) ? "Date and venue coming soon" : x.rsvpUrl ? "Venue on the event page" : "Venue to be announced") + (c ? " · " + c + " in the circle" : "") + "</p>" +
+            (x.status === "upcoming" && !isSoon(x) && !isPast(x) ? '<div class="actions rec-actions">' + rsvpButtons(x) + "</div>" : "") +
           "</div>" +
           '<span class="go" aria-hidden="true">Open →</span>' +
-        "</a>"
+        "</article>"
       );
     }).join("");
     return (
@@ -896,7 +911,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
           (x.topic && x.question ? '<p class="sess-topic">Theme: ' + esc(x.topic) + "</p>" : "") +
           '<p class="credit">' + (x.place ? "Hosted at <span>" + esc(x.place) + "</span>" : isSoon(x) ? "Date and venue coming soon" : x.rsvpUrl ? "Venue on the event page" : "Venue to be announced") + "</p>" +
           tagChips(x) +
-          (up && !isSoon(x) ? '<div class="actions">' + rsvpButtons(x) + "</div>" : "") +
+          (up && !isSoon(x) && !isPast(x) ? '<div class="actions">' + rsvpButtons(x) + "</div>" : "") +
         "</div></div>" +
         (x.line ? '<figure class="night"><figcaption class="eyebrow">Line of the night</figcaption><blockquote><p><mark>' + esc(x.line) + "</mark></p></blockquote></figure>" : "") +
         '<div class="sess-body">' +

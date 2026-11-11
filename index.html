@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>The Ordinary Inquiry Club</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="A small table for thinking out loud, together. Hamburg, Thursdays 18:00–20:00: one question, up to five people, your own words.">
+<meta name="description" content="A small table for thinking out loud, together. Hamburg, Thursdays & Saturdays: one question, two hours, up to five people, your own words.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="The Ordinary Inquiry Club">
-<meta property="og:description" content="A small table for thinking out loud, together. Hamburg, Thursdays 18:00–20:00: one question, up to five people, your own words.">
+<meta property="og:description" content="A small table for thinking out loud, together. Hamburg, Thursdays & Saturdays: one question, two hours, up to five people, your own words.">
 <meta property="og:url" content="https://sudhara-jayalath.github.io/toic/">
 <meta property="og:image" content="https://sudhara-jayalath.github.io/toic/og.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -502,17 +502,17 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   "theme": "neon",
   "lines": "on",
   "letterUrl": "",
-  "when": "Thursdays 18:00–20:00"
+  "when": "Thursdays & Saturdays"
  },
  "sessions": [
   {
    "id": "s03",
    "no": "03",
    "status": "upcoming",
-   "soon": "yes",
-   "date": "",
-   "format": "Table",
+   "date": "Saturday, 28 November 2026 · 15:00–17:00",
+   "format": "Saturday table",
    "place": "",
+   "rsvpUrl": "https://meetu.ps/e/Qpd2S/16kDq2/i",
    "topic": "",
    "question": "What is Essence?",
    "line": "",
@@ -628,7 +628,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   {
    "id": "f-listen",
    "q": "Can I just listen?",
-   "a": "Yes. Nobody has to speak. But we would love to hear at least one thought from you by the end of the evening. The short closing round is a good moment for it."
+   "a": "Yes. Nobody has to speak. But we would love to hear at least one thought from you by the end of the session. The short closing round is a good moment for it."
   },
   {
    "id": "f-archive",
@@ -638,12 +638,12 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   {
    "id": "f-size",
    "q": "What if more than five people want to come?",
-   "a": "The Thursday table is kept to five people, four guests and the host, so everyone has room to think out loud. When it is full, there is a waitlist.\n\nWe are starting small on purpose, to see how the table develops. In the future we may organise bigger events. The Thursday table will stay small."
+   "a": "Each table is kept small, never more than five people with the host, so everyone has room to think out loud. When it is full, there is a waitlist.\n\nWe are starting small on purpose, to see how the table develops. In the future we may organise bigger events. The tables themselves will stay small."
   },
   {
    "id": "f-friend",
    "q": "Can I bring a friend?",
-   "a": "Not to the Thursday table. Places are limited, and everyone signs up on their own so the table stays balanced. Your friend is very welcome to RSVP too."
+   "a": "Not to the table. Places are limited, and everyone signs up on their own so the table stays balanced. Your friend is very welcome to RSVP too."
   },
   {
    "id": "f-religion",
@@ -665,8 +665,8 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   "listen": "At TOIC, talking is only about 30 percent of taking part. The other 70 percent is listening.\n\nListening here means more than waiting for your turn. It means paying respect to the person who is speaking: giving them your full attention, letting them finish, and making the table a safe place for a thought that isn't finished yet.\n\nThat safety is something we give each other. Offer it while others speak; it is the only way you can expect to receive it when it is your turn.",
   "items": [
    "Keep your voice at café level, so we can hear each other and the guests around us can enjoy their evening too.",
-   "Respect for everyone, always. Disagree with ideas, never with people. Harassment or discrimination of any kind has no place here. If something feels wrong, tell the host, during the evening or afterwards.",
-   "Arrive by 18:00. The question opens at 18:10.",
+   "Respect for everyone, always. Disagree with ideas, never with people. Harassment or discrimination of any kind has no place here. If something feels wrong, tell the host, during the session or afterwards.",
+   "Arrive on time. The question opens ten minutes after we start.",
    "Phones on silent, please. It’s just two hours :)",
    "No photos or recordings without asking everyone first. What is said at the table stays at the table, unless you agree to be quoted.",
    "The café hosts us for free, so please order something. A drink or two is plenty.",
@@ -675,7 +675,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
  },
  "rules": {
   "items": [
-   "One question per evening.",
+   "One question per table.",
    "Speak from your own life. No famous names needed.",
    "Everyone gets the floor. Nobody has to take it.",
    "Disagree with ideas, never with people.",
@@ -784,7 +784,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     var s = S.settings;
     /* every upcoming table, soonest first (the minute-book lists newest first) */
     var ups = S.sessions.filter(function (x) { return x.status === "upcoming"; }).reverse();
-    var tickItems = [s.when || "Thursdays 18:00–20:00", "Hamburg", "Five at the table", "One question", "No history lessons", "Bring your own question", "Guruvāra: the day of the teacher"];
+    var tickItems = [s.when || "Thursdays & Saturdays", "Hamburg", "Five at the table", "One question", "No history lessons", "Bring your own question", "Guruvāra: the day of the teacher"];
     var tick = tickItems.map(function (t) { return "<span>" + esc(t) + "</span><span><b>&#x2643;&#xFE0E;</b></span>"; }).join("");
     var nextBlock = ups.length ? (
       '<div class="next">' + ups.map(function (next, i) {
@@ -798,7 +798,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     return (
       '<div class="hero"><div class="inner">' +
         '<div class="hero-copy">' +
-          '<p class="eyebrow">Hamburg · Thursdays</p>' +
+          '<p class="eyebrow">Hamburg · Thursdays &amp; Saturdays</p>' +
           '<h1><span style="--i:0">Yes. No.</span> <span style="--i:1">Both. Neither.</span> <span style="--i:2">Let\u2019s talk! :)</span></h1>' +
           '<p class="lede">A small table for thinking out loud, together. Once a week, up to five people sit down with one question and think it through in their own words.</p>' +
           '<div class="actions">' + joinButtons("btn solid", "btn", "Join") + '<a class="btn" href="#records">Read the records</a></div>' +
@@ -818,11 +818,11 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       '<div class="inner"><p class="quote"><mark>Let’s rescue philosophy from history books and institutions,</mark> and bring it back to the streets.</p></div>' +
 
       '<div class="inner section">' +
-        '<div class="lead"><p class="eyebrow">A Thursday at the table</p><h2>Two hours, one question</h2></div>' +
+        '<div class="lead"><p class="eyebrow">At the table</p><h2>Two hours, one question</h2></div>' +
         '<ol class="timeline">' +
-          '<li><span class="t">18:00</span><h3>We sit down</h3><p>One table in a Hamburg café, up to five people. A drink or two is plenty.</p></li>' +
-          '<li><span class="t">18:10</span><h3>One question</h3><p>A focused question, announced a few days before on ' + mainPlatform() + '.</p></li>' +
-          '<li><span class="t">→20:00</span><h3>Your own words</h3><p>Everyone thinks from their own life. No famous names needed to make a point.</p></li>' +
+          '<li><span class="t">Arrive</span><h3>We sit down</h3><p>One table in a Hamburg café, up to five people. A drink or two is plenty.</p></li>' +
+          '<li><span class="t">+10 min</span><h3>One question</h3><p>A focused question, announced a few days before on ' + mainPlatform() + '.</p></li>' +
+          '<li><span class="t">2 hours</span><h3>Your own words</h3><p>Everyone thinks from their own life. No famous names needed to make a point.</p></li>' +
           '<li><span class="t">After</span><h3>The record</h3><p>The question, the threads and what we found go into the minute-book.</p></li>' +
         "</ol>" +
       "</div>" +
@@ -841,7 +841,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       "</div>" +
 
       '<div class="band"><div class="inner">' +
-        '<div class="copy"><p class="eyebrow">The Thursday Letter</p><h2>One short letter after each session</h2><p>The question we asked, the threads worth keeping, and the next topic. Nothing else.</p></div>' +
+        '<div class="copy"><p class="eyebrow">The Letter</p><h2>One short letter after each session</h2><p>The question we asked, the threads worth keeping, and the next topic. Nothing else.</p></div>' +
         '<div class="actions">' + (letterUrl() ? ext(letterUrl(), "Subscribe", "btn jup") : lumaUrl() ? ext(lumaUrl(), "Subscribe on Luma", "btn jup") : ext(joinUrl(), "Get it via Meetup", "btn jup")) + '<a class="btn" href="#letter">Past letters</a></div>' +
       "</div></div>"
     );
@@ -857,7 +857,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
           '<div class="rec-body">' + metaLine(x) +
             '<h3 class="rq">' + esc(sessionTitle(x)) + "</h3>" +
             (x.line ? '<p class="line">“' + esc(x.line) + "”</p>" : "") +
-            '<p class="credit">' + (x.place ? "Hosted at <span>" + esc(x.place) + "</span>" : isSoon(x) ? "Date and venue coming soon" : "Venue to be announced") + (c ? " · " + c + " in the circle" : "") + "</p>" +
+            '<p class="credit">' + (x.place ? "Hosted at <span>" + esc(x.place) + "</span>" : isSoon(x) ? "Date and venue coming soon" : x.rsvpUrl ? "Venue on the event page" : "Venue to be announced") + (c ? " · " + c + " in the circle" : "") + "</p>" +
           "</div>" +
           '<span class="go" aria-hidden="true">Open →</span>' +
         "</a>"
@@ -894,7 +894,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
         '<div class="sess-head"><div class="num" aria-hidden="true">' + esc(x.no) + '</div><div class="sess-title">' + metaLine(x) +
           '<h2 class="sess-q">' + esc(sessionTitle(x)) + "</h2>" +
           (x.topic && x.question ? '<p class="sess-topic">Theme: ' + esc(x.topic) + "</p>" : "") +
-          '<p class="credit">' + (x.place ? "Hosted at <span>" + esc(x.place) + "</span>" : isSoon(x) ? "Date and venue coming soon" : "Venue to be announced") + "</p>" +
+          '<p class="credit">' + (x.place ? "Hosted at <span>" + esc(x.place) + "</span>" : isSoon(x) ? "Date and venue coming soon" : x.rsvpUrl ? "Venue on the event page" : "Venue to be announced") + "</p>" +
           tagChips(x) +
           (up && !isSoon(x) ? '<div class="actions">' + rsvpButtons(x) + "</div>" : "") +
         "</div></div>" +
@@ -940,7 +940,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     var mail = (S.legal.email || "").trim();
     var join =
       '<article class="member join"><p class="eyebrow">Your page here</p><h3>Join the chamber</h3>' +
-      "<p>Came to a Thursday and want a place here? Apply with the short form below. It asks for four things:</p>" +
+      "<p>Came to a table and want a place here? Apply with the short form below. It asks for four things:</p>" +
       "<ul><li>your name, as you'd like it shown</li><li>one line on what you do, by profession or by passion</li><li>a thought of your own, in one sentence</li><li>a short bio of up to 80 words</li></ul><p>Later you can add one-liners, notes, poems or anything else you write about the concepts we discuss. They appear on your page and in the Lexicon.</p>" +
       (mail ? '<button type="button" class="btn ink m-open" data-jump="apply">Apply below <span class="arr" aria-hidden="true">\u2193</span></button>' : "") +
       '<p class="m-foot">Prefer to talk first? Bring it to the next table.</p></article>';
@@ -1043,7 +1043,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     }).join("");
     var sub = letterUrl() ? ext(letterUrl(), "Subscribe to the letter", "btn ink") : lumaUrl() ? ext(lumaUrl(), "Subscribe on Luma", "btn ink") : ext(joinUrl(), "Join on Meetup to receive it", "btn ink");
     return (
-      '<div class="inner page-head"><p class="eyebrow">The Thursday Letter</p><h2>Letters from the table</h2>' +
+      '<div class="inner page-head"><p class="eyebrow">The Letter</p><h2>Letters from the table</h2>' +
       '<p class="intro">After each session, one short letter: the question we asked, the threads worth keeping, and the next topic.</p>' +
       '<div class="actions">' + sub + "</div>" +
       '<p class="how">' + (letterUrl() ? "Subscribing opens our newsletter page in a new tab. Every letter is also archived here." : lumaUrl() ? "Subscribe to our Luma calendar and each letter arrives by email. Every letter is also archived here." : "Until the email list opens, every letter goes out to members of our Meetup group and is archived here.") + "</p>" +
@@ -1441,7 +1441,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     if (!rows.length) return "";
     return (
       '<div class="inner section leftovers-all"><div class="lead"><p class="eyebrow">Leftovers</p><h2>Questions waiting for a table</h2>' +
-      '<p class="intro">What the evenings raised but didn’t answer. Some of them will become future sessions.</p></div>' +
+      '<p class="intro">What the tables raised but didn’t answer. Some of them will become future sessions.</p></div>' +
       '<ul class="left-list">' + rows.map(function (r) { return '<li><span class="q-text">' + esc(r.q) + '</span><a class="credit" href="#' + sessionId(r.x) + '">from No. ' + esc(r.x.no) + "</a></li>"; }).join("") + "</ul></div>"
     );
   }
@@ -1454,7 +1454,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     }).join("");
     return (
       '<div class="inner page-head"><p class="eyebrow">FAQ</p><h2>Questions people ask</h2>' +
-      '<p class="intro">Before your first Thursday. If your question isn\u2019t here, ask us on ' + mainPlatform() + '.</p>' +
+      '<p class="intro">Before your first table. If your question isn\u2019t here, ask us on ' + mainPlatform() + '.</p>' +
       '<button type="button" class="ed" data-act="add" data-kind="faq">+ Add a question</button></div>' +
       '<div class="inner"><div class="faq">' + (items || '<p class="pending">No questions yet.</p>') + "</div></div>"
     );
@@ -1916,7 +1916,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       ["since", "Member since", "text", "e.g. November 2026"],
       ["note", "Note (optional)", "text", "Shown in small print, e.g. that an entry is a placeholder."]
     ] },
-    letter: { key: "letters", title: "Thursday Letter", fields: [
+    letter: { key: "letters", title: "The Letter", fields: [
       ["no", "Number", "text", "e.g. 01"],
       ["date", "Date", "text"],
       ["title", "Title", "text"],
@@ -1980,7 +1980,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       ["lines", "Drawings in the hero", "select", [["off", "Off"], ["on", "Columns and patterns"], ["wisdom", "Figures of wisdom"]]],
       ["theme", "Look", "select", [["neon", "Neon (Hamburg at night)"], ["yellow", "Jupiter yellow (special seasons)"]]],
       ["letterUrl", "Newsletter sign-up link (optional)", "url", "Leave empty to use the Luma calendar (Luma sends newsletters to its subscribers), or Meetup if there is no Luma link."],
-      ["when", "When (shown in the ticker)", "text", "e.g. Thursdays 18:00–20:00"]
+      ["when", "When (shown in the ticker)", "text", "e.g. Thursdays & Saturdays"]
     ] }
   };
 

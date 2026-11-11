@@ -126,6 +126,7 @@ h3 { font-size: 1.5rem; line-height: 1.15; }
 .next .inner { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 1.5rem 2.5rem; align-items: center; padding-block: 2.5rem; }
 .next .inner + .inner { border-top: 1px solid var(--rule); }
 /* vote for the next topic */
+.vote { scroll-margin-top: 4.5rem; }
 .vote .lead { display: grid; gap: 1rem; max-width: 46rem; }
 .vote .intro { margin: 0; }
 .topics { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(auto-fill, minmax(12.5rem, 1fr)); gap: 1rem; }
@@ -1415,12 +1416,14 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     else if (/^member-/.test(h) && memberBySlug(h.slice(7))) { v = "member"; nav = "chamber"; document.getElementById("member-page").innerHTML = memberPage(memberBySlug(h.slice(7))); }
     else if (/^concept-/.test(h) && conceptBySlug(h.slice(8))) { v = "concept"; nav = "lexicon"; document.getElementById("concept-page").innerHTML = conceptPage(conceptBySlug(h.slice(8))); }
     else if (/^work-/.test(h) && workById(h.slice(5))) { v = "work"; nav = memberByName(workById(h.slice(5)).author) ? "chamber" : "lexicon"; document.getElementById("work-page").innerHTML = workPage(workById(h.slice(5))); }
+    else if (h === "vote") { v = "club"; }
     else v = ALL_VIEWS.indexOf(h) >= 0 ? h : "club";
     nav = nav || v;
     Array.prototype.forEach.call(document.querySelectorAll("[data-view]"), function (s) { s.hidden = s.getAttribute("data-view") !== v; });
     Array.prototype.forEach.call(document.querySelectorAll(".views a"), function (a) { if (a.getAttribute("data-v") === nav) a.setAttribute("aria-current", "page"); else a.removeAttribute("aria-current"); });
     Array.prototype.forEach.call(document.querySelectorAll(".member.flash"), function (el) { el.classList.remove("flash"); });
     if (target) { target.classList.add("flash"); target.scrollIntoView({ block: "start" }); }
+    else if (h === "vote") { var vb = document.querySelector(".vote"); if (vb) requestAnimationFrame(function () { vb.scrollIntoView({ block: "start" }); }); }
     else if (scroll) window.scrollTo(0, 0);
   }
 

@@ -484,6 +484,24 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
  },
  "sessions": [
   {
+   "id": "s03",
+   "no": "03",
+   "status": "upcoming",
+   "soon": "yes",
+   "date": "",
+   "format": "Table",
+   "place": "",
+   "topic": "",
+   "question": "What is Essence?",
+   "line": "",
+   "threads": "",
+   "insights": [],
+   "concepts": [],
+   "leftovers": [],
+   "circle": [],
+   "table": ""
+  },
+  {
    "id": "s02",
    "no": "02",
    "status": "upcoming",
@@ -720,7 +738,9 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     return platforms().map(function (p, i) { return ext(p.url, (verb || "Join") + " on " + p.name, i ? c2 : c1); }).join("");
   }
   /* a session with its own RSVP link (e.g. one Luma event) gets a single button to it */
+  function isSoon(x) { return !!(x && x.soon && x.status === "upcoming"); }
   function rsvpButtons(x) {
+    if (isSoon(x)) return "";
     var u = (x && x.rsvpUrl || "").trim();
     if (!u) return joinButtons("btn ink", "btn", "RSVP");
     var name = /luma\.com|lu\.ma/.test(u) ? "Luma" : /meetup\.com|meetu\.ps/.test(u) ? "Meetup" : "";
@@ -733,7 +753,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   function circleNames(x) { return (x.circle || []).filter(Boolean); }
   function metaLine(x) {
     var up = x.status === "upcoming";
-    return '<div class="rec-meta"><span class="chip' + (up ? " up" : "") + '">' + (up ? "Upcoming" : "Recorded") + "</span><span>No. " + esc(x.no) + "</span>" +
+    return '<div class="rec-meta"><span class="chip' + (up ? " up" : "") + '">' + (up ? (isSoon(x) ? "Coming soon" : "Upcoming") : "Recorded") + "</span><span>No. " + esc(x.no) + "</span>" +
       (x.date ? "<span>" + esc(x.date) + "</span>" : "") + (x.format ? "<span>" + esc(x.format) + "</span>" : "") + "</div>";
   }
 
@@ -749,8 +769,8 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
         return '<div class="inner">' +
           '<div class="num" aria-hidden="true">' + esc(next.no) + "</div>" +
           '<div class="body"><p class="eyebrow">' + (i ? "After that" : "Next at the table") + '</p><h3><a href="#' + sessionId(next) + '">' + esc(sessionTitle(next)) + "</a></h3>" +
-          '<p class="meta">' + esc([next.date, next.place ? "Hosted at " + next.place : ""].filter(Boolean).join(" · ")) + "</p></div>" +
-          '<div class="actions">' + rsvpButtons(next) + "</div>" +
+          '<p class="meta">' + esc(isSoon(next) ? "Coming soon" : [next.date, next.place ? "Hosted at " + next.place : ""].filter(Boolean).join(" · ")) + "</p></div>" +
+          (isSoon(next) ? "" : '<div class="actions">' + rsvpButtons(next) + "</div>") +
         "</div>";
       }).join("") + "</div>") : "";
     return (
@@ -815,7 +835,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
           '<div class="rec-body">' + metaLine(x) +
             '<h3 class="rq">' + esc(sessionTitle(x)) + "</h3>" +
             (x.line ? '<p class="line">“' + esc(x.line) + "”</p>" : "") +
-            '<p class="credit">' + (x.place ? "Hosted at <span>" + esc(x.place) + "</span>" : "Venue to be announced") + (c ? " · " + c + " in the circle" : "") + "</p>" +
+            '<p class="credit">' + (x.place ? "Hosted at <span>" + esc(x.place) + "</span>" : isSoon(x) ? "Date and venue coming soon" : "Venue to be announced") + (c ? " · " + c + " in the circle" : "") + "</p>" +
           "</div>" +
           '<span class="go" aria-hidden="true">Open →</span>' +
         "</a>"
@@ -852,9 +872,9 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
         '<div class="sess-head"><div class="num" aria-hidden="true">' + esc(x.no) + '</div><div class="sess-title">' + metaLine(x) +
           '<h2 class="sess-q">' + esc(sessionTitle(x)) + "</h2>" +
           (x.topic && x.question ? '<p class="sess-topic">Theme: ' + esc(x.topic) + "</p>" : "") +
-          '<p class="credit">' + (x.place ? "Hosted at <span>" + esc(x.place) + "</span>" : "Venue to be announced") + "</p>" +
+          '<p class="credit">' + (x.place ? "Hosted at <span>" + esc(x.place) + "</span>" : isSoon(x) ? "Date and venue coming soon" : "Venue to be announced") + "</p>" +
           tagChips(x) +
-          (up ? '<div class="actions">' + rsvpButtons(x) + "</div>" : "") +
+          (up && !isSoon(x) ? '<div class="actions">' + rsvpButtons(x) + "</div>" : "") +
         "</div></div>" +
         (x.line ? '<figure class="night"><figcaption class="eyebrow">Line of the night</figcaption><blockquote><p><mark>' + esc(x.line) + "</mark></p></blockquote></figure>" : "") +
         '<div class="sess-body">' +
@@ -1765,6 +1785,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     session: { key: "sessions", title: "Session record", fields: [
       ["no", "Number", "text", "Two digits, e.g. 02"],
       ["status", "Status", "select", ["upcoming", "recorded"]],
+      ["soon", "Coming soon", "select", [["", "No: date, venue and RSVP are set"], ["yes", "Yes: show only \u201ccoming soon\u201d"]]],
       ["question", "The question", "textarea", "This is the title of the session, e.g. When does work actually end?"],
       ["date", "Date and time", "text", "e.g. Thursday 13 November 2026, 18:00–20:00"],
       ["format", "Format", "text", "e.g. Table, Walk, Guest table"],

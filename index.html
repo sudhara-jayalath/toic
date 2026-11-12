@@ -334,6 +334,24 @@ a.tag:hover { background: var(--jupiter); color: var(--on-jupiter); border-color
 .theory p { font-family: var(--display); font-size: 1.3rem; line-height: 1.22; }
 .m-foot { font-family: var(--mono); font-size: .74rem; color: var(--muted); }
 .member.join { border-style: dashed; background: var(--paper-2); border-color: var(--muted); }
+/* the chamber: every member card opens with a pane of light, divided like the club's four-paned mark */
+.chamber-idea { display: grid; gap: .9rem; max-width: 46rem; }
+.chamber-idea .intro { margin: 0; }
+.m-window { position: relative; height: 6.5rem; margin: -1.6rem -1.6rem .4rem; border-bottom: 1.5px solid var(--ink); overflow: hidden; isolation: isolate; }
+.m-window::before { content: ""; position: absolute; inset: 0; z-index: -1; background:
+  radial-gradient(70% 120% at 20% 10%, var(--neon-2) 0%, transparent 70%),
+  radial-gradient(60% 110% at 85% 30%, var(--neon-1) 0%, transparent 70%),
+  linear-gradient(170deg, var(--neon-3), var(--neon-4)); filter: hue-rotate(var(--h, 0deg)) saturate(.9); opacity: .85; transition: opacity .3s ease; }
+.m-window::after { content: ""; position: absolute; inset: 0; background:
+  linear-gradient(var(--paper), var(--paper)) center / 2px 100% no-repeat,
+  linear-gradient(var(--paper), var(--paper)) center / 100% 2px no-repeat; }
+.member:hover .m-window::before { opacity: 1; }
+.m-window.open { border-bottom: 1.5px dashed var(--muted); }
+.m-window.open::before { background: none; }
+.m-window.open::after { background:
+  linear-gradient(var(--muted), var(--muted)) center / 1px 100% no-repeat,
+  linear-gradient(var(--muted), var(--muted)) center / 100% 1px no-repeat; opacity: .5; }
+@media (prefers-reduced-motion: reduce) { .m-window::before { transition: none; } }
 .member.join ul { margin: 0; padding-left: 1.1rem; display: grid; gap: .3rem; }
 .member.join .m-open { justify-self: start; cursor: pointer; }
 /* Chamber application form */
@@ -744,6 +762,8 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   function safeUrl(u) { u = String(u || "").trim(); return /^https?:\/\/\S+$/i.test(u) ? u : ""; }
   function paras(t) { return String(t || "").split(/\n\s*\n/).map(function (p) { return p.trim(); }).filter(Boolean); }
   function P(t) { return paras(t).map(function (p) { return "<p>" + esc(p) + "</p>"; }).join(""); }
+  /* each member's pane of light gets its own colour, always the same for the same name */
+  function paneHue(name) { var h = 0, t = String(name || ""); for (var i = 0; i < t.length; i++) h = (h * 31 + t.charCodeAt(i)) % 360; return h; }
   function initials(n) { return String(n || "?").trim().split(/\s+/).map(function (w) { return w.charAt(0); }).slice(0, 2).join("").toUpperCase(); }
   function pend(t) { return '<span class="pending">' + esc(t) + "</span>"; }
   function ext(href, label, cls) { return '<a class="' + cls + '" href="' + esc(href) + '" target="_blank" rel="noopener noreferrer">' + label + ' <span class="arr" aria-hidden="true">&#8599;</span></a>'; }
@@ -941,6 +961,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       var foot = [m.since ? "Member since " + esc(m.since) : "", link ? '<a href="' + esc(link) + '" target="_blank" rel="noopener noreferrer">' + esc(link.replace(/^https?:\/\/(www\.)?/i, "").replace(/\/$/, "")) + "</a>" : ""].filter(Boolean).join(" · ");
       return (
         '<article class="member">' +
+          '<div class="m-window" aria-hidden="true" style="--h:' + paneHue(m.name) + 'deg"></div>' +
           '<div class="m-head"><div class="tile" aria-hidden="true">' + esc(initials(m.name)) + '</div><div><h3><a class="m-name" href="#' + memberId(m) + '">' + esc(m.name) + "</a></h3>" + (m.line ? '<p class="m-line">' + esc(m.line) + "</p>" : "") + "</div></div>" +
           (m.note ? '<p class="m-note">' + esc(m.note) + "</p>" : "") +
           (m.theory ? '<blockquote class="theory"><span class="eyebrow">In their words</span><p>' + esc(m.theory) + "</p></blockquote>" : "") +
@@ -954,14 +975,15 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     }).join("");
     var mail = (S.legal.email || "").trim();
     var join =
-      '<article class="member join"><p class="eyebrow">Your page here</p><h3>Join the chamber</h3>' +
+      '<article class="member join"><div class="m-window open" aria-hidden="true"></div><p class="eyebrow">An open window</p><h3>This window could be yours</h3>' +
       "<p>Came to a table and want a place here? Apply with the short form below. It asks for four things:</p>" +
       "<ul><li>your name, as you'd like it shown</li><li>one line on what you do, by profession or by passion</li><li>a thought of your own, in one sentence</li><li>a short bio of up to 80 words</li></ul><p>Later you can add one-liners, notes, poems or anything else you write about the concepts we discuss. They appear on your page and in the Lexicon.</p>" +
       (mail ? '<button type="button" class="btn ink m-open" data-jump="apply">Apply below <span class="arr" aria-hidden="true">\u2193</span></button>' : "") +
       '<p class="m-foot">Prefer to talk first? Bring it to the next table.</p></article>';
     return (
-      '<div class="inner page-head"><p class="eyebrow">Chamber of Members · ' + n + "</p><h2>The people at the table</h2>" +
-      '<p class="intro">Short biographies of the people who think with us. Each one shares a thought in their own words.</p>' +
+      '<div class="inner page-head"><p class="eyebrow">Chamber of Members · ' + n + "</p><h2>A chamber of many windows</h2>" +
+      '<div class="chamber-idea"><p class="intro">Think of a society as a chamber with countless windows. Each of us is one window, facing one part of reality: one looks onto a tree, one onto a river, one onto a mountain, one onto a path. Every window brings its own light into the room, rich, vital and like no other.</p>' +
+      '<p class="intro">No single window shows the whole world. But the more we let these views meet and mingle, the richer our picture of reality becomes. The table in the middle is where they meet.</p></div>' +
       '<button type="button" class="ed" data-act="add" data-kind="member">+ Add a member</button></div>' +
       '<div class="inner"><div class="members">' + cards + join + "</div></div>" +
       (mail ? applyBlock(mail) : "")

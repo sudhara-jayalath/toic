@@ -336,6 +336,119 @@ a.tag:hover { background: var(--jupiter); color: var(--on-jupiter); border-color
 .member.join { border-style: dashed; background: var(--paper-2); border-color: var(--muted); }
 /* the chamber: every member card opens with a pane of light, divided like the club's four-paned mark */
 .chamber-idea { display: grid; gap: .9rem; max-width: 46rem; }
+/* ===== The chamber: a building of windows on the Chamber page, and the room you can enter ===== */
+.chb { position: relative; overflow: hidden; isolation: isolate; background: var(--night); color: var(--night-ink); }
+.chb::before { content: ""; position: absolute; inset: -25%; z-index: -1; background:
+  radial-gradient(34% 40% at 14% 24%, rgb(255 43 214 / .5) 0%, transparent 70%),
+  radial-gradient(30% 38% at 88% 18%, rgb(0 225 255 / .4) 0%, transparent 70%),
+  radial-gradient(40% 44% at 66% 92%, rgb(138 60 255 / .5) 0%, transparent 72%),
+  radial-gradient(24% 30% at 30% 96%, rgb(255 178 30 / .3) 0%, transparent 70%); filter: blur(40px); }
+.chb-inner { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, .95fr); gap: 1rem 2.5rem; align-items: center; padding-block: clamp(2.5rem, 6vw, 4.5rem); }
+.chb-copy { display: grid; gap: 1.1rem; align-content: center; }
+.chb .eyebrow { color: rgb(247 243 255 / .72); }
+.chb h2 { font-size: clamp(2.3rem, 5vw, 3.8rem); line-height: 1; }
+.chb .chamber-idea .intro { color: var(--night-ink); opacity: .9; }
+.chb-actions { display: flex; flex-wrap: wrap; gap: .6rem; padding-top: .3rem; }
+.chb-btn { display: inline-flex; align-items: center; gap: .55rem; font-family: var(--mono); font-size: .76rem; letter-spacing: .1em; text-transform: uppercase; padding: .9rem 1.2rem; border: 1.5px solid var(--night-ink); background: transparent; color: var(--night-ink); cursor: pointer; transition: transform .15s ease; }
+.chb-btn.solid { background: var(--night-ink); color: var(--night); }
+.chb-btn:hover { transform: translateY(-2px); }
+.chb-btn:focus-visible { outline: 2px solid var(--neon-2); outline-offset: 3px; }
+.chb-stage { position: relative; height: clamp(300px, 40vw, 440px); perspective: 1500px; perspective-origin: 50% 34%; transform-origin: 50% 64%;
+  transition: transform 1.05s cubic-bezier(.62, 0, .25, 1), opacity .9s ease .1s; }
+.chb.entering .chb-stage { transform: scale(6); opacity: 0; }
+.chb-building { --B: clamp(150px, 19vw, 230px); --H: calc(var(--B) * 1.2); position: absolute; left: 50%; top: 50%; width: var(--B); height: var(--H);
+  margin-left: calc(var(--B) / -2); margin-top: calc(var(--H) / -2); transform-style: preserve-3d; transform: rotateX(-13deg) rotateY(var(--rot, -28deg)); }
+.chb-face { position: absolute; inset: 0; border: 1.5px solid rgb(247 243 255 / .74); background: rgb(15 12 24 / .78); }
+.chb-face.front { transform: translateZ(calc(var(--B) / 2)); }
+.chb-face.right { transform: rotateY(90deg) translateZ(calc(var(--B) / 2)); }
+.chb-face.back { transform: rotateY(180deg) translateZ(calc(var(--B) / 2)); }
+.chb-face.left { transform: rotateY(-90deg) translateZ(calc(var(--B) / 2)); }
+.chb-roof, .chb-ground { position: absolute; left: 0; width: var(--B); height: var(--B); top: calc((var(--H) - var(--B)) / 2); }
+.chb-roof { border: 1.5px solid rgb(247 243 255 / .74); background: rgb(15 12 24 / .85); transform: rotateX(90deg) translateZ(calc(var(--H) / 2)); }
+.chb-ground { transform: rotateX(90deg) translateZ(calc(var(--H) / -2)) scale(2.2); background: radial-gradient(closest-side, rgb(255 210 140 / .16), transparent); border-radius: 50%; }
+.chb-grid { position: absolute; left: 11%; right: 11%; top: 8%; height: 64%; display: grid; grid-template-columns: repeat(4, 1fr); grid-template-rows: repeat(4, 1fr); gap: 10% 15%; }
+.chb-w { position: relative; border: 1px solid rgb(247 243 255 / .2); }
+.chb-w::after { content: ""; position: absolute; inset: 0; background:
+  linear-gradient(rgb(247 243 255 / .2), rgb(247 243 255 / .2)) center / 1px 100% no-repeat,
+  linear-gradient(rgb(247 243 255 / .2), rgb(247 243 255 / .2)) center / 100% 1px no-repeat; }
+.chb-w.lit { border-color: rgb(255 255 255 / .9); box-shadow: 0 0 12px rgb(255 255 255 / .25); }
+.chb-w.lit::before, .chx-pane::before { content: ""; position: absolute; inset: 0; background:
+  radial-gradient(70% 120% at 20% 10%, var(--neon-2) 0%, transparent 70%),
+  radial-gradient(60% 110% at 85% 30%, var(--neon-1) 0%, transparent 70%),
+  linear-gradient(170deg, var(--neon-3), var(--neon-4)); filter: hue-rotate(var(--h, 0deg)) saturate(.95); }
+.chb-w.lit::after { background:
+  linear-gradient(var(--night), var(--night)) center / 1.5px 100% no-repeat,
+  linear-gradient(var(--night), var(--night)) center / 100% 1.5px no-repeat; }
+.chb-w.open { border: 1px dashed rgb(247 243 255 / .74); }
+.chb-door { position: absolute; left: 40%; width: 20%; bottom: 0; height: 18%; border: 1.5px solid rgb(247 243 255 / .74); border-bottom: 0;
+  background: radial-gradient(90% 100% at 50% 100%, rgb(255 210 140 / .55), transparent 75%); }
+.chb-base { position: absolute; left: 6%; right: 6%; bottom: 22%; border-top: 1px solid rgb(247 243 255 / .2); }
+#members { scroll-margin-top: 5rem; }
+@media (max-width: 760px) {
+  .chb-inner { grid-template-columns: minmax(0, 1fr); }
+  .chb-stage { height: 300px; order: -1; margin-top: -1rem; }
+  .chb-building { --B: 150px; }
+}
+
+/* inside the chamber: a full-screen room you can turn around in */
+.chx { position: fixed; inset: 0; z-index: 60; background: var(--night); color: var(--night-ink); opacity: 0; transition: opacity .8s ease; }
+.chx.shown { opacity: 1; }
+.chx-stage { position: absolute; inset: 0; overflow: hidden; cursor: grab; touch-action: none; perspective: var(--P, 600px); }
+.chx-stage.dragging { cursor: grabbing; }
+.chx-room { position: absolute; left: 50%; top: 50%; width: 0; height: 0; transform-style: preserve-3d; }
+.chx-wall, .chx-floor, .chx-ceiling { position: absolute; }
+.chx-wall { width: var(--S); height: var(--RH); left: calc(var(--S) / -2); top: calc(var(--RH) / -2);
+  background: linear-gradient(180deg, #110e19 0%, #1e1a2b 48%, #15121e 100%); box-shadow: inset 0 0 0 1px rgb(247 243 255 / .2); overflow: hidden; }
+.chx-floor, .chx-ceiling { width: var(--S); height: var(--S); left: calc(var(--S) / -2); top: calc(var(--S) / -2); overflow: hidden; }
+.chx-floor { background: radial-gradient(closest-side, rgb(255 210 140 / .08), transparent), #0e0c15; isolation: isolate; }
+.chx-ceiling { background: #0c0a12; box-shadow: inset 0 0 0 1px rgb(247 243 255 / .2); }
+.chx-glow { position: absolute; border-radius: 50%; pointer-events: none; opacity: .32; filter: hue-rotate(var(--h, 0deg)); background: radial-gradient(closest-side, var(--neon-3), transparent); }
+.chx-iw { position: absolute; padding: 0; border: 0; background: none; cursor: pointer; display: block; color: var(--night-ink); }
+.chx-frame { position: relative; display: block; width: 100%; aspect-ratio: 1 / 1.45; border: 3px solid rgb(247 243 255 / .92); box-shadow: 0 0 28px rgb(255 255 255 / .14); background: var(--night); overflow: hidden; transition: box-shadow .25s ease; }
+.chx-pane { position: absolute; inset: 0; }
+.chx-pane::after { content: ""; position: absolute; inset: 0; background:
+  linear-gradient(rgb(247 243 255 / .92), rgb(247 243 255 / .92)) center / 3px 100% no-repeat,
+  linear-gradient(rgb(247 243 255 / .92), rgb(247 243 255 / .92)) center / 100% 3px no-repeat; }
+.chx-iw.open .chx-frame { border: 2px dashed rgb(247 243 255 / .74); background: transparent; box-shadow: none; }
+.chx-iw.open .chx-pane::before { display: none; }
+.chx-iw.open .chx-pane::after { opacity: .35; }
+.chx-iw:hover .chx-frame, .chx-iw:focus-visible .chx-frame { box-shadow: 0 0 44px rgb(255 255 255 / .32); }
+.chx-iw:focus-visible { outline: none; }
+.chx-lab { position: absolute; left: 50%; top: calc(100% + 12px); width: calc(var(--ww) * 1.55); transform: translateX(-50%); display: grid; justify-items: center; gap: .35em; text-align: center; }
+.chx-nm { font-family: var(--display); font-size: var(--fs-name); line-height: 1.05; text-wrap: balance; }
+.chx-ln { font-family: var(--mono); font-size: var(--fs-line); line-height: 1.4; letter-spacing: .1em; text-transform: uppercase; color: rgb(247 243 255 / .68); text-wrap: balance; }
+.chx-apply { font-family: var(--mono); font-size: var(--fs-line); letter-spacing: .12em; text-transform: uppercase; background: var(--night-ink); color: var(--night); padding: .55em .9em; margin-top: .3em; }
+.chx-iw.open:hover .chx-apply, .chx-iw.open:focus-visible .chx-apply { background: var(--neon-line); }
+.chx-side { position: absolute; inset: 0; }
+.chx-patch { position: absolute; top: 0; mix-blend-mode: screen; opacity: .5; transform-origin: 50% 0; filter: hue-rotate(var(--h, 0deg));
+  background: linear-gradient(#0e0c15, #0e0c15) center / 3px 100% no-repeat, linear-gradient(#0e0c15, #0e0c15) 50% 34% / 100% 3px no-repeat, linear-gradient(180deg, var(--neon-2), var(--neon-1) 55%, transparent); }
+.chx-hud { position: absolute; z-index: 2; left: 0; right: 0; display: flex; align-items: center; justify-content: space-between; gap: .75rem; pointer-events: none;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.chx-hud > * { pointer-events: auto; }
+.chx-hud.chx-top { top: calc(env(safe-area-inset-top, 0px) + 16px); }
+.chx-hud.chx-bottom { bottom: calc(env(safe-area-inset-bottom, 0px) + 18px); justify-content: center; }
+.chx-caption { font-family: var(--mono); font-size: .66rem; letter-spacing: .14em; text-transform: uppercase; color: rgb(247 243 255 / .68); text-align: right; }
+.chx-turn { width: 44px; height: 44px; border: 1.5px solid var(--night-ink); background: rgb(11 10 18 / .6); color: var(--night-ink); cursor: pointer; font-family: var(--mono); font-size: 1rem; }
+.chx-hint { font-family: var(--mono); font-size: .66rem; letter-spacing: .12em; text-transform: uppercase; background: rgb(11 10 18 / .6); padding: .55rem .8rem; border: 1px solid rgb(247 243 255 / .2); text-align: center; }
+.chx .chb-btn { background: rgb(11 10 18 / .6); }
+.chx-sheet { position: absolute; inset: 0; z-index: 5; display: grid; place-items: center; background: rgb(5 4 9 / .62);
+  padding-block: calc(env(safe-area-inset-top, 0px) + 16px) calc(env(safe-area-inset-bottom, 0px) + 16px);
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.chx-card { position: relative; width: min(30rem, 100%); max-height: 100%; overflow: auto; background: #f6f6f2; color: #141412; border: 1.5px solid #141412; }
+.chx-card .chx-ptop { position: relative; height: 7rem; border-bottom: 1.5px solid #141412; overflow: hidden; }
+.chx-card .chx-ptop::after { content: ""; position: absolute; inset: 0; background: linear-gradient(#f6f6f2, #f6f6f2) center / 2px 100% no-repeat, linear-gradient(#f6f6f2, #f6f6f2) center / 100% 2px no-repeat; }
+.chx-card .chx-body { display: grid; gap: .9rem; padding: 1.5rem 1.6rem 1.7rem; }
+.chx-card h3 { font-family: var(--display); font-weight: 400; font-size: 2rem; line-height: 1; margin: 0; }
+.chx-card .k { font-family: var(--mono); font-size: .64rem; letter-spacing: .14em; text-transform: uppercase; color: #5c5b55; margin: 0; }
+.chx-card .line { font-family: var(--mono); font-size: .74rem; color: #5c5b55; margin: 0; }
+.chx-card blockquote { margin: 0; font-family: var(--display); font-size: 1.45rem; line-height: 1.2; border-top: 1px solid #d4d3cb; border-bottom: 1px solid #d4d3cb; padding-block: .8rem; }
+.chx-card p { margin: 0; font-size: 1.05rem; line-height: 1.55; }
+.chx-card .x { position: absolute; z-index: 2; top: .6rem; right: .6rem; width: 40px; height: 40px; border: 1.5px solid #141412; background: #f6f6f2; color: #141412; cursor: pointer; font-family: var(--mono); }
+.chx-card .chx-go { justify-self: start; font-family: var(--mono); font-size: .74rem; letter-spacing: .1em; text-transform: uppercase; padding: .85rem 1.15rem; border: 1.5px solid #141412; color: #141412; background: transparent; text-decoration: none; cursor: pointer; }
+.chx-card .x:focus-visible, .chx-card .chx-go:focus-visible { outline: 2px solid #141412; outline-offset: 3px; }
+html.chx-open, html.chx-open body { overflow: hidden; }
+@media (max-width: 560px) { .chx-caption { display: none; } .chx-hint { font-size: .58rem; } }
+@media (prefers-reduced-motion: reduce) { .chb-stage, .chx { transition: none; } }
 .chamber-idea .intro { margin: 0; }
 .m-window { position: relative; height: 6.5rem; margin: -1.6rem -1.6rem .4rem; border-bottom: 1.5px solid var(--ink); overflow: hidden; isolation: isolate; }
 .m-window::before { content: ""; position: absolute; inset: 0; z-index: -1; background:
@@ -981,11 +1094,16 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       (mail ? '<button type="button" class="btn ink m-open" data-jump="apply">Apply below <span class="arr" aria-hidden="true">\u2193</span></button>' : "") +
       '<p class="m-foot">Prefer to talk first? Bring it to the next table.</p></article>';
     return (
-      '<div class="inner page-head"><p class="eyebrow">Chamber of Members · ' + n + "</p><h2>A chamber of many windows</h2>" +
+      '<div class="chb"><div class="inner chb-inner">' +
+      '<div class="chb-copy"><p class="eyebrow">Chamber of Members · ' + n + "</p><h2>A chamber of many windows</h2>" +
       '<div class="chamber-idea"><p class="intro">Think of a society as a chamber with countless windows. Each of us is one window, facing one part of reality: one looks onto a tree, one onto a river, one onto a mountain, one onto a path. Every window brings its own light into the room, rich, vital and like no other.</p>' +
       '<p class="intro">No single window shows the whole world. But the more we let these views meet and mingle, the richer our picture of reality becomes. The table in the middle is where they meet.</p></div>' +
+      '<div class="chb-actions"><button type="button" class="chb-btn solid chb-enter">Enter the chamber <span aria-hidden="true">\u2192</span></button>' +
+      '<button type="button" class="chb-btn" data-jump="members">See everyone as a list <span aria-hidden="true">\u2193</span></button></div>' +
       '<button type="button" class="ed" data-act="add" data-kind="member">+ Add a member</button></div>' +
-      '<div class="inner"><div class="members">' + cards + join + "</div></div>" +
+      '<div class="chb-stage" aria-hidden="true"><div class="chb-building">' + chamberBuilding() + "</div></div>" +
+      "</div></div>" +
+      '<div class="inner" id="members"><div class="members">' + cards + join + "</div></div>" +
       (mail ? applyBlock(mail) : "")
     );
   }
@@ -1531,6 +1649,185 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       '<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>';
   }
 
+  /* ===== the chamber: the building on the Chamber page and the room you can enter ===== */
+  var CH_REDUCE = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function chMembers() {
+    return S.members.map(function (m) { return { name: m.name, line: m.line || "", thought: m.theory || "", bio: m.bio || "", page: "#" + memberId(m) }; });
+  }
+  function chamberBuilding() {
+    var ms = chMembers(), slots = 64, order = [], i, x = 0;
+    for (i = 0; i < slots; i++) order.push(i);
+    function rnd() { x = (x * 9301 + 49297 + 7) % 233280; return x / 233280; }
+    for (i = order.length - 1; i > 0; i--) { var j = Math.floor(rnd() * (i + 1)); var t = order[i]; order[i] = order[j]; order[j] = t; }
+    /* the first member's window and the open one sit on the front, where the building is first seen */
+    var front = order.filter(function (k) { return k < 16; }), rest = order.filter(function (k) { return k >= 16; });
+    order = front.concat(rest);
+    var cells = new Array(slots).fill(null);
+    ms.slice(0, slots - 1).forEach(function (m, k) { cells[order[k === 0 ? 0 : k + 1]] = { m: m }; });
+    cells[order[1]] = { open: true };
+    return ["front", "right", "back", "left"].map(function (f, fi) {
+      var g = "";
+      for (var c = 0; c < 16; c++) {
+        var cell = cells[fi * 16 + c];
+        g += cell && cell.m ? '<div class="chb-w lit" style="--h:' + paneHue(cell.m.name) + 'deg"></div>' : cell && cell.open ? '<div class="chb-w open"></div>' : '<div class="chb-w"></div>';
+      }
+      return '<div class="chb-face ' + f + '"><div class="chb-grid">' + g + "</div>" + (f === "front" ? '<div class="chb-door"></div>' : "") + '<div class="chb-base"></div></div>';
+    }).join("") + '<div class="chb-roof"></div><div class="chb-ground"></div>';
+  }
+  var chRot = -28, chSpin = true;
+  function chamberSpin() {
+    var b = app.querySelector(".chb-building"), sec = app.querySelector('[data-view="chamber"]');
+    if (b && chSpin && !CH_REDUCE && sec && !sec.hidden && !document.hidden) { chRot += 0.12; b.style.setProperty("--rot", chRot + "deg"); }
+    requestAnimationFrame(chamberSpin);
+  }
+  var CH_WALLS = [{ ry: 0, fr: 0 }, { ry: -90, fr: 90 }, { ry: 180, fr: 180 }, { ry: 90, fr: -90 }];
+  var ch = null; /* the open room, when someone is inside */
+  function chEsc(t) { return esc(t); }
+  function enterChamber() {
+    if (ch) return;
+    var band = app.querySelector(".chb"), b = app.querySelector(".chb-building");
+    chSpin = false;
+    var start = chRot, end = Math.round(chRot / 360) * 360, t0 = performance.now(), dur = CH_REDUCE ? 0 : 650;
+    function face(now) {
+      var p = dur ? Math.min(1, (now - t0) / dur) : 1, e = p < .5 ? 2 * p * p : 1 - Math.pow(-2 * p + 2, 2) / 2;
+      chRot = start + (end - start) * e; if (b) b.style.setProperty("--rot", chRot + "deg");
+      if (p < 1) return requestAnimationFrame(face);
+      if (band) band.classList.add("entering");
+      setTimeout(openRoom, CH_REDUCE ? 0 : 900);
+    }
+    requestAnimationFrame(face);
+  }
+  function openRoom() {
+    var el = document.createElement("div");
+    el.className = "chx"; el.setAttribute("role", "dialog"); el.setAttribute("aria-modal", "true"); el.setAttribute("aria-label", "Inside the chamber");
+    el.innerHTML = '<div class="chx-stage"><div class="chx-room"></div></div>' +
+      '<div class="chx-hud chx-top"><button type="button" class="chb-btn chx-leave"><span aria-hidden="true">\u2190</span> Leave the chamber</button><span class="chx-caption">You are standing at the table in the middle</span></div>' +
+      '<div class="chx-hud chx-bottom"><button type="button" class="chx-turn" data-turn="90" aria-label="Turn left">\u25C0</button><span class="chx-hint">Drag to look around \u00b7 choose a window</span><button type="button" class="chx-turn" data-turn="-90" aria-label="Turn right">\u25B6</button></div>' +
+      '<div class="chx-sheet" hidden><div class="chx-card" role="dialog" aria-modal="true" aria-labelledby="chx-name"></div></div>';
+    document.body.appendChild(el);
+    document.documentElement.classList.add("chx-open");
+    ch = { el: el, stage: el.querySelector(".chx-stage"), room: el.querySelector(".chx-room"), sheet: el.querySelector(".chx-sheet"), card: el.querySelector(".chx-card"),
+      S: 1200, RH: 740, yaw: 0, pitch: -6, ty: 0, tp: -6, last: performance.now(), drag: false, moved: 0, sx: 0, sy: 0, pid: null, lastFocus: null };
+    chBuildRoom();
+    chWire();
+    requestAnimationFrame(function () { el.classList.add("shown"); });
+    var first = el.querySelector(".chx-iw"); if (first) first.focus({ preventScroll: true });
+    requestAnimationFrame(chLoop);
+  }
+  function chLayout() {
+    var ms = chMembers().map(function (m) { return { m: m }; });
+    var all = ms.slice(0, 1).concat([{ open: true }], ms.slice(1)); /* the first member and the open window share the first wall */
+    var per = all.length <= 3 ? 3 : Math.min(6, Math.ceil(all.length / 4)), walls = [[], [], [], []];
+    all.forEach(function (w, i) { walls[Math.min(3, Math.floor(i / per))].push(w); });
+    return walls;
+  }
+  function chBuildRoom() {
+    var S2 = Math.round(Math.max(window.innerWidth, window.innerHeight * 1.3)), RH = Math.round(S2 * 0.62);
+    ch.S = S2; ch.RH = RH;
+    ch.stage.style.setProperty("--P", S2 / 2 + "px");
+    var r = ch.room;
+    r.style.setProperty("--S", S2 + "px"); r.style.setProperty("--RH", RH + "px");
+    r.style.setProperty("--fs-name", Math.round(S2 * 0.0165) + "px"); r.style.setProperty("--fs-line", Math.max(9, Math.round(S2 * 0.0095)) + "px");
+    r.style.setProperty("--ww", Math.round(S2 * 0.1) + "px");
+    var walls = chLayout(), html = "", sides = "", ww = S2 * 0.1, wh = ww * 1.45, cy = -RH * 0.08;
+    CH_WALLS.forEach(function (W, wi) {
+      var list = walls[wi], k = list.length, gap = Math.min(S2 * 0.17, (S2 * 0.84) / Math.max(k, 1)), inner = "", patches = "";
+      list.forEach(function (w, j) {
+        var x = (j - (k - 1) / 2) * gap, left = S2 / 2 + x - ww / 2, top = RH / 2 + cy - wh / 2, h = w.m ? paneHue(w.m.name) : 0;
+        if (w.m) inner += '<div class="chx-glow" style="--h:' + h + 'deg;left:' + (S2 / 2 + x - ww * 1.6) + "px;top:" + (RH / 2 + cy - ww * 1.9) + "px;width:" + ww * 3.2 + "px;height:" + ww * 3.8 + 'px"></div>';
+        inner += '<button type="button" class="chx-iw' + (w.open ? " open" : "") + '" data-i="' + (w.open ? "open" : chEsc(w.m.name)) + '" style="left:' + left + "px;top:" + top + "px;width:" + ww + 'px"' +
+          ' aria-label="' + chEsc(w.open ? "This window could be yours. Apply here" : w.m.name + (w.m.line ? ", " + w.m.line : "")) + '">' +
+          '<span class="chx-frame"><span class="chx-pane" style="--h:' + h + 'deg"></span></span><span class="chx-lab">' +
+          (w.open ? '<span class="chx-nm">This window could be yours</span><span class="chx-apply">Apply here \u2192</span>'
+                  : '<span class="chx-nm">' + chEsc(w.m.name) + '</span><span class="chx-ln">' + chEsc(w.m.line) + "</span>") + "</span></button>";
+        if (w.m) {
+          var skew = Math.max(-38, Math.min(38, -(x / (S2 / 2)) * 34));
+          patches += '<div class="chx-patch" style="--h:' + h + "deg;left:" + (S2 / 2 + x - ww * 0.55) + "px;width:" + ww * 1.1 + "px;height:" + S2 * 0.3 + "px;transform:skewX(" + skew.toFixed(1) + 'deg)"></div>';
+        }
+      });
+      html += '<div class="chx-wall" style="transform:rotateY(' + W.ry + "deg) translateZ(" + (-S2 / 2) + 'px)">' + inner + "</div>";
+      sides += '<div class="chx-side" style="transform:rotate(' + W.fr + 'deg)">' + patches + "</div>";
+    });
+    html += '<div class="chx-floor" style="transform:rotateX(90deg) translateZ(' + (-RH / 2) + 'px)">' + sides + "</div>";
+    html += '<div class="chx-ceiling" style="transform:rotateX(-90deg) translateZ(' + (-RH / 2) + 'px)"></div>';
+    r.innerHTML = html;
+    chView();
+  }
+  function chView() { ch.room.style.transform = "translateZ(" + ch.S / 2 + "px) rotateX(" + ch.pitch.toFixed(2) + "deg) rotateY(" + ch.yaw.toFixed(2) + "deg)"; }
+  function chLoop(now) {
+    if (!ch) return;
+    if (!ch.drag && !CH_REDUCE && ch.sheet.hidden && now - ch.last > 3500) ch.ty -= 0.03; /* a slow look around until someone takes over */
+    var dy = ch.ty - ch.yaw, dp = ch.tp - ch.pitch;
+    if (Math.abs(dy) > 0.01 || Math.abs(dp) > 0.01) { ch.yaw += CH_REDUCE ? dy : dy * 0.14; ch.pitch += CH_REDUCE ? dp : dp * 0.14; chView(); }
+    requestAnimationFrame(chLoop);
+  }
+  function chWire() {
+    var st = ch.stage;
+    st.addEventListener("pointerdown", function (e) { ch.drag = true; ch.moved = 0; ch.sx = e.clientX; ch.sy = e.clientY; ch.pid = e.pointerId; ch.last = performance.now(); st.classList.add("dragging"); });
+    st.addEventListener("pointermove", function (e) {
+      if (!ch || !ch.drag || e.pointerId !== ch.pid) return;
+      var dx = e.clientX - ch.sx, dyy = e.clientY - ch.sy; ch.sx = e.clientX; ch.sy = e.clientY; ch.moved += Math.abs(dx) + Math.abs(dyy);
+      ch.ty -= dx * (90 / (window.innerWidth * 0.55)); ch.tp = Math.max(-28, Math.min(14, ch.tp + dyy * 0.08));
+      ch.yaw = ch.ty; ch.pitch = ch.tp; chView(); ch.last = performance.now();
+    });
+    function up() { if (!ch || !ch.drag) return; ch.drag = false; st.classList.remove("dragging"); ch.last = performance.now(); }
+    st.addEventListener("pointerup", up); st.addEventListener("pointercancel", up); st.addEventListener("pointerleave", up);
+    st.addEventListener("wheel", function (e) { e.preventDefault(); ch.ty -= (e.deltaX || e.deltaY) * 0.12; ch.last = performance.now(); }, { passive: false });
+    ch.room.addEventListener("focusin", function (e) {
+      var b = e.target.closest(".chx-iw"); if (!b) return;
+      var wi = [].indexOf.call(ch.room.querySelectorAll(".chx-wall"), b.closest(".chx-wall")); if (wi < 0) return;
+      var want = -CH_WALLS[wi].ry, cur = ((ch.ty % 360) + 360) % 360, goal = ((want % 360) + 360) % 360;
+      ch.ty += ((goal - cur + 540) % 360) - 180; ch.last = performance.now();
+    });
+    ch.el.addEventListener("click", function (e) {
+      var t;
+      if ((t = e.target.closest(".chx-leave"))) return leaveChamber();
+      if ((t = e.target.closest(".chx-turn"))) { ch.ty += +t.getAttribute("data-turn"); ch.last = performance.now(); return; }
+      if (e.target === ch.sheet || e.target.closest(".chx-card .x")) return chCloseCard();
+      if ((t = e.target.closest(".chx-card a.chx-go"))) { leaveChamber(true); return; } /* the link itself moves to the member's page */
+      if ((t = e.target.closest(".chx-iw")) && ch.moved < 9) {
+        var id = t.getAttribute("data-i");
+        if (id === "open") return chApply();
+        chOpenCard(id);
+      }
+    });
+  }
+  function chOpenCard(name) {
+    var m = chMembers().filter(function (x) { return x.name === name; })[0]; if (!m) return;
+    ch.lastFocus = document.activeElement;
+    ch.card.innerHTML = '<button type="button" class="x" aria-label="Close">\u2715</button>' +
+      '<div class="chx-ptop"><span class="chx-pane" style="--h:' + paneHue(m.name) + 'deg"></span></div>' +
+      '<div class="chx-body"><h3 id="chx-name">' + chEsc(m.name) + "</h3>" + (m.line ? '<p class="line">' + chEsc(m.line) + "</p>" : "") +
+      (m.thought ? '<p class="k">In their words</p><blockquote>' + chEsc(m.thought) + "</blockquote>" : "") +
+      (m.bio ? "<p>" + chEsc(m.bio) + "</p>" : "") +
+      '<a class="chx-go" href="' + m.page + '">Open their page <span aria-hidden="true">\u2192</span></a></div>';
+    ch.sheet.hidden = false; ch.card.querySelector(".x").focus();
+  }
+  function chCloseCard() { if (!ch) return; ch.sheet.hidden = true; if (ch.lastFocus && ch.lastFocus.focus) ch.lastFocus.focus({ preventScroll: true }); }
+  function chApply() {
+    leaveChamber(true);
+    location.hash = "chamber";
+    setTimeout(function () { var a = document.getElementById("apply"); if (a) a.scrollIntoView({ block: "start" }); var n = document.getElementById("ap-name"); if (n) n.focus({ preventScroll: true }); }, 60);
+  }
+  function leaveChamber(quiet) {
+    if (!ch) return;
+    var el = ch.el; ch = null;
+    el.remove(); document.documentElement.classList.remove("chx-open");
+    var band = app.querySelector(".chb"); if (band) band.classList.remove("entering");
+    chSpin = true;
+    if (!quiet) { var btn = app.querySelector(".chb-enter"); if (btn) btn.focus({ preventScroll: true }); }
+  }
+  app.addEventListener("click", function (e) { if (e.target.closest(".chb-enter")) enterChamber(); });
+  window.addEventListener("keydown", function (e) {
+    if (!ch) return;
+    if (e.key === "Escape") { if (!ch.sheet.hidden) chCloseCard(); else leaveChamber(); return; }
+    if (!ch.sheet.hidden) return;
+    if (e.key === "ArrowLeft") { ch.ty += 45; ch.last = performance.now(); e.preventDefault(); }
+    if (e.key === "ArrowRight") { ch.ty -= 45; ch.last = performance.now(); e.preventDefault(); }
+  });
+  var chRt; window.addEventListener("resize", function () { clearTimeout(chRt); chRt = setTimeout(function () { if (ch) chBuildRoom(); }, 150); });
+  window.addEventListener("hashchange", function () { if (ch) leaveChamber(true); });
+
   /* the vote boxes fill up once they scroll into view */
   function armVote() {
     var el = app.querySelector(".topics");
@@ -1896,6 +2193,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   route(false);
   heroLines();
   armVote();
+  requestAnimationFrame(chamberSpin);
   window.addEventListener("hashchange", function () { route(true); });
 
   /* ---------- editing (owner and editors only) ---------- */

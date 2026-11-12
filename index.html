@@ -526,6 +526,10 @@ html.chx-open, html.chx-open body { overflow: hidden; }
 .missing { background: var(--hl); padding: 0 .3em; font-family: var(--mono); font-size: .85em; }
 .legal-links { display: flex; gap: 1.2rem; flex-wrap: wrap; margin-top: .6rem; }
 .legal-links a { font-family: var(--mono); font-size: .74rem; color: var(--muted); }
+.social-links { display: flex; gap: .5rem 1.4rem; flex-wrap: wrap; margin-top: .9rem; }
+.social-links a { font-family: var(--mono); font-size: .78rem; letter-spacing: .04em; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--rule); padding-bottom: .15rem; }
+.social-links a b { font-weight: 400; color: var(--muted); }
+.social-links a:hover, .social-links a:focus-visible { border-bottom-color: var(--ink); }
 
 /* footer */
 footer { border-top: 1px solid var(--rule); }
@@ -639,6 +643,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
  "settings": {
   "meetupUrl": "https://www.meetup.com/hamburg-communication-meetup-group/",
   "lumaUrl": "https://luma.com/toic",
+  "instagramUrl": "https://www.instagram.com/ordinary_inquiry/",
   "primary": "meetup",
   "theme": "neon",
   "lines": "on",
@@ -892,6 +897,15 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   function joinUrl() { return safeUrl(S.settings.meetupUrl) || MEETUP_SEARCH; }
   function letterUrl() { return safeUrl(S.settings.letterUrl); }
   function lumaUrl() { return safeUrl(S.settings.lumaUrl); }
+  function instaUrl() { return safeUrl(S.settings.instagramUrl); }
+  function instaHandle() { var m = /instagram\.com\/([A-Za-z0-9_.]+)/.exec(instaUrl() || ""); return m ? "@" + m[1] : "Instagram"; }
+  function socialNav() {
+    var l = [];
+    if (instaUrl()) l.push(ext(instaUrl(), "Instagram <b>" + esc(instaHandle()) + "</b>", "soc"));
+    if (safeUrl(S.settings.meetupUrl)) l.push(ext(S.settings.meetupUrl, "Meetup", "soc"));
+    if (lumaUrl()) l.push(ext(lumaUrl(), "Luma", "soc"));
+    return l.length ? '<nav class="social-links" aria-label="Follow the club">' + l.join("") + "</nav>" : "";
+  }
   function platforms() {
     var meet = { name: "Meetup", url: joinUrl() };
     var luma = lumaUrl() ? { name: "Luma", url: lumaUrl() } : null;
@@ -1266,7 +1280,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
         "<p>Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO. Unser berechtigtes Interesse liegt in einer sicheren und zuverlässigen Bereitstellung der Website.</p>" +
         "<p>Dabei können Daten in die USA übermittelt werden. GitHub erklärt, das EU-U.S. Data Privacy Framework einzuhalten; die Übermittlung stützt sich damit auf den Angemessenheitsbeschluss der EU-Kommission nach Art. 45 DSGVO. Weitere Informationen gibt das GitHub General Privacy Statement:</p>" +
         '<p class="src">https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement</p>' +
-        "<h3>4. Externe Links</h3><p>Diese Website verlinkt auf externe Angebote, etwa auf unsere Seiten bei Meetup oder Luma, auf einen Newsletter-Dienst oder auf den Blog des Gründers. Daten werden an diese Anbieter erst übertragen, wenn Sie einen solchen Link anklicken. Ab dann gilt die Datenschutzerklärung des jeweiligen Anbieters.</p>" +
+        "<h3>4. Externe Links</h3><p>Diese Website verlinkt auf externe Angebote, etwa auf unsere Seiten bei Instagram, Meetup oder Luma, auf einen Newsletter-Dienst oder auf den Blog des Gründers. Daten werden an diese Anbieter erst übertragen, wenn Sie einen solchen Link anklicken. Ab dann gilt die Datenschutzerklärung des jeweiligen Anbieters.</p>" +
         "<h3>5. Kontakt per E-Mail oder Nachricht</h3><p>Wenn Sie uns per E-Mail oder über Meetup schreiben, verarbeiten wir Ihre Angaben (zum Beispiel Name, E-Mail-Adresse und Inhalt der Nachricht), um Ihre Anfrage zu beantworten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO, bei Anfragen zur Teilnahme Art. 6 Abs. 1 lit. b DSGVO. Wir löschen die Angaben, sobald sie für diesen Zweck nicht mehr benötigt werden.</p>" +
         (voteLive() ? "<p><strong>Abstimmung über das nächste Thema.</strong> Erst wenn Sie auf der Startseite ein Thema anklicken, „See the votes“ wählen oder einen Themenvorschlag senden, verbindet sich Ihr Browser mit unserer Datenbank bei Supabase (Supabase Inc.; Speicherort der Datenbank: Frankfurt am Main, EU). Gespeichert werden nur das gewählte Thema mit seiner Stimmenzahl bzw. der Text Ihres Vorschlags, ohne Namen oder IP-Adresse. Supabase verarbeitet dabei technisch notwendige Verbindungsdaten wie Ihre IP-Adresse in Server-Protokollen. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO; unser berechtigtes Interesse ist eine einfache Abstimmung über künftige Themen. Mehr dazu in der <a href=\"https://supabase.com/privacy\" target=\"_blank\" rel=\"noopener noreferrer\">Datenschutzerklärung von Supabase</a>.</p><p>Damit niemand versehentlich doppelt abstimmt, merkt sich Ihr Browser im lokalen Speicher (Local Storage), für welche Themen Sie gestimmt haben. Diese Angabe verlässt Ihr Gerät nicht und ist für die von Ihnen gewünschte Abstimmung erforderlich (§ 25 Abs. 2 Nr. 2 TDDDG). Sie können sie jederzeit über die Einstellungen Ihres Browsers löschen.</p>" : S.vote && (S.vote.url || "").trim() ? "<p>Für die Abstimmung über das nächste Thema verlinken wir auf eine externe Umfrage (" + esc(hostOf(S.vote.url)) + "). Erst wenn Sie den Link anklicken, verlassen Sie diese Website; dort gilt die Datenschutzerklärung des Anbieters.</p>" : "<p>Das gilt auch für Stimmen und Themenvorschläge auf der Startseite: Ein Klick öffnet Ihr eigenes E-Mail-Programm. Die Website selbst überträgt oder speichert dabei nichts.</p>") +
         "<h3>6. Chamber of Members, Beiträge und Sitzungsprotokolle</h3><p>In der „Chamber of Members“ veröffentlichen wir Name, Kurzbiografie, eine persönliche These und gegebenenfalls einen Link, außerdem Beiträge wie One-liners, Notizen, Gedichte oder Texte, nur wenn die betreffende Person uns diese Angaben selbst zur Veröffentlichung geschickt hat. In den Sitzungsprotokollen nennen wir Teilnehmende nur mit ihrer Einwilligung. Rechtsgrundlage ist Art. 6 Abs. 1 lit. a DSGVO.</p><p>Das Bewerbungsformular auf der Chamber-Seite erstellt nur eine E-Mail in Ihrem eigenen E-Mail-Programm; erst wenn Sie diese absenden, erhalten wir Ihre Angaben. Die Website selbst überträgt oder speichert dabei nichts. Ihre Einwilligung zur Veröffentlichung können Sie jederzeit per E-Mail widerrufen; wir entfernen Ihre Angaben dann.</p>" +
@@ -1645,7 +1659,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
         '<section data-view="datenschutz" hidden>' + datenschutz() + "</section>" +
       "</main>" +
       '<footer><div class="inner foot">' +
-        '<div><img class="word" src="' + WORD + '" alt="1he 0dinary 1nquiry 0lub"><p class="small">Hamburg · founded November 2026</p><nav class="legal-links" aria-label="More"><a href="#faq">FAQ</a><a href="#impressum">Impressum</a><a href="#datenschutz">Datenschutz</a></nav></div>' +
+        '<div><img class="word" src="' + WORD + '" alt="1he 0dinary 1nquiry 0lub"><p class="small">Hamburg · founded November 2026</p>' + socialNav() + '<nav class="legal-links" aria-label="More"><a href="#faq">FAQ</a><a href="#impressum">Impressum</a><a href="#datenschutz">Datenschutz</a></nav></div>' +
         '<p class="small guru">&#x2643;&#xFE0E; Thursday is Guruvāra in Sanskrit: the day of Bṛhaspati, teacher of the gods and lord of speech.</p>' +
       "</div></footer>" +
       '<button type="button" class="fab" id="fab" hidden>Edit site</button>' +
@@ -2329,6 +2343,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     settings: { key: "settings", single: true, title: "Links & schedule", fields: [
       ["meetupUrl", "Meetup group link", "url", "Without it, the Meetup buttons open a Meetup search."],
       ["lumaUrl", "Luma calendar link", "url", "e.g. https://luma.com/your-calendar. Luma buttons appear once this is set."],
+      ["instagramUrl", "Instagram link", "url", "e.g. https://www.instagram.com/your_account/. Shown in the footer."],
       ["primary", "Main platform for joining", "select", ["meetup", "luma"]],
       ["lines", "Drawings in the hero", "select", [["off", "Off"], ["on", "Columns and patterns"], ["wisdom", "Figures of wisdom"]]],
       ["theme", "Look", "select", [["neon", "Neon (Hamburg at night)"], ["yellow", "Jupiter yellow (special seasons)"]]],

@@ -359,10 +359,10 @@ a.tag:hover { background: var(--jupiter); color: var(--on-jupiter); border-color
 .chb-building { --B: clamp(150px, 19vw, 230px); --H: calc(var(--B) * 1.2); position: absolute; left: 50%; top: 50%; width: var(--B); height: var(--H);
   margin-left: calc(var(--B) / -2); margin-top: calc(var(--H) / -2); transform-style: preserve-3d; transform: rotateX(-13deg) rotateY(var(--rot, -28deg)); }
 .chb-face { position: absolute; inset: 0; border: 1.5px solid rgb(247 243 255 / .74); background: rgb(15 12 24 / .78); }
-.chb-face.front { transform: translateZ(calc(var(--B) / 2)); }
-.chb-face.right { transform: rotateY(90deg) translateZ(calc(var(--B) / 2)); }
-.chb-face.back { transform: rotateY(180deg) translateZ(calc(var(--B) / 2)); }
-.chb-face.left { transform: rotateY(-90deg) translateZ(calc(var(--B) / 2)); }
+.chb-face.chb-front { transform: translateZ(calc(var(--B) / 2)); }
+.chb-face.chb-right { transform: rotateY(90deg) translateZ(calc(var(--B) / 2)); }
+.chb-face.chb-back { transform: rotateY(180deg) translateZ(calc(var(--B) / 2)); }
+.chb-face.chb-left { transform: rotateY(-90deg) translateZ(calc(var(--B) / 2)); }
 .chb-roof, .chb-ground { position: absolute; left: 0; width: var(--B); height: var(--B); top: calc((var(--H) - var(--B)) / 2); }
 .chb-roof { border: 1.5px solid rgb(247 243 255 / .74); background: rgb(15 12 24 / .85); transform: rotateX(90deg) translateZ(calc(var(--H) / 2)); }
 .chb-ground { transform: rotateX(90deg) translateZ(calc(var(--H) / -2)) scale(2.2); background: radial-gradient(closest-side, rgb(255 210 140 / .16), transparent); border-radius: 50%; }
@@ -409,6 +409,10 @@ a.tag:hover { background: var(--jupiter); color: var(--on-jupiter); border-color
 .chx-pane::after { content: ""; position: absolute; inset: 0; background:
   linear-gradient(rgb(247 243 255 / .92), rgb(247 243 255 / .92)) center / 3px 100% no-repeat,
   linear-gradient(rgb(247 243 255 / .92), rgb(247 243 255 / .92)) center / 100% 3px no-repeat; }
+.chx-iw.anon { cursor: inherit; }
+.chx-iw.anon .chx-frame { border-color: rgb(247 243 255 / .55); box-shadow: 0 0 18px rgb(255 255 255 / .08); }
+.chx-iw.anon .chx-pane { opacity: .72; }
+.chx-patch.anon { opacity: .32; }
 .chx-iw.open .chx-frame { border: 2px dashed rgb(247 243 255 / .74); background: transparent; box-shadow: none; }
 .chx-iw.open .chx-pane::before { display: none; }
 .chx-iw.open .chx-pane::after { opacity: .35; }
@@ -1671,7 +1675,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
         var cell = cells[fi * 16 + c];
         g += cell && cell.m ? '<div class="chb-w lit" style="--h:' + paneHue(cell.m.name) + 'deg"></div>' : cell && cell.open ? '<div class="chb-w open"></div>' : '<div class="chb-w"></div>';
       }
-      return '<div class="chb-face ' + f + '"><div class="chb-grid">' + g + "</div>" + (f === "front" ? '<div class="chb-door"></div>' : "") + '<div class="chb-base"></div></div>';
+      return '<div class="chb-face chb-' + f + '"><div class="chb-grid">' + g + "</div>" + (f === "front" ? '<div class="chb-door"></div>' : "") + '<div class="chb-base"></div></div>';
     }).join("") + '<div class="chb-roof"></div><div class="chb-ground"></div>';
   }
   var chRot = -28, chSpin = true;
@@ -1716,9 +1720,17 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   }
   function chLayout() {
     var ms = chMembers().map(function (m) { return { m: m }; });
-    var all = ms.slice(0, 1).concat([{ open: true }], ms.slice(1)); /* the first member and the open window share the first wall */
-    var per = all.length <= 3 ? 3 : Math.min(6, Math.ceil(all.length / 4)), walls = [[], [], [], []];
-    all.forEach(function (w, i) { walls[Math.min(3, Math.floor(i / per))].push(w); });
+    var named = ms.slice(0, 1).concat([{ open: true }], ms.slice(1)); /* the first member and the open window share the first wall */
+    /* the room always has many windows: unnamed ones let the light in until members take their place */
+    var per = Math.max(5, Math.min(6, Math.ceil(named.length / 4))), total = per * 4, all = named.slice(), walls = [[], [], [], []], i;
+    var NEON_TURNS = [0, 25, 330, 50, 300, 345, 15, 280, 35, 315, 10, 290];
+    for (i = named.length; i < total; i++) all.push({ anon: true, h: NEON_TURNS[i % NEON_TURNS.length] }); /* small turns keep the unnamed light in the neon family */
+    /* spread the named windows to the middle of the first wall, unnamed ones around them */
+    var first = all.slice(0, per), restW = all.slice(per);
+    var nm = first.filter(function (w) { return !w.anon; }), an = first.filter(function (w) { return w.anon; });
+    var left = an.slice(0, Math.floor(an.length / 2)), right = an.slice(Math.floor(an.length / 2));
+    walls[0] = left.concat(nm, right);
+    for (i = 0; i < restW.length; i++) walls[1 + Math.floor(i / per)].push(restW[i]);
     return walls;
   }
   function chBuildRoom() {
@@ -1733,7 +1745,13 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     CH_WALLS.forEach(function (W, wi) {
       var list = walls[wi], k = list.length, gap = Math.min(S2 * 0.17, (S2 * 0.84) / Math.max(k, 1)), inner = "", patches = "";
       list.forEach(function (w, j) {
-        var x = (j - (k - 1) / 2) * gap, left = S2 / 2 + x - ww / 2, top = RH / 2 + cy - wh / 2, h = w.m ? paneHue(w.m.name) : 0;
+        var x = (j - (k - 1) / 2) * gap, left = S2 / 2 + x - ww / 2, top = RH / 2 + cy - wh / 2, h = w.m ? paneHue(w.m.name) : w.anon ? w.h : 0;
+        if (w.anon) {
+          inner += '<div class="chx-glow" style="--h:' + h + 'deg;opacity:.2;left:' + (S2 / 2 + x - ww * 1.6) + "px;top:" + (RH / 2 + cy - ww * 1.9) + "px;width:" + ww * 3.2 + "px;height:" + ww * 3.8 + 'px"></div>' +
+            '<div class="chx-iw anon" aria-hidden="true" style="left:' + left + "px;top:" + top + "px;width:" + ww + 'px"><span class="chx-frame"><span class="chx-pane" style="--h:' + h + 'deg"></span></span></div>';
+          patches += '<div class="chx-patch anon" style="--h:' + h + "deg;left:" + (S2 / 2 + x - ww * 0.55) + "px;width:" + ww * 1.1 + "px;height:" + S2 * 0.3 + "px;transform:skewX(" + Math.max(-38, Math.min(38, -(x / (S2 / 2)) * 34)).toFixed(1) + 'deg)"></div>';
+          return;
+        }
         if (w.m) inner += '<div class="chx-glow" style="--h:' + h + 'deg;left:' + (S2 / 2 + x - ww * 1.6) + "px;top:" + (RH / 2 + cy - ww * 1.9) + "px;width:" + ww * 3.2 + "px;height:" + ww * 3.8 + 'px"></div>';
         inner += '<button type="button" class="chx-iw' + (w.open ? " open" : "") + '" data-i="' + (w.open ? "open" : chEsc(w.m.name)) + '" style="left:' + left + "px;top:" + top + "px;width:" + ww + 'px"' +
           ' aria-label="' + chEsc(w.open ? "This window could be yours. Apply here" : w.m.name + (w.m.line ? ", " + w.m.line : "")) + '">' +
@@ -1785,7 +1803,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       if ((t = e.target.closest(".chx-turn"))) { ch.ty += +t.getAttribute("data-turn"); ch.last = performance.now(); return; }
       if (e.target === ch.sheet || e.target.closest(".chx-card .x")) return chCloseCard();
       if ((t = e.target.closest(".chx-card a.chx-go"))) { leaveChamber(true); return; } /* the link itself moves to the member's page */
-      if ((t = e.target.closest(".chx-iw")) && ch.moved < 9) {
+      if ((t = e.target.closest(".chx-iw:not(.anon)")) && ch.moved < 9) {
         var id = t.getAttribute("data-i");
         if (id === "open") return chApply();
         chOpenCard(id);

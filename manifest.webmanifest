@@ -1,0 +1,17 @@
+{
+  "id": "/toic/",
+  "name": "the ordinary inquiry club",
+  "short_name": "Inquiry Club",
+  "description": "Street philosophy in Hamburg. One question, two hours, a small table, your own words.",
+  "lang": "en",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0b0a12",
+  "theme_color": "#f6f6f2",
+  "icons": [
+    { "src": "icons/icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "icons/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -13,6 +13,18 @@
 <meta property="og:image" content="https://sudhara-jayalath.github.io/toic/og.png">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="favicon.png">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<meta name="theme-color" content="#f6f6f2" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#11110f" media="(prefers-color-scheme: dark)">
+<meta name="apple-mobile-web-app-title" content="Inquiry Club">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script>/* the offline copy is kept only when the club is opened as an installed app */
+if ("serviceWorker" in navigator && ((window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone)) {
+  addEventListener("load", function () { navigator.serviceWorker.register("sw.js", { scope: "./" }).catch(function () {}); });
+}</script>
 <style>:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
 </head>
 <body>
@@ -530,6 +542,21 @@ html.chx-open, html.chx-open body { overflow: hidden; }
 .social-links a { font-family: var(--mono); font-size: .78rem; letter-spacing: .04em; color: var(--ink); text-decoration: none; border-bottom: 1px solid var(--rule); padding-bottom: .15rem; }
 .social-links a b { font-weight: 400; color: var(--muted); }
 .social-links a:hover, .social-links a:focus-visible { border-bottom-color: var(--ink); }
+.social-links .soc-app { font: inherit; font-family: var(--mono); font-size: .78rem; letter-spacing: .04em; color: var(--ink); background: none; border: 0; border-bottom: 1px dashed var(--muted); padding: 0 0 .15rem; cursor: pointer; }
+.social-links .soc-app:hover, .social-links .soc-app:focus-visible { border-bottom-style: solid; border-bottom-color: var(--ink); }
+.app-dlg { border: 1.5px solid var(--ink); background: var(--paper); color: var(--ink); padding: 0; width: min(26rem, calc(100% - 2rem)); max-height: calc(100% - 2rem); }
+.app-dlg::backdrop { background: rgb(5 4 9 / .55); }
+.app-card { position: relative; display: grid; gap: .85rem; padding: 1.6rem 1.5rem 1.5rem; }
+.app-icon { width: 64px; height: 64px; border-radius: 15px; }
+.app-card .eyebrow { margin: .2rem 0 0; }
+.app-card h3 { font-family: var(--display); font-weight: 400; font-size: 1.75rem; line-height: 1.05; margin: 0; }
+.app-how { margin: 0; font-size: 1.08rem; line-height: 1.55; }
+.app-how b { font-weight: 600; }
+.app-note { margin: 0; font-family: var(--mono); font-size: .74rem; line-height: 1.6; color: var(--muted); }
+.app-more summary { font-family: var(--mono); font-size: .74rem; letter-spacing: .04em; cursor: pointer; color: var(--muted); }
+.app-more ul { margin: .6rem 0 0; padding-left: 1.1rem; display: grid; gap: .45rem; font-size: .98rem; line-height: 1.5; }
+.app-x { position: absolute; top: .6rem; right: .6rem; width: 40px; height: 40px; border: 1.5px solid var(--ink); background: var(--paper); color: var(--ink); cursor: pointer; font-family: var(--mono); font-size: 1.1rem; }
+.app-x:focus-visible, .social-links .soc-app:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 
 /* footer */
 footer { border-top: 1px solid var(--rule); }
@@ -914,7 +941,24 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     if (instaUrl()) l.push(ext(instaUrl(), "Instagram <b>" + esc(instaHandle()) + "</b>", "soc"));
     if (safeUrl(S.settings.meetupUrl)) l.push(ext(S.settings.meetupUrl, "Meetup", "soc"));
     if (lumaUrl()) l.push(ext(lumaUrl(), "Luma", "soc"));
+    if (appInstallable()) l.push('<button type="button" class="soc soc-app" id="app-install">Add to home screen <span aria-hidden="true">+</span></button>');
     return l.length ? '<nav class="social-links" aria-label="Follow the club">' + l.join("") + "</nav>" : "";
+  }
+  /* the club as an app: only on the published site (it carries the manifest), and not once it is already installed */
+  function appInstallable() {
+    var standalone = (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || navigator.standalone;
+    return !!document.querySelector('link[rel="manifest"]') && !standalone;
+  }
+  function appDialog() {
+    if (!appInstallable()) return "";
+    return '<dialog id="app-dlg" class="app-dlg" aria-labelledby="app-dlg-t"><div class="app-card">' +
+      '<button type="button" class="app-x" aria-label="Close">\u00d7</button>' +
+      '<img class="app-icon" src="icons/icon-192.png" alt="" width="64" height="64">' +
+      '<p class="eyebrow">The club on your phone</p><h3 id="app-dlg-t">Add it to your home screen</h3>' +
+      '<p class="app-how" id="app-how"></p>' +
+      '<p class="app-note">It is this same website, opening full-screen with the 1010 icon. Nothing to download from a store, and it updates by itself.</p>' +
+      '<details class="app-more"><summary>On another device</summary><ul id="app-other"></ul></details>' +
+      "</div></dialog>";
   }
   function platforms() {
     var meet = { name: "Meetup", url: joinUrl() };
@@ -1290,6 +1334,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
         "<p>Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO. Unser berechtigtes Interesse liegt in einer sicheren und zuverlässigen Bereitstellung der Website.</p>" +
         "<p>Dabei können Daten in die USA übermittelt werden. GitHub erklärt, das EU-U.S. Data Privacy Framework einzuhalten; die Übermittlung stützt sich damit auf den Angemessenheitsbeschluss der EU-Kommission nach Art. 45 DSGVO. Weitere Informationen gibt das GitHub General Privacy Statement:</p>" +
         '<p class="src">https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement</p>' +
+        "<p><strong>Als App auf dem Startbildschirm.</strong> Sie können diese Website über Ihren Browser auf dem Startbildschirm Ihres Geräts ablegen. Nur wenn Sie sie von dort öffnen, speichert Ihr Browser eine Kopie der Website (Seite und Bilder) im Speicher Ihres Geräts, damit sie schneller lädt und auch ohne Internetverbindung lesbar ist. Diese Kopie bleibt auf Ihrem Gerät; dabei werden keine personenbezogenen Daten an uns übermittelt. Rechtsgrundlage ist § 25 Abs. 2 Nr. 2 TDDDG. Sie können die Kopie jederzeit löschen, indem Sie die App entfernen oder die Website-Daten in Ihrem Browser löschen.</p>" +
         "<h3>4. Externe Links</h3><p>Diese Website verlinkt auf externe Angebote, etwa auf unsere Seiten bei Instagram, Meetup oder Luma, auf einen Newsletter-Dienst oder auf den Blog des Gründers. Daten werden an diese Anbieter erst übertragen, wenn Sie einen solchen Link anklicken. Ab dann gilt die Datenschutzerklärung des jeweiligen Anbieters.</p>" +
         "<h3>5. Kontakt per E-Mail oder Nachricht</h3><p>Wenn Sie uns per E-Mail oder über Meetup schreiben, verarbeiten wir Ihre Angaben (zum Beispiel Name, E-Mail-Adresse und Inhalt der Nachricht), um Ihre Anfrage zu beantworten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO, bei Anfragen zur Teilnahme Art. 6 Abs. 1 lit. b DSGVO. Wir löschen die Angaben, sobald sie für diesen Zweck nicht mehr benötigt werden.</p>" +
         (voteLive() ? "<p><strong>Abstimmung über das nächste Thema.</strong> Erst wenn Sie auf der Startseite ein Thema anklicken, „See the votes“ wählen oder einen Themenvorschlag senden, verbindet sich Ihr Browser mit unserer Datenbank bei Supabase (Supabase Inc.; Speicherort der Datenbank: Frankfurt am Main, EU). Gespeichert werden nur das gewählte Thema mit seiner Stimmenzahl bzw. der Text Ihres Vorschlags, ohne Namen oder IP-Adresse. Supabase verarbeitet dabei technisch notwendige Verbindungsdaten wie Ihre IP-Adresse in Server-Protokollen. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO; unser berechtigtes Interesse ist eine einfache Abstimmung über künftige Themen. Mehr dazu in der <a href=\"https://supabase.com/privacy\" target=\"_blank\" rel=\"noopener noreferrer\">Datenschutzerklärung von Supabase</a>.</p><p>Damit niemand versehentlich doppelt abstimmt, merkt sich Ihr Browser im lokalen Speicher (Local Storage), für welche Themen Sie gestimmt haben. Diese Angabe verlässt Ihr Gerät nicht und ist für die von Ihnen gewünschte Abstimmung erforderlich (§ 25 Abs. 2 Nr. 2 TDDDG). Sie können sie jederzeit über die Einstellungen Ihres Browsers löschen.</p>" : S.vote && (S.vote.url || "").trim() ? "<p>Für die Abstimmung über das nächste Thema verlinken wir auf eine externe Umfrage (" + esc(hostOf(S.vote.url)) + "). Erst wenn Sie den Link anklicken, verlassen Sie diese Website; dort gilt die Datenschutzerklärung des Anbieters.</p>" : "<p>Das gilt auch für Stimmen und Themenvorschläge auf der Startseite: Ein Klick öffnet Ihr eigenes E-Mail-Programm. Die Website selbst überträgt oder speichert dabei nichts.</p>") +
@@ -1672,7 +1717,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
         '<div><img class="word" src="' + WORD + '" alt="1he 0dinary 1nquiry 0lub"><p class="small">Hamburg · founded November 2026</p>' + socialNav() + '<nav class="legal-links" aria-label="More"><a href="#faq">FAQ</a><a href="#impressum">Impressum</a><a href="#datenschutz">Datenschutz</a></nav></div>' +
         '<p class="small guru">&#x2643;&#xFE0E; Thursday is Guruvāra in Sanskrit: the day of Bṛhaspati, teacher of the gods and lord of speech.</p>' +
       "</div></footer>" +
-      '<button type="button" class="fab" id="fab" hidden>Edit site</button>' +
+      '<button type="button" class="fab" id="fab" hidden>Edit site</button>' + appDialog() +
       '<dialog id="dlg" aria-labelledby="dlg-title"><form id="dlg-form" class="dlg"></form></dialog>' +
       '<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>';
   }
@@ -1860,6 +1905,36 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     if (!quiet) { var btn = app.querySelector(".chb-enter"); if (btn) btn.focus({ preventScroll: true }); }
   }
   app.addEventListener("click", function (e) { if (e.target.closest(".chb-enter")) enterChamber(); });
+
+  /* ===== add to home screen ===== */
+  var appPrompt = null;
+  window.addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); appPrompt = e; });
+  window.addEventListener("appinstalled", function () { var b = document.getElementById("app-install"); if (b) b.hidden = true; });
+  var APP_HOW = {
+    ios: "Tap <b>Share</b> (the square with an arrow), then <b>Add to Home Screen</b>.",
+    android: "Open the browser menu <b>\u22ee</b> and choose <b>Install app</b> or <b>Add to Home screen</b>.",
+    desktop: "In Chrome or Edge, open the browser menu and choose <b>Install</b>. In Safari on a Mac, choose File \u2192 <b>Add to Dock</b>."
+  };
+  var APP_NAME = { ios: "iPhone or iPad", android: "Android", desktop: "Computer" };
+  function appPlatform() {
+    var ua = navigator.userAgent || "";
+    if (/iPhone|iPad|iPod/.test(ua) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1)) return "ios";
+    return /Android/.test(ua) ? "android" : "desktop";
+  }
+  document.addEventListener("click", function (e) {
+    var dlg = document.getElementById("app-dlg");
+    if (e.target.closest("#app-install")) {
+      if (appPrompt) { var p = appPrompt; appPrompt = null; p.prompt(); return; }
+      if (!dlg) return;
+      var k = appPlatform();
+      document.getElementById("app-how").innerHTML = APP_HOW[k];
+      document.getElementById("app-other").innerHTML = Object.keys(APP_HOW).filter(function (o) { return o !== k; })
+        .map(function (o) { return "<li><b>" + APP_NAME[o] + ":</b> " + APP_HOW[o] + "</li>"; }).join("");
+      if (dlg.showModal) dlg.showModal(); else dlg.setAttribute("open", "");
+      return;
+    }
+    if (dlg && (e.target === dlg || e.target.closest(".app-x"))) dlg.close ? dlg.close() : dlg.removeAttribute("open");
+  });
   window.addEventListener("keydown", function (e) {
     if (!ch) return;
     if (e.key === "Escape") { if (!ch.sheet.hidden) chCloseCard(); else leaveChamber(); return; }

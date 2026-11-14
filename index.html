@@ -5,10 +5,10 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <title>The Ordinary Inquiry Club</title>
 <meta name="claude:viewport-fit-sides" content="cover">
-<meta name="description" content="A small table for thinking out loud, together. Hamburg, Thursdays & Saturdays: one question, two hours, up to five people, your own words.">
+<meta name="description" content="A small table for thinking out loud, together. Hamburg, Thursdays: one question, two hours, up to four people, your own words.">
 <meta property="og:type" content="website">
 <meta property="og:title" content="The Ordinary Inquiry Club">
-<meta property="og:description" content="A small table for thinking out loud, together. Hamburg, Thursdays & Saturdays: one question, two hours, up to five people, your own words.">
+<meta property="og:description" content="A small table for thinking out loud, together. Hamburg, Thursdays: one question, two hours, up to four people, your own words.">
 <meta property="og:url" content="https://sudhara-jayalath.github.io/toic/">
 <meta property="og:image" content="https://sudhara-jayalath.github.io/toic/og.png">
 <meta name="twitter:card" content="summary_large_image">
@@ -675,7 +675,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   "theme": "neon",
   "lines": "on",
   "letterUrl": "",
-  "when": "Thursdays & Saturdays"
+  "when": "Thursdays"
  },
  "sessions": [
   {
@@ -820,8 +820,8 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   },
   {
    "id": "f-size",
-   "q": "What if more than five people want to come?",
-   "a": "Each table is kept small, never more than five people with the host, so everyone has room to think out loud. When it is full, there is a waitlist.\n\nWe are starting small on purpose, to see how the table develops. In the future we may organise bigger events. The tables themselves will stay small."
+   "q": "What if more than four people want to come?",
+   "a": "Each table is kept small, never more than four people with the host, so everyone has room to think out loud. When it is full, there is a waitlist.\n\nWe are starting small on purpose, to see how the table develops. In the future we may organise bigger events. The tables themselves will stay small."
   },
   {
    "id": "f-friend",
@@ -1003,7 +1003,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     var s = S.settings;
     /* every upcoming table, soonest first (the minute-book lists newest first) */
     var ups = S.sessions.filter(function (x) { return x.status === "upcoming" && !isPast(x); }).reverse();
-    var tickItems = [s.when || "Thursdays & Saturdays", "Hamburg", "Five at the table", "One question", "No history lessons", "Bring your own question", "Guruvāra: the day of the teacher"];
+    var tickItems = [s.when || "Thursdays", "Hamburg", "Four at the table", "One question", "No history lessons", "Bring your own question", "Guruvāra: the day of the teacher"];
     var tick = tickItems.map(function (t) { return "<span>" + esc(t) + "</span><span><b>&#x2643;&#xFE0E;</b></span>"; }).join("");
     var nextBlock = ups.length ? (
       '<div class="next">' + ups.map(function (next, i) {
@@ -1017,9 +1017,9 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     return (
       '<div class="hero"><div class="inner">' +
         '<div class="hero-copy">' +
-          '<p class="eyebrow">Hamburg · Thursdays &amp; Saturdays</p>' +
+          '<p class="eyebrow">Hamburg · Thursdays</p>' +
           '<h1><span style="--i:0">Yes. No.</span> <span style="--i:1">Both. Neither.</span> <span style="--i:2">Let\u2019s talk! :)</span></h1>' +
-          '<p class="lede">A small table for thinking out loud, together. Up to five people sit down with one question and think it through in their own words.</p>' +
+          '<p class="lede">A small table for thinking out loud, together. Up to four people sit down with one question and think it through in their own words.</p>' +
           '<div class="actions">' + joinButtons("btn solid", "btn", "Join") + '<a class="btn" href="#records">Read the records</a></div>' +
         "</div>" +
         '<div class="hero-mark"><img class="mark" src="' + MARK + '" alt="The club mark: IO above 1O"><img class="word" src="' + WORD + '" alt="1he 0dinary 1nquiry 0lub"></div>' +
@@ -1031,7 +1031,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
         '<div class="prose">' +
           "<p>Do you wonder about life, and enjoy hearing how others see it? If you're enchanted by life and its mysteries, if you like to describe the world and existence in your own way, and if you're curious how the people around you creatively make sense of it, this club is for you.</p>" +
           "<p>You don't need to be a philosopher by profession. It's enough to be one by life, by vocation, and by passion.</p>" +
-          "<p>We meet in small groups of up to five people to explore one focused topic at a time. We won't dive into the history of philosophy, and we're not concerned with how philosophy is practiced in institutions. Here, your own thinking is the starting point.</p>" +
+          "<p>We meet in small groups of up to four people to explore one focused topic at a time. We won't dive into the history of philosophy, and we're not concerned with how philosophy is practiced in institutions. Here, your own thinking is the starting point.</p>" +
         "</div>" +
       "</div>" +
       '<div class="inner"><p class="quote"><mark>Let’s rescue philosophy from history books and institutions,</mark> and bring it back to the streets.</p></div>' +
@@ -1039,7 +1039,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       '<div class="inner section">' +
         '<div class="lead"><p class="eyebrow">At the table</p><h2>Two hours, one question</h2></div>' +
         '<ol class="timeline">' +
-          '<li><span class="t">Arrive</span><h3>We sit down</h3><p>One table in a Hamburg café, up to five people. A drink or two is plenty.</p></li>' +
+          '<li><span class="t">Arrive</span><h3>We sit down</h3><p>One table in a Hamburg café, up to four people. A drink or two is plenty.</p></li>' +
           '<li><span class="t">+10 min</span><h3>One question</h3><p>A focused question, announced a few days before on ' + mainPlatform() + '.</p></li>' +
           '<li><span class="t">2 hours</span><h3>Your own words</h3><p>Everyone thinks from their own life. No famous names needed to make a point.</p></li>' +
           '<li><span class="t">After</span><h3>The record</h3><p>The question, the threads and what we found go into the minute-book.</p></li>' +
@@ -2433,7 +2433,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       ["lines", "Drawings in the hero", "select", [["off", "Off"], ["on", "Columns and patterns"], ["wisdom", "Figures of wisdom"]]],
       ["theme", "Look", "select", [["neon", "Neon (Hamburg at night)"], ["yellow", "Jupiter yellow (special seasons)"]]],
       ["letterUrl", "Newsletter sign-up link (optional)", "url", "Leave empty to use the Luma calendar (Luma sends newsletters to its subscribers), or Meetup if there is no Luma link."],
-      ["when", "When (shown in the ticker)", "text", "e.g. Thursdays & Saturdays"]
+      ["when", "When (shown in the ticker)", "text", "e.g. Thursdays"]
     ] }
   };
 

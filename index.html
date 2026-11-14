@@ -21,6 +21,14 @@
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script>/* the opening animation plays once each time the installed app starts */
+(function () {
+  var sa = (window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone;
+  var rm = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var seen = false; try { seen = !!sessionStorage.getItem("toic-intro"); } catch (e) {}
+  if (sa && !rm && !seen) { document.documentElement.classList.add("oi-pending"); setTimeout(function () { document.documentElement.classList.remove("oi-pending"); }, 15000); }
+})();</script>
+<style>html.oi-pending, html.oi-pending body { background: #0b0a12 !important; } html.oi-pending #app { visibility: hidden; }</style>
 <script>/* the offline copy is kept only when the club is opened as an installed app */
 if ("serviceWorker" in navigator && ((window.matchMedia && matchMedia("(display-mode: standalone)").matches) || navigator.standalone)) {
   addEventListener("load", function () { navigator.serviceWorker.register("sw.js", { scope: "./" }).catch(function () {}); });
@@ -557,6 +565,26 @@ html.chx-open, html.chx-open body { overflow: hidden; }
 .app-more ul { margin: .6rem 0 0; padding-left: 1.1rem; display: grid; gap: .45rem; font-size: .98rem; line-height: 1.5; }
 .app-x { position: absolute; top: .6rem; right: .6rem; width: 40px; height: 40px; border: 1.5px solid var(--ink); background: var(--paper); color: var(--ink); cursor: pointer; font-family: var(--mono); font-size: 1.1rem; }
 .app-x:focus-visible, .social-links .soc-app:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+
+/* the opening of the home-screen app (index.html marks it with html.oi-pending) */
+.oi-splash { position: fixed; inset: 0; z-index: 200; overflow: hidden; background: #0b0a12; isolation: isolate; cursor: pointer; transition: opacity .8s ease; }
+.oi-splash.oi-out { opacity: 0; pointer-events: none; }
+.oi-splash.oi-out.oi-fast { transition-duration: .35s; }
+.oi-glow { position: absolute; inset: -30%; z-index: -2; opacity: 0; background:
+  radial-gradient(30% 24% at 18% 26%, #ff2bd6 0%, transparent 70%),
+  radial-gradient(28% 22% at 84% 20%, #00e1ff 0%, transparent 70%),
+  radial-gradient(36% 26% at 62% 84%, #8a3cff 0%, transparent 72%),
+  radial-gradient(24% 18% at 26% 90%, #ffb21e 0%, transparent 70%); filter: blur(48px) saturate(1.2); }
+.oi-grain { position: absolute; inset: 0; z-index: -1; opacity: .14; mix-blend-mode: overlay; pointer-events: none;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='180' height='180'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .55 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>"); }
+.oi-ch { position: absolute; left: 0; top: 0; display: block; font-family: "Gloock", Georgia, serif; font-size: 100px; line-height: 1; white-space: pre; color: #f7f3ff;
+  transform-origin: 0 0; opacity: 0; will-change: transform, opacity; text-shadow: 0 0 30px rgb(255 255 255 / .22); }
+.oi-mark { position: absolute; max-width: none; opacity: 0; filter: invert(1); will-change: transform, opacity; pointer-events: none; }
+.oi-tag { position: absolute; left: 0; right: 0; text-align: center; font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 11px; letter-spacing: .2em; text-transform: uppercase; color: #a9a3ba; opacity: 0; }
+.oi-hint { position: absolute; left: 0; right: 0; bottom: calc(22px + env(safe-area-inset-bottom, 0px)); text-align: center; font-family: "IBM Plex Mono", ui-monospace, monospace; font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: rgb(247 243 255 / .38); }
+.oi-measure { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; visibility: hidden; pointer-events: none; }
+.oi-measure div { display: block; white-space: pre; line-height: 1; }
+.oi-measure span { display: inline-block; font-family: "Gloock", Georgia, serif; line-height: 1; white-space: pre; }
 
 /* footer */
 footer { border-top: 1px solid var(--rule); }
@@ -2305,6 +2333,125 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     }
     requestAnimationFrame(frame);
   }
+
+  /* ===== the opening of the home-screen app: oi, ordinary inquiry, the ordinary / inquiry club, 1010 ===== */
+  function oiSplash() {
+    var root = document.documentElement, el = null, done = false, anims = [], timers = [], themes = [];
+    function release() { root.classList.remove("oi-pending"); }
+    try {
+      try { sessionStorage.setItem("toic-intro", "1"); } catch (e) {}
+      [].forEach.call(document.querySelectorAll('meta[name="theme-color"]'), function (m) { themes.push([m, m.getAttribute("content")]); m.setAttribute("content", "#0b0a12"); });
+      el = document.createElement("div");
+      el.className = "oi-splash"; el.setAttribute("role", "img"); el.setAttribute("aria-label", "the ordinary inquiry club");
+      el.innerHTML = '<div class="oi-glow"></div><div class="oi-grain"></div><div class="oi-letters"></div><img class="oi-mark" alt="" src="' + MARK + '"><div class="oi-tag">street philosophy · hamburg</div><div class="oi-hint">Tap to skip</div>';
+      document.body.appendChild(el);
+      release();
+      var lettersEl = el.querySelector(".oi-letters"), mark = el.querySelector(".oi-mark"), tag = el.querySelector(".oi-tag"), glow = el.querySelector(".oi-glow");
+      var BASE = 100, A = "the ordinary", B = "inquiry club", MARK_W = 263, MARK_H = 316;
+      var GLYPH = { A0: [6, 10, 103, 151], A4: [131, 6, 256, 150], B0: [18, 164, 115, 305], B8: [131, 165, 256, 309] };
+      var chars = {}, ids = [];
+      [[A, "A"], [B, "B"]].forEach(function (w) { for (var i = 0; i < w[0].length; i++) { var c = document.createElement("span"); c.className = "oi-ch"; c.textContent = w[0][i]; lettersEl.appendChild(c); chars[w[1] + i] = c; ids.push(w[1] + i); } });
+      var range = function (p, a, b) { var r = []; for (var i = a; i <= b; i++) r.push(p + i); return r; };
+      var measure = function (lines, F) {
+        var m = document.createElement("div"); m.className = "oi-measure"; m.style.gap = (F * 0.08) + "px";
+        lines.forEach(function (line) {
+          var d = document.createElement("div");
+          line.forEach(function (tok) { var sp = document.createElement("span"); sp.style.fontSize = F + "px"; sp.textContent = tok === " " ? " " : chars[tok].textContent; if (tok !== " ") sp.setAttribute("data-id", tok); d.appendChild(sp); });
+          m.appendChild(d);
+        });
+        el.appendChild(m);
+        var sr = el.getBoundingClientRect(), pos = {}, widths = [];
+        [].forEach.call(m.children, function (d) { widths.push(d.getBoundingClientRect().width); });
+        [].forEach.call(m.querySelectorAll("span[data-id]"), function (sp) { var r = sp.getBoundingClientRect(); pos[sp.getAttribute("data-id")] = { x: r.left - sr.left, y: r.top - sr.top, s: F / BASE }; });
+        m.parentNode.removeChild(m);
+        return { pos: pos, w: Math.max.apply(null, widths) };
+      };
+      var fit = function (lines, share, maxF) { return Math.min(BASE * (el.clientWidth * share) / measure(lines, BASE).w, maxF); };
+      var T = function (p, dx, dy, k) { return "translate(" + (p.x + (dx || 0)).toFixed(2) + "px," + (p.y + (dy || 0)).toFixed(2) + "px) scale(" + (p.s * (k || 1)).toFixed(4) + ")"; };
+      var inkBox = function (id) {
+        var c = document.createElement("canvas").getContext("2d"); c.font = BASE + "px Gloock";
+        var m = c.measureText(chars[id].textContent), asc = m.fontBoundingBoxAscent || BASE * .9, desc = m.fontBoundingBoxDescent || BASE * .25, base = (BASE - (asc + desc)) / 2 + asc;
+        return { l: -m.actualBoundingBoxLeft, r: m.actualBoundingBoxRight, t: base - m.actualBoundingBoxAscent, b: base + m.actualBoundingBoxDescent };
+      };
+      var EASE = "cubic-bezier(.65,0,.35,1)", OUT = "cubic-bezier(.2,.7,.2,1)";
+      var go = function (node, frames, delay, dur, easing) { if (!node.animate) return; anims.push(node.animate(frames, { delay: delay, duration: dur, easing: easing || EASE, fill: "forwards" })); };
+      var close = function (fast) {
+        if (done) return; done = true;
+        timers.forEach(clearTimeout);
+        themes.forEach(function (t) { t[0].setAttribute("content", t[1]); });
+        el.classList.add("oi-out"); if (fast) el.classList.add("oi-fast");
+        setTimeout(function () { anims.forEach(function (a) { a.cancel(); }); if (el.parentNode) el.parentNode.removeChild(el); }, fast ? 400 : 850);
+      };
+      el.addEventListener("click", function () { close(true); });
+      document.addEventListener("keydown", function k(e) { if (e.key === "Escape" || e.key === "Enter" || e.key === " ") { document.removeEventListener("keydown", k); close(true); } });
+      timers.push(setTimeout(function () { close(false); }, 14000));
+
+      var start = function () {
+        if (done) return;
+        var W = el.clientWidth, H = el.clientHeight, L = {};
+        var S0 = [["A4", "B0"]], S1 = [range("A", 4, 11).concat([" "], range("B", 0, 6))], S2 = [range("A", 0, 11), range("B", 0, 11)];
+        L.s0 = measure(S0, fit(S0, .34, H * .22)).pos;
+        L.s1 = measure(S1, fit(S1, .84, H * .075)).pos;
+        L.s2 = measure(S2, fit(S2, .8, H * .085)).pos;
+        var mh = Math.min(H * .27, W * .58 * MARK_H / MARK_W), mw = mh * MARK_W / MARK_H, mx = (W - mw) / 2, my = (H - mh) / 2 - H * .03;
+        mark.style.left = mx + "px"; mark.style.top = my + "px"; mark.style.width = mw + "px"; mark.style.height = mh + "px";
+        tag.style.top = (my + mh + H * .055) + "px";
+        L.s3 = {};
+        Object.keys(GLYPH).forEach(function (id) {
+          var g = GLYPH[id], k = mw / MARK_W, gx = mx + g[0] * k, gy = my + g[1] * k, gw = (g[2] - g[0]) * k, gh = (g[3] - g[1]) * k;
+          var b = inkBox(id), sc = Math.min(gh / (b.b - b.t), gw / (b.r - b.l) * 1.15);
+          L.s3[id] = { x: gx + gw / 2 - sc * (b.l + b.r) / 2, y: gy + gh / 2 - sc * (b.t + b.b) / 2, s: sc };
+        });
+        var center = { x: W / 2, y: my + mh / 2 };
+        var seed = ["A4", "B0"], w1 = range("A", 5, 11), w2 = range("B", 1, 6), the = ["A2", "A1", "A0"], club = ["B8", "B9", "B10", "B11"], initials = ["A0", "A4", "B0", "B8"], visible = seed.concat(w1, w2);
+        /* 1: oi */
+        seed.forEach(function (id) {
+          go(chars[id], [{ opacity: 0, filter: "blur(10px)" }, { opacity: 1, filter: "blur(0)" }], 250, 800, OUT);
+          go(chars[id], [{ transform: T(L.s0[id], 0, 0, .94) }, { transform: T(L.s0[id]) }], 250, 900, OUT);
+        });
+        /* 2: ordinary inquiry, growing out of the o and the i */
+        var t1 = 1500, mv1 = 1100;
+        seed.forEach(function (id) { go(chars[id], [{ transform: T(L.s0[id]) }, { transform: T(L.s1[id]) }], t1, mv1); });
+        [w1, w2].forEach(function (list) {
+          list.forEach(function (id, k) {
+            var d = t1 + mv1 * .45 + k * 95;
+            go(chars[id], [{ opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0)" }], d, 560, OUT);
+            go(chars[id], [{ transform: T(L.s1[id], -18 * L.s1[id].s, 0) }, { transform: T(L.s1[id]) }], d, 560, OUT);
+          });
+        });
+        /* 3: the ordinary / inquiry club */
+        var t2 = 4100, mv2 = 1000;
+        visible.forEach(function (id) { go(chars[id], [{ transform: T(L.s1[id]) }, { transform: T(L.s2[id]) }], t2, mv2); });
+        [the, club].forEach(function (list, li) {
+          list.forEach(function (id, k) {
+            var d = t2 + mv2 * .55 + k * 90, dx = (li === 0 ? 14 : -14) * L.s2[id].s;
+            go(chars[id], [{ opacity: 0, filter: "blur(6px)" }, { opacity: 1, filter: "blur(0)" }], d, 520, OUT);
+            go(chars[id], [{ transform: T(L.s2[id], dx, 0) }, { transform: T(L.s2[id]) }], d, 520, OUT);
+          });
+        });
+        /* 4: the initials become 1 0 / 1 0 */
+        var t3 = 6300, mv3 = 1150, t4 = t3 + mv3 - 150;
+        ids.forEach(function (id) {
+          if (id === "A3" || id === "B7") return;
+          if (initials.indexOf(id) >= 0) { go(chars[id], [{ transform: T(L.s2[id]) }, { transform: T(L.s3[id]) }], t3, mv3); return; }
+          var p = L.s2[id];
+          go(chars[id], [{ opacity: 1, filter: "blur(0)" }, { opacity: 0, filter: "blur(8px)" }], t3 + Math.random() * 200, 620);
+          go(chars[id], [{ transform: T(p) }, { transform: T(p, (center.x - p.x) * .18, (center.y - p.y) * .18, .8) }], t3, 820);
+        });
+        initials.forEach(function (id) { go(chars[id], [{ opacity: 1, filter: "blur(0)" }, { opacity: 0, filter: "blur(4px)" }], t4, 520); });
+        go(mark, [{ opacity: 0, transform: "scale(1.04)", filter: "invert(1) blur(5px)" }, { opacity: 1, transform: "scale(1)", filter: "invert(1) blur(0)" }], t4, 820, OUT);
+        go(glow, [{ opacity: 0 }, { opacity: .38, offset: .35 }, { opacity: .38, offset: .78 }, { opacity: .82 }], 0, t4 + 600, "linear");
+        go(tag, [{ opacity: 0, transform: "translateY(6px)" }, { opacity: 1, transform: "translateY(0)" }], t4 + 650, 700, OUT);
+        timers.push(setTimeout(function () { close(false); }, t4 + 1700));
+      };
+      var fonts = document.fonts && document.fonts.load ? Promise.all([document.fonts.load(BASE + "px Gloock"), document.fonts.load("11px 'IBM Plex Mono'")]) : Promise.resolve();
+      fonts.catch(function () {}).then(function () { try { start(); } catch (e) { close(true); } });
+    } catch (e) {
+      release();
+      if (el && el.parentNode) el.parentNode.removeChild(el);
+    }
+  }
+  if (document.documentElement.classList.contains("oi-pending")) oiSplash();
 
   render();
   route(false);

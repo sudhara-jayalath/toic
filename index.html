@@ -563,6 +563,17 @@ html.chx-open, html.chx-open body { overflow: hidden; }
 .app-note { margin: 0; font-family: var(--mono); font-size: .74rem; line-height: 1.6; color: var(--muted); }
 .app-more summary { font-family: var(--mono); font-size: .74rem; letter-spacing: .04em; cursor: pointer; color: var(--muted); }
 .app-more ul { margin: .6rem 0 0; padding-left: 1.1rem; display: grid; gap: .45rem; font-size: .98rem; line-height: 1.5; }
+.hero-more { display: inline-block; justify-self: start; align-self: start; width: max-content; margin-top: 1.1rem; font-family: var(--mono); font-size: .74rem; letter-spacing: .1em; text-transform: uppercase; color: inherit; text-decoration: none; border-bottom: 1px solid currentColor; padding-bottom: .15rem; opacity: .85; }
+.hero-more:hover, .hero-more:focus-visible { opacity: 1; }
+.write-ways { display: grid; gap: .6rem; margin-top: .2rem; }
+.write-ways .btn { justify-content: space-between; }
+.write-addr { display: flex; align-items: center; justify-content: space-between; gap: .8rem; padding: .55rem .2rem .55rem 0; border-block: 1px solid var(--rule); font-family: var(--mono); font-size: .86rem; }
+.write-mail { overflow-wrap: anywhere; user-select: all; }
+.write-copy { font: inherit; font-size: .72rem; letter-spacing: .1em; text-transform: uppercase; background: none; color: var(--ink); border: 1.5px solid var(--ink); padding: .35rem .7rem; cursor: pointer; flex: none; }
+.write-copy:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
+.app-card .btn.solid { background: var(--ink); color: var(--paper); border-color: var(--ink); }
+.app-card .btn { color: var(--ink); }
+.app-card .btn.solid { color: var(--paper); }
 .app-x { position: absolute; top: .6rem; right: .6rem; width: 40px; height: 40px; border: 1.5px solid var(--ink); background: var(--paper); color: var(--ink); cursor: pointer; font-family: var(--mono); font-size: 1.1rem; }
 .app-x:focus-visible, .social-links .soc-app:focus-visible { outline: 2px solid var(--ink); outline-offset: 3px; }
 
@@ -1183,6 +1194,7 @@ details.more > :not(summary) + * { margin-top: 1rem; }
     if (instaUrl()) l.push(ext(instaUrl(), "Instagram <b>" + esc(instaHandle()) + "</b>", "soc"));
     if (safeUrl(S.settings.meetupUrl)) l.push(ext(S.settings.meetupUrl, "Meetup", "soc"));
     if (lumaUrl()) l.push(ext(lumaUrl(), "Luma", "soc"));
+    if (contactMail()) l.push('<button type="button" class="soc soc-app" data-write>Write to me <span aria-hidden="true">\u2709</span></button>');
     if (appInstallable()) l.push('<button type="button" class="soc soc-app" id="app-install">Add to home screen <span aria-hidden="true">+</span></button>');
     return l.length ? '<nav class="social-links" aria-label="Follow the club">' + l.join("") + "</nav>" : "";
   }
@@ -1190,6 +1202,26 @@ details.more > :not(summary) + * { margin-top: 1rem; }
   function appInstallable() {
     var standalone = (window.matchMedia && window.matchMedia("(display-mode: standalone)").matches) || navigator.standalone;
     return !!document.querySelector('link[rel="manifest"]') && !standalone;
+  }
+  /* writing directly: for people who found a sticker and use neither Meetup nor Luma */
+  function contactMail() { var m = (S.legal.email || "").trim(); return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(m) ? m : ""; }
+  function writeBtn(cls) { return contactMail() ? '<button type="button" class="' + cls + ' write-btn" data-write>Write to me directly <span class="arr" aria-hidden="true">\u2709</span></button>' : ""; }
+  function writeDialog() {
+    var m = contactMail(); if (!m) return "";
+    var h = instaHandle(), dm = /^@/.test(h) ? "https://ig.me/m/" + h.slice(1) : "";
+    var first = ((S.legal.name || "").trim().split(/\s+/)[0]) || "";
+    var mailHref = "mailto:" + m + "?subject=" + encodeURIComponent("Hello from the street") + "&body=" + encodeURIComponent((first ? "Hi " + first + ",\n\n" : "Hi,\n\n"));
+    return '<dialog id="write-dlg" class="app-dlg" aria-labelledby="write-dlg-t"><div class="app-card">' +
+      '<button type="button" class="app-x" aria-label="Close">\u00d7</button>' +
+      '<p class="eyebrow">No app, no account</p><h3 id="write-dlg-t">Write to me directly</h3>' +
+      '<p class="app-how">Found a sticker? Ask anything, or tell me which Thursday you\u2019d like to come. I read every message myself and write back' + (first ? ". \u2014 " + esc(first) : "") + '</p>' +
+      '<div class="write-ways">' +
+        '<a class="btn solid" href="' + esc(mailHref) + '">Write an email <span class="arr" aria-hidden="true">\u2192</span></a>' +
+        (dm ? '<a class="btn" href="' + esc(dm) + '" target="_blank" rel="noopener">Message on Instagram <span class="arr" aria-hidden="true">\u2197</span></a>' : "") +
+      "</div>" +
+      '<div class="write-addr"><span class="write-mail">' + esc(m) + '</span><button type="button" class="write-copy" data-mail="' + esc(m) + '">Copy</button></div>' +
+      '<p class="app-note">Your message reaches only me, and I use your address only to answer you.</p>' +
+      "</div></dialog>";
   }
   function appDialog() {
     if (!appInstallable()) return "";
@@ -1262,7 +1294,8 @@ details.more > :not(summary) + * { margin-top: 1rem; }
           '<p class="eyebrow">Hamburg · Thursdays</p>' +
           '<h1><span style="--i:0">Yes. No.</span> <span style="--i:1">Both. Neither.</span> <span style="--i:2">Let\u2019s talk! :)</span></h1>' +
           '<p class="lede">A small table for thinking out loud, together. Up to four people sit down with one question and think it through in their own words.</p>' +
-          '<div class="actions">' + joinButtons("btn solid", "btn", "Join") + '<a class="btn" href="#records">Read the records</a></div>' +
+          '<div class="actions">' + joinButtons("btn solid", "btn", "Join") + writeBtn("btn") + "</div>" +
+          '<a class="hero-more" href="#records">Read the records <span aria-hidden="true">\u2192</span></a>' +
         "</div>" +
         '<div class="hero-mark"><img class="mark" src="' + MARK + '" alt="The club mark: IO above 1O"><img class="word" src="' + WORD + '" alt="1he 0dinary 1nquiry 0lub"></div>' +
       "</div>" + looksHtml("hero") + "</div>" +
@@ -1581,7 +1614,7 @@ details.more > :not(summary) + * { margin-top: 1rem; }
         "<p><strong>Als App auf dem Startbildschirm.</strong> Sie können diese Website über Ihren Browser auf dem Startbildschirm Ihres Geräts ablegen. Nur wenn Sie sie von dort öffnen, speichert Ihr Browser eine Kopie der Website (Seite und Bilder) im Speicher Ihres Geräts, damit sie schneller lädt und auch ohne Internetverbindung lesbar ist. Diese Kopie bleibt auf Ihrem Gerät; dabei werden keine personenbezogenen Daten an uns übermittelt. Rechtsgrundlage ist § 25 Abs. 2 Nr. 2 TDDDG. Sie können die Kopie jederzeit löschen, indem Sie die App entfernen oder die Website-Daten in Ihrem Browser löschen.</p>" +
         "<p><strong>Ihre Wahl der Darstellung.</strong> Wenn Sie unten auf der Startseite oder im Fußbereich eine Darstellung wählen (Neon, Forest oder Deep Waters), merkt sich Ihr Browser diese Wahl in seinem lokalen Speicher, damit die Website beim nächsten Besuch so aussieht. Die Wahl bleibt auf Ihrem Gerät und wird nicht an uns übermittelt. Rechtsgrundlage ist § 25 Abs. 2 Nr. 2 TDDDG.</p>" +
         "<h3>4. Externe Links</h3><p>Diese Website verlinkt auf externe Angebote, etwa auf unsere Seiten bei Instagram, Meetup oder Luma, auf einen Newsletter-Dienst oder auf den Blog des Gründers. Daten werden an diese Anbieter erst übertragen, wenn Sie einen solchen Link anklicken. Ab dann gilt die Datenschutzerklärung des jeweiligen Anbieters.</p>" +
-        "<h3>5. Kontakt per E-Mail oder Nachricht</h3><p>Wenn Sie uns per E-Mail oder über Meetup schreiben, verarbeiten wir Ihre Angaben (zum Beispiel Name, E-Mail-Adresse und Inhalt der Nachricht), um Ihre Anfrage zu beantworten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO, bei Anfragen zur Teilnahme Art. 6 Abs. 1 lit. b DSGVO. Wir löschen die Angaben, sobald sie für diesen Zweck nicht mehr benötigt werden.</p>" +
+        "<h3>5. Kontakt per E-Mail oder Nachricht</h3><p>Wenn Sie uns per E-Mail (etwa über „Write to me directly“), über Instagram, Meetup oder Luma schreiben, verarbeiten wir Ihre Angaben (zum Beispiel Name, E-Mail-Adresse und Inhalt der Nachricht), um Ihre Anfrage zu beantworten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO, bei Anfragen zur Teilnahme Art. 6 Abs. 1 lit. b DSGVO. Wir löschen die Angaben, sobald sie für diesen Zweck nicht mehr benötigt werden.</p>" +
         (voteLive() ? "<p><strong>Abstimmung über das nächste Thema.</strong> Erst wenn Sie auf der Startseite ein Thema anklicken, „See the votes“ wählen oder einen Themenvorschlag senden, verbindet sich Ihr Browser mit unserer Datenbank bei Supabase (Supabase Inc.; Speicherort der Datenbank: Frankfurt am Main, EU). Gespeichert werden nur das gewählte Thema mit seiner Stimmenzahl bzw. der Text Ihres Vorschlags, ohne Namen oder IP-Adresse. Supabase verarbeitet dabei technisch notwendige Verbindungsdaten wie Ihre IP-Adresse in Server-Protokollen. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO; unser berechtigtes Interesse ist eine einfache Abstimmung über künftige Themen. Mehr dazu in der <a href=\"https://supabase.com/privacy\" target=\"_blank\" rel=\"noopener noreferrer\">Datenschutzerklärung von Supabase</a>.</p><p>Damit niemand versehentlich doppelt abstimmt, merkt sich Ihr Browser im lokalen Speicher (Local Storage), für welche Themen Sie gestimmt haben. Diese Angabe verlässt Ihr Gerät nicht und ist für die von Ihnen gewünschte Abstimmung erforderlich (§ 25 Abs. 2 Nr. 2 TDDDG). Sie können sie jederzeit über die Einstellungen Ihres Browsers löschen.</p>" : S.vote && (S.vote.url || "").trim() ? "<p>Für die Abstimmung über das nächste Thema verlinken wir auf eine externe Umfrage (" + esc(hostOf(S.vote.url)) + "). Erst wenn Sie den Link anklicken, verlassen Sie diese Website; dort gilt die Datenschutzerklärung des Anbieters.</p>" : "<p>Das gilt auch für Stimmen und Themenvorschläge auf der Startseite: Ein Klick öffnet Ihr eigenes E-Mail-Programm. Die Website selbst überträgt oder speichert dabei nichts.</p>") +
         "<h3>6. Chamber of Members, Beiträge und Sitzungsprotokolle</h3><p>In der „Chamber of Members“ veröffentlichen wir Name, Kurzbiografie, eine persönliche These und gegebenenfalls einen Link, außerdem Beiträge wie One-liners, Notizen, Gedichte oder Texte, nur wenn die betreffende Person uns diese Angaben selbst zur Veröffentlichung geschickt hat. In den Sitzungsprotokollen nennen wir Teilnehmende nur mit ihrer Einwilligung. Rechtsgrundlage ist Art. 6 Abs. 1 lit. a DSGVO.</p><p>Das Bewerbungsformular auf der Chamber-Seite erstellt nur eine E-Mail in Ihrem eigenen E-Mail-Programm; erst wenn Sie diese absenden, erhalten wir Ihre Angaben. Die Website selbst überträgt oder speichert dabei nichts. Ihre Einwilligung zur Veröffentlichung können Sie jederzeit per E-Mail widerrufen; wir entfernen Ihre Angaben dann.</p>" +
         "<p>Sie können Ihre Einwilligung jederzeit mit Wirkung für die Zukunft widerrufen (Art. 7 Abs. 3 DSGVO). Eine kurze Nachricht genügt; wir entfernen Ihre Angaben dann von der Website. Da der Quelltext der Website in einem öffentlichen GitHub-Repository liegt, können frühere Fassungen in dessen Versionsgeschichte sichtbar bleiben. Auf Wunsch entfernen wir Ihre Angaben auch dort, soweit das technisch möglich ist.</p>" +
@@ -1987,7 +2020,7 @@ details.more > :not(summary) + * { margin-top: 1rem; }
         '<div><img class="word" src="' + WORD + '" alt="1he 0dinary 1nquiry 0lub"><p class="small">Hamburg · founded November 2026</p>' + socialNav() + looksHtml("foot") + '<nav class="legal-links" aria-label="More"><a href="#faq">FAQ</a><a href="#impressum">Impressum</a><a href="#datenschutz">Datenschutz</a></nav></div>' +
         '<p class="small guru">&#x2643;&#xFE0E; Thursday is Guruvāra in Sanskrit: the day of Bṛhaspati, teacher of the gods and lord of speech.</p>' +
       "</div></footer>" +
-      '<button type="button" class="fab" id="fab" hidden>Edit site</button>' + appDialog() +
+      '<button type="button" class="fab" id="fab" hidden>Edit site</button>' + appDialog() + writeDialog() +
       '<dialog id="dlg" aria-labelledby="dlg-title"><form id="dlg-form" class="dlg"></form></dialog>' +
       '<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>';
     applyLook();
@@ -2240,6 +2273,19 @@ details.more > :not(summary) + * { margin-top: 1rem; }
       return;
     }
     if (dlg && (e.target === dlg || e.target.closest(".app-x"))) dlg.close ? dlg.close() : dlg.removeAttribute("open");
+  });
+  document.addEventListener("click", function (e) {
+    var wd = document.getElementById("write-dlg"); if (!wd) return;
+    if (e.target.closest("[data-write]")) { if (wd.showModal) wd.showModal(); else wd.setAttribute("open", ""); return; }
+    var cp = e.target.closest(".write-copy");
+    if (cp) {
+      var m = cp.getAttribute("data-mail"), done = function () { cp.textContent = "Copied"; setTimeout(function () { cp.textContent = "Copy"; }, 2200); };
+      if (navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(m).then(done, function () { selectMail(); });
+      else selectMail();
+      return;
+    }
+    if (e.target === wd || e.target.closest("#write-dlg .app-x")) wd.close ? wd.close() : wd.removeAttribute("open");
+    function selectMail() { var r = document.createRange(), el = wd.querySelector(".write-mail"); r.selectNodeContents(el); var sel = getSelection(); sel.removeAllRanges(); sel.addRange(r); }
   });
   window.addEventListener("keydown", function (e) {
     if (!ch) return;

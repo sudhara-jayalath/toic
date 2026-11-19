@@ -585,7 +585,7 @@ html.chx-open, html.chx-open body { overflow: hidden; }
 .oi-birds { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .oi-splash.oi-forest { background-color: #17211b;
   background-image: linear-gradient(180deg, rgb(15 22 18 / .5) 0%, rgb(15 22 18 / .42) 45%, rgb(15 22 18 / .72) 100%),
-    var(--forest-photo, linear-gradient(180deg, #879d9b 0%, #6f8a87 20%, #667658 34%, #4b5d45 55%, #455642 72%, #414a40 78%, #2a3932 100%));
+    var(--forest-photo, url("forest.jpg"));
   background-size: cover; background-position: center 58%; }
 .oi-forest .oi-glow { background:
   radial-gradient(30% 24% at 18% 26%, #879d9b 0%, transparent 70%),
@@ -595,6 +595,17 @@ html.chx-open, html.chx-open body { overflow: hidden; }
 .oi-forest .oi-ch { color: #eef0e6; text-shadow: 0 2px 28px rgb(15 22 18 / .5); }
 .oi-forest .oi-tag { color: rgb(238 240 230 / .78); }
 .oi-forest .oi-hint { color: rgb(238 240 230 / .42); }
+.oi-splash.oi-deep { background-color: #171a2b;
+  background-image: linear-gradient(180deg, rgb(20 22 40 / .5) 0%, rgb(20 22 40 / .4) 45%, rgb(20 22 40 / .7) 100%), var(--deep-photo, url("water.jpg"));
+  background-size: cover; background-position: center 42%; }
+.oi-deep .oi-glow { background:
+  radial-gradient(26% 22% at 82% 18%, #cfe5e1 0%, transparent 70%),
+  radial-gradient(28% 22% at 12% 62%, #9bb9c6 0%, transparent 70%),
+  radial-gradient(36% 26% at 60% 86%, #444764 0%, transparent 72%); filter: blur(52px); mix-blend-mode: soft-light; }
+.oi-deep .oi-grain { opacity: .3; }
+.oi-deep .oi-ch { color: #eef1f6; text-shadow: 0 2px 28px rgb(16 18 34 / .5); }
+.oi-deep .oi-tag { color: rgb(238 241 246 / .78); }
+.oi-deep .oi-hint { color: rgb(238 241 246 / .42); }
 .oi-measure { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; visibility: hidden; pointer-events: none; }
 .oi-measure div { display: block; white-space: pre; line-height: 1; }
 .oi-measure span { display: inline-block; font-family: "Gloock", Georgia, serif; line-height: 1; white-space: pre; }
@@ -718,6 +729,129 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
 .t-neon .views a[aria-current="page"] { box-shadow: 0 0 0 1px var(--neon-1), 0 0 14px rgb(255 43 214 / .45); }
 @media (prefers-reduced-motion: reduce) { .t-neon .hero::before { animation: none; } }
 
+/* ===== "deep": deep water seen from below, light breaking through, film grain.
+   Colours sampled from a photo: slate indigo #444764 and #575877, haze #70799a, light #9bb9c6 and #cfe5e1.
+   The photo is water.jpg next to the page (a page may inline it as --deep-photo). ===== */
+:root.t-deep {
+  --paper: #e7e9f0; --paper-2: #d9dde9; --ink: #1b1f33; --muted: #565b75; --rule: #c3c7d6;
+  --jupiter: #8a8fb8; --on-jupiter: #1b1f33; --hl: #c9d6e6; --band: #1b1f33; --band-ink: #e7e9f0; --logo-filter: none;
+  --neon-1: #cfe5e1; --neon-2: #9bb9c6; --neon-3: #444764; --neon-4: #c4c0e4; --night: #171a2b; --night-ink: #eef1f6;
+  --neon-line: linear-gradient(100deg, #cfe5e1, #aab5d8 45%, #8a8fb8);
+  --deep-grain: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='220' height='220'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='3' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .6 0'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+@media (prefers-color-scheme: dark) {
+  :root.t-deep:not([data-theme="light"]) {
+    --paper: #11131f; --paper-2: #191c2b; --ink: #e2e5ef; --muted: #9a9fb6; --rule: #2a2e42;
+    --jupiter: #7b80aa; --on-jupiter: #11131f; --hl: #33395a; --band: #0c0e18; --band-ink: #e2e5ef; --logo-filter: invert(1); color-scheme: dark;
+  }
+}
+:root.t-deep[data-theme="dark"] {
+  --paper: #11131f; --paper-2: #191c2b; --ink: #e2e5ef; --muted: #9a9fb6; --rule: #2a2e42;
+  --jupiter: #7b80aa; --on-jupiter: #11131f; --hl: #33395a; --band: #0c0e18; --band-ink: #e2e5ef; --logo-filter: invert(1); color-scheme: dark;
+}
+.t-deep body::after { content: ""; position: fixed; inset: 0; z-index: 90; pointer-events: none; background-image: var(--deep-grain); opacity: .08; mix-blend-mode: multiply; }
+@media (prefers-color-scheme: dark) { .t-deep:not([data-theme="light"]) body::after { mix-blend-mode: screen; opacity: .05; } }
+.t-deep[data-theme="dark"] body::after { mix-blend-mode: screen; opacity: .05; }
+.t-deep .hero { color: var(--night-ink); position: relative; overflow: hidden; isolation: isolate;
+  background-color: #444764;
+  background-image: linear-gradient(180deg, rgb(20 22 40 / .34) 0%, rgb(20 22 40 / .2) 45%, rgb(20 22 40 / .58) 100%),
+    var(--deep-photo, url("water.jpg"));
+  background-size: cover; background-position: center 42%; }
+/* light moving through the water above */
+.t-deep .hero::before { content: ""; position: absolute; inset: -20%; z-index: -1; pointer-events: none;
+  background:
+    radial-gradient(16% 24% at 84% 16%, rgb(207 229 225 / .6) 0%, transparent 70%),
+    radial-gradient(20% 28% at 10% 62%, rgb(207 229 225 / .42) 0%, transparent 70%),
+    radial-gradient(14% 18% at 56% 86%, rgb(155 185 198 / .36) 0%, transparent 70%),
+    radial-gradient(12% 16% at 34% 24%, rgb(196 192 228 / .22) 0%, transparent 70%);
+  filter: blur(28px); mix-blend-mode: screen; opacity: .75; animation: deep-drift 26s ease-in-out infinite alternate; }
+@keyframes deep-drift { 0% { transform: translate(0, 0) scale(1); } 50% { transform: translate(3%, -2.5%) scale(1.06); } 100% { transform: translate(-3%, 2%) scale(1); } }
+.t-deep .hero::after { content: ""; position: absolute; inset: 0; z-index: -1; background-image: var(--deep-grain); opacity: .3; mix-blend-mode: overlay; pointer-events: none; }
+.t-deep .hero .eyebrow { color: var(--night-ink); opacity: .85; }
+.t-deep .hero h1 { text-shadow: 0 2px 30px rgb(16 18 34 / .45); }
+.t-deep .hero .lede { color: rgb(238 241 246 / .92); }
+.t-deep .hero-mark img, .t-deep .hero-mark .word { filter: invert(1); }
+.t-deep .hero .btn.solid { background: var(--night-ink); color: var(--night); border-color: var(--night-ink); }
+.t-deep .hero .btn:not(.solid) { border-color: rgb(238 241 246 / .75); color: var(--night-ink); }
+.t-deep .hero a:focus-visible { outline-color: var(--night-ink); }
+.t-deep .ticker { background: #1b1f33; color: #e7e9f0; border-block: 1px solid rgb(207 229 225 / .24); }
+.t-deep .ticker b { color: #cfe5e1; }
+.t-deep .tile, .t-deep .f-tile, .t-deep .chip.up, .t-deep .circle .ini { background: var(--neon-line); color: #1b1f33; border-color: transparent; }
+.t-deep .circle li > span .ini { background: var(--paper-2); color: var(--ink); }
+.t-deep .btn.jup { background: var(--neon-line); color: #1b1f33; border-color: transparent; }
+.t-deep .quote mark, .t-deep .night mark { background: linear-gradient(transparent 60%, rgb(155 185 198 / .5) 60%); }
+.t-deep .ins li::before, .t-deep .rules li::before { background: var(--neon-line); }
+.t-deep .road article:first-child { border-top: 2px solid transparent; border-image: var(--neon-line) 1; }
+.t-deep .theories li::before { color: #70799a; }
+.t-deep .az button:hover, .t-deep a.tag:hover { background: var(--neon-line); color: #1b1f33; border-color: transparent; }
+.t-deep .views a[aria-current="page"] { box-shadow: 0 0 0 1px #70799a, 0 0 12px rgb(155 185 198 / .4); }
+.t-deep .ratio .talk { background: var(--neon-line); color: #1b1f33; }
+.t-deep .chb::before { background:
+  radial-gradient(34% 40% at 14% 24%, rgb(155 185 198 / .4) 0%, transparent 70%),
+  radial-gradient(30% 38% at 88% 18%, rgb(207 229 225 / .3) 0%, transparent 70%),
+  radial-gradient(40% 44% at 66% 92%, rgb(68 71 100 / .7) 0%, transparent 72%),
+  radial-gradient(24% 30% at 30% 96%, rgb(196 192 228 / .2) 0%, transparent 70%); }
+.t-deep .chb-w.lit::before, .t-deep .chx-pane::before, .t-deep .m-window::before { filter: hue-rotate(calc(var(--h, 0deg) * .12)) saturate(.85); }
+.t-deep .chb-face { background: rgb(20 22 38 / .8); border-color: rgb(231 233 240 / .7); }
+.t-deep .chb-roof { background: rgb(20 22 38 / .88); border-color: rgb(231 233 240 / .7); }
+.t-deep .chx-wall { background: linear-gradient(180deg, #121423 0%, #1f2238 48%, #171a2b 100%); }
+.t-deep .chx-floor { background: radial-gradient(closest-side, rgb(207 229 225 / .07), transparent), #10121f; }
+.t-deep .chx-ceiling { background: #0d0f1a; }
+.t-deep .chx-patch { background: linear-gradient(#10121f, #10121f) center / 3px 100% no-repeat, linear-gradient(#10121f, #10121f) 50% 34% / 100% 3px no-repeat, linear-gradient(180deg, var(--neon-2), var(--neon-1) 55%, transparent); }
+.t-deep .topic .liquid { background: linear-gradient(to top, #444764 0%, #8a8fb8 40%, #cfe5e1 100%); }
+@media (prefers-reduced-motion: reduce) { .t-deep .hero::before { animation: none; } }
+
+/* ===== choosing the look ===== */
+.looks { display: flex; align-items: center; gap: .5rem; font-family: var(--mono); font-size: .66rem; letter-spacing: .12em; text-transform: uppercase; }
+.looks .looks-l { opacity: .75; margin-right: .15rem; }
+.look-sw { display: inline-flex; align-items: center; gap: .45rem; padding: 0; border: 0; background: none; color: inherit; font: inherit; letter-spacing: inherit; text-transform: inherit; cursor: pointer; }
+.look-sw i { display: block; width: 24px; height: 24px; border-radius: 50%; border: 1.5px solid currentColor; opacity: .85; transition: transform .2s ease; }
+.look-sw[data-look="neon"] i { background: conic-gradient(from 200deg, #ff2bd6, #ffb21e, #00e1ff, #8a3cff, #ff2bd6); }
+.look-sw[data-look="forest"] i { background: linear-gradient(180deg, #879d9b 0%, #667658 40%, #4b5d45 65%, #2a3932 100%); }
+.look-sw[data-look="deep"] i { background: radial-gradient(60% 50% at 75% 25%, #cfe5e1, transparent 70%), linear-gradient(180deg, #70799a, #444764); }
+.look-sw[aria-pressed="true"] i { opacity: 1; box-shadow: 0 0 0 2px var(--paper), 0 0 0 3.5px currentColor; }
+.hero .look-sw[aria-pressed="true"] i { box-shadow: 0 0 0 2px rgb(0 0 0 / .35), 0 0 0 3.5px currentColor; }
+.look-sw:hover i { transform: scale(1.1); }
+.look-sw:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; border-radius: 4px; }
+.look-sw .look-name { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+.looks .looks-cur { margin-left: .25rem; }
+.hero .looks { position: absolute; z-index: 2; right: max(16px, env(safe-area-inset-right, 0px)); bottom: 1.1rem; color: inherit; }
+.hero > .inner { padding-bottom: clamp(4.25rem, 8vw, 6.5rem); }
+.looks.in-foot { flex-wrap: wrap; gap: .5rem 1.1rem; margin-top: 1rem; color: var(--ink); }
+.looks.in-foot .look-sw .look-name { position: static; width: auto; height: auto; clip: auto; }
+.looks.in-foot .look-sw i { width: 18px; height: 18px; }
+.looks.in-foot .looks-cur { display: none; }
+
+/* ===== quieter pages: text that steps back or opens on request ===== */
+.hero h1, .hero .lede { transition: opacity 1.6s cubic-bezier(.45, 0, .15, 1), filter 1.6s cubic-bezier(.45, 0, .15, 1), transform 1.6s cubic-bezier(.45, 0, .15, 1); }
+.hero.quiet h1, .hero.quiet .lede { opacity: 0; filter: blur(8px); transform: translateY(-6px); }
+body.editing .hero.quiet h1, body.editing .hero.quiet .lede { opacity: 1; filter: none; transform: none; }
+details.more > summary { list-style: none; cursor: pointer; display: inline-flex; align-items: center; gap: .5rem; font-family: var(--mono); font-size: .74rem; letter-spacing: .1em; text-transform: uppercase; color: var(--ink); border-bottom: 1px solid var(--rule); padding-bottom: .2rem; margin-top: .4rem; }
+details.more > summary::-webkit-details-marker { display: none; }
+details.more > summary::after { content: "+"; font-size: .95rem; transition: transform .3s ease; }
+details.more[open] > summary::after { transform: rotate(45deg); }
+details.more[open] > summary { margin-bottom: 1rem; }
+details.more > summary:focus-visible { outline: 2px solid currentColor; outline-offset: 4px; }
+details.more > :not(summary) + * { margin-top: 1rem; }
+.chb details.more > summary { color: var(--night-ink); border-bottom-color: rgb(255 255 255 / .3); }
+.m-lead { font-size: 1.25rem; line-height: 1.5; }
+.peek > li, .peek > article { position: relative; cursor: pointer; }
+.peek h3::after { content: "+"; display: inline-block; margin-left: .5rem; font-family: var(--mono); font-size: .8em; font-weight: 400; color: var(--muted); transition: transform .3s ease; }
+.peek > .open h3::after { transform: rotate(45deg); }
+@media (hover: hover) { .peek > :hover h3::after { transform: rotate(45deg); } }
+.peek > :focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+.peek-more { display: grid; grid-template-rows: 0fr; opacity: 0; transition: grid-template-rows .45s ease, opacity .45s ease; }
+.peek-more > * { overflow: hidden; min-height: 0; margin: 0; }
+.peek > .open .peek-more, .peek > :focus-visible .peek-more, body.editing .peek-more { grid-template-rows: 1fr; opacity: 1; }
+@media (hover: hover) { .peek > :hover .peek-more { grid-template-rows: 1fr; opacity: 1; } }
+.faq-q { all: unset; display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; width: 100%; cursor: pointer; font: inherit; }
+.faq-q::after { content: "+"; font-family: var(--mono); font-size: 1.1rem; color: var(--muted); transition: transform .3s ease; flex: none; }
+.faq-item.open .faq-q::after { transform: rotate(45deg); }
+.faq-q:focus-visible { outline: 2px solid var(--ink); outline-offset: 4px; }
+.faq-a { display: none; }
+.faq-item.open .faq-a, body.editing .faq-a { display: block; }
+.faq-item { padding-block: 1.4rem; }
+
 /* ===== "forest": misty green woods by water, seen through film grain.
    Colours sampled from a photo: mist #879d9b, canopy #4b5d45, moss #667658, pale trunks #c9ceb4, dark water #2a3932.
    A page may set --forest-photo to that photo; without it the hero paints the same scene as a gradient. ===== */
@@ -744,7 +878,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
 .t-forest .hero { color: var(--night-ink); position: relative; overflow: hidden; isolation: isolate;
   background-color: #4b5d45;
   background-image: linear-gradient(180deg, rgb(23 33 27 / .30) 0%, rgb(23 33 27 / .18) 40%, rgb(23 33 27 / .55) 100%),
-    var(--forest-photo, linear-gradient(180deg, #879d9b 0%, #6f8a87 20%, #667658 34%, #4b5d45 55%, #455642 72%, #414a40 78%, #2a3932 100%));
+    var(--forest-photo, url("forest.jpg"));
   background-size: cover; background-position: center 58%; }
 .t-forest .hero::after { content: ""; position: absolute; inset: 0; z-index: -1; background-image: var(--forest-grain); opacity: .32; mix-blend-mode: overlay; }
 .t-forest .hero .eyebrow { color: var(--night-ink); opacity: .85; }
@@ -1035,6 +1169,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   function ext(href, label, cls) { return '<a class="' + cls + '" href="' + esc(href) + '" target="_blank" rel="noopener noreferrer">' + label + ' <span class="arr" aria-hidden="true">&#8599;</span></a>'; }
 
   var MEETUP_SEARCH = "https://www.meetup.com/find/?keywords=the%20ordinary%20inquiry%20club";
+  var LOOKS = [["neon", "Neon \u00b7 Columns"], ["forest", "Forest \u00b7 Birds"], ["deep", "Deep Waters"]], LOOK_LS = "toic-look";
   var VIEWS = [["club", "Club"], ["records", "Records"], ["lexicon", "Lexicon"], ["chamber", "Chamber"], ["letter", "Letter"], ["founder", "About me"]];
   var ALL_VIEWS = VIEWS.map(function (v) { return v[0]; }).concat(["faq", "impressum", "datenschutz"]);
 
@@ -1130,26 +1265,28 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
           '<div class="actions">' + joinButtons("btn solid", "btn", "Join") + '<a class="btn" href="#records">Read the records</a></div>' +
         "</div>" +
         '<div class="hero-mark"><img class="mark" src="' + MARK + '" alt="The club mark: IO above 1O"><img class="word" src="' + WORD + '" alt="1he 0dinary 1nquiry 0lub"></div>' +
-      "</div></div>" +
+      "</div>" + looksHtml("hero") + "</div>" +
       '<div class="ticker" aria-hidden="true"><div class="track">' + tick + tick + "</div></div>" +
 
       '<div class="inner section manifesto">' +
         '<div class="lead"><p class="eyebrow">The idea</p><h2>Philosophers by life, by vocation, by passion</h2></div>' +
         '<div class="prose">' +
+          "<p class=\"m-lead\">You don't need to be a philosopher by profession. It's enough to be one by life, by vocation, and by passion.</p>" +
+          '<details class="more"><summary>More about the idea</summary>' +
           "<p>Do you wonder about life, and enjoy hearing how others see it? If you're enchanted by life and its mysteries, if you like to describe the world and existence in your own way, and if you're curious how the people around you creatively make sense of it, this club is for you.</p>" +
-          "<p>You don't need to be a philosopher by profession. It's enough to be one by life, by vocation, and by passion.</p>" +
           "<p>We meet in small groups of up to four people to explore one focused topic at a time. We won't dive into the history of philosophy, and we're not concerned with how philosophy is practiced in institutions. Here, your own thinking is the starting point.</p>" +
+          "</details>" +
         "</div>" +
       "</div>" +
       '<div class="inner"><p class="quote"><mark>Let’s rescue philosophy from history books and institutions,</mark> and bring it back to the streets.</p></div>' +
 
       '<div class="inner section">' +
         '<div class="lead"><p class="eyebrow">At the table</p><h2>Two hours, one question</h2></div>' +
-        '<ol class="timeline">' +
-          '<li><span class="t">Arrive</span><h3>We sit down</h3><p>One table in a Hamburg café, up to four people. A drink or two is plenty.</p></li>' +
-          '<li><span class="t">+10 min</span><h3>One question</h3><p>A focused question, announced a few days before on ' + mainPlatform() + '.</p></li>' +
-          '<li><span class="t">2 hours</span><h3>Your own words</h3><p>Everyone thinks from their own life. No famous names needed to make a point.</p></li>' +
-          '<li><span class="t">After</span><h3>The record</h3><p>The question, the threads and what we found go into the minute-book.</p></li>' +
+        '<ol class="timeline peek">' +
+          '<li tabindex="0" aria-expanded="false"><span class="t">Arrive</span><h3>We sit down</h3><div class="peek-more"><p>One table in a Hamburg café, up to four people. A drink or two is plenty.</p></div></li>' +
+          '<li tabindex="0" aria-expanded="false"><span class="t">+10 min</span><h3>One question</h3><div class="peek-more"><p>A focused question, announced a few days before on ' + mainPlatform() + '.</p></div></li>' +
+          '<li tabindex="0" aria-expanded="false"><span class="t">2 hours</span><h3>Your own words</h3><div class="peek-more"><p>Everyone thinks from their own life. No famous names needed to make a point.</p></div></li>' +
+          '<li tabindex="0" aria-expanded="false"><span class="t">After</span><h3>The record</h3><div class="peek-more"><p>The question, the threads and what we found go into the minute-book.</p></div></li>' +
         "</ol>" +
       "</div>" +
       rulesBlock() +
@@ -1159,10 +1296,10 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
 
       '<div class="inner section">' +
         '<div class="lead"><p class="eyebrow">Where the records lead</p><h2>From a table, to a book, to the street</h2></div>' +
-        '<div class="road">' +
-          '<article><span class="stage">Now</span><h3>The minute-book</h3><p>Every session leaves a record: the question, the threads, and what we found together.</p><a class="btn" href="#records">Open the records</a></article>' +
-          '<article><span class="stage">Next</span><h3>A book, written together</h3><p>Over time the records become a shared book. Everyone whose thinking shaped a session can become a co-author.</p></article>' +
-          '<article><span class="stage">Someday</span><h3>A street philosophy conference</h3><p>A gathering in public space for people who think by vocation rather than profession. No podium, only tables.</p></article>' +
+        '<div class="road peek">' +
+          '<article tabindex="0" aria-expanded="false"><span class="stage">Now</span><h3>The minute-book</h3><div class="peek-more"><p>Every session leaves a record: the question, the threads, and what we found together.</p></div><a class="btn" href="#records">Open the records</a></article>' +
+          '<article tabindex="0" aria-expanded="false"><span class="stage">Next</span><h3>A book, written together</h3><div class="peek-more"><p>Over time the records become a shared book. Everyone whose thinking shaped a session can become a co-author.</p></div></article>' +
+          '<article tabindex="0" aria-expanded="false"><span class="stage">Someday</span><h3>A street philosophy conference</h3><div class="peek-more"><p>A gathering in public space for people who think by vocation rather than profession. No podium, only tables.</p></div></article>' +
         "</div>" +
       "</div>" +
 
@@ -1276,7 +1413,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       '<div class="chb"><div class="inner chb-inner">' +
       '<div class="chb-copy"><p class="eyebrow">Chamber of Members · ' + n + "</p><h2>A chamber of many windows</h2>" +
       '<div class="chamber-idea"><p class="intro">Think of a society as a chamber with countless windows. Each of us is one window, facing one part of reality: one looks onto a tree, one onto a river, one onto a mountain, one onto a path. Every window brings its own light into the room, rich, vital and like no other.</p>' +
-      '<p class="intro">No single window shows the whole world. But the more we let these views meet and mingle, the richer our picture of reality becomes. The table in the middle is where they meet.</p></div>' +
+      '<details class="more"><summary>Read more</summary><p class="intro">No single window shows the whole world. But the more we let these views meet and mingle, the richer our picture of reality becomes. The table in the middle is where they meet.</p></details></div>' +
       '<div class="chb-actions"><button type="button" class="chb-btn solid chb-enter">Enter the chamber <span aria-hidden="true">\u2192</span></button>' +
       '<button type="button" class="chb-btn" data-jump="members">See everyone as a list <span aria-hidden="true">\u2193</span></button></div>' +
       '<button type="button" class="ed" data-act="add" data-kind="member">+ Add a member</button></div>' +
@@ -1442,6 +1579,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
         "<p>Dabei können Daten in die USA übermittelt werden. GitHub erklärt, das EU-U.S. Data Privacy Framework einzuhalten; die Übermittlung stützt sich damit auf den Angemessenheitsbeschluss der EU-Kommission nach Art. 45 DSGVO. Weitere Informationen gibt das GitHub General Privacy Statement:</p>" +
         '<p class="src">https://docs.github.com/en/site-policy/privacy-policies/github-general-privacy-statement</p>' +
         "<p><strong>Als App auf dem Startbildschirm.</strong> Sie können diese Website über Ihren Browser auf dem Startbildschirm Ihres Geräts ablegen. Nur wenn Sie sie von dort öffnen, speichert Ihr Browser eine Kopie der Website (Seite und Bilder) im Speicher Ihres Geräts, damit sie schneller lädt und auch ohne Internetverbindung lesbar ist. Diese Kopie bleibt auf Ihrem Gerät; dabei werden keine personenbezogenen Daten an uns übermittelt. Rechtsgrundlage ist § 25 Abs. 2 Nr. 2 TDDDG. Sie können die Kopie jederzeit löschen, indem Sie die App entfernen oder die Website-Daten in Ihrem Browser löschen.</p>" +
+        "<p><strong>Ihre Wahl der Darstellung.</strong> Wenn Sie unten auf der Startseite oder im Fußbereich eine Darstellung wählen (Neon, Forest oder Deep Waters), merkt sich Ihr Browser diese Wahl in seinem lokalen Speicher, damit die Website beim nächsten Besuch so aussieht. Die Wahl bleibt auf Ihrem Gerät und wird nicht an uns übermittelt. Rechtsgrundlage ist § 25 Abs. 2 Nr. 2 TDDDG.</p>" +
         "<h3>4. Externe Links</h3><p>Diese Website verlinkt auf externe Angebote, etwa auf unsere Seiten bei Instagram, Meetup oder Luma, auf einen Newsletter-Dienst oder auf den Blog des Gründers. Daten werden an diese Anbieter erst übertragen, wenn Sie einen solchen Link anklicken. Ab dann gilt die Datenschutzerklärung des jeweiligen Anbieters.</p>" +
         "<h3>5. Kontakt per E-Mail oder Nachricht</h3><p>Wenn Sie uns per E-Mail oder über Meetup schreiben, verarbeiten wir Ihre Angaben (zum Beispiel Name, E-Mail-Adresse und Inhalt der Nachricht), um Ihre Anfrage zu beantworten. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO, bei Anfragen zur Teilnahme Art. 6 Abs. 1 lit. b DSGVO. Wir löschen die Angaben, sobald sie für diesen Zweck nicht mehr benötigt werden.</p>" +
         (voteLive() ? "<p><strong>Abstimmung über das nächste Thema.</strong> Erst wenn Sie auf der Startseite ein Thema anklicken, „See the votes“ wählen oder einen Themenvorschlag senden, verbindet sich Ihr Browser mit unserer Datenbank bei Supabase (Supabase Inc.; Speicherort der Datenbank: Frankfurt am Main, EU). Gespeichert werden nur das gewählte Thema mit seiner Stimmenzahl bzw. der Text Ihres Vorschlags, ohne Namen oder IP-Adresse. Supabase verarbeitet dabei technisch notwendige Verbindungsdaten wie Ihre IP-Adresse in Server-Protokollen. Rechtsgrundlage ist Art. 6 Abs. 1 lit. f DSGVO; unser berechtigtes Interesse ist eine einfache Abstimmung über künftige Themen. Mehr dazu in der <a href=\"https://supabase.com/privacy\" target=\"_blank\" rel=\"noopener noreferrer\">Datenschutzerklärung von Supabase</a>.</p><p>Damit niemand versehentlich doppelt abstimmt, merkt sich Ihr Browser im lokalen Speicher (Local Storage), für welche Themen Sie gestimmt haben. Diese Angabe verlässt Ihr Gerät nicht und ist für die von Ihnen gewünschte Abstimmung erforderlich (§ 25 Abs. 2 Nr. 2 TDDDG). Sie können sie jederzeit über die Einstellungen Ihres Browsers löschen.</p>" : S.vote && (S.vote.url || "").trim() ? "<p>Für die Abstimmung über das nächste Thema verlinken wir auf eine externe Umfrage (" + esc(hostOf(S.vote.url)) + "). Erst wenn Sie den Link anklicken, verlassen Sie diese Website; dort gilt die Datenschutzerklärung des Anbieters.</p>" : "<p>Das gilt auch für Stimmen und Themenvorschläge auf der Startseite: Ein Klick öffnet Ihr eigenes E-Mail-Programm. Die Website selbst überträgt oder speichert dabei nichts.</p>") +
@@ -1786,7 +1924,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
 
   function faq() {
     var items = S.faq.map(function (f) {
-      return '<article class="faq-item"><h3>' + esc(f.q) + '</h3><div class="prose">' + P(f.a) +
+      return '<article class="faq-item"><h3><button type="button" class="faq-q" aria-expanded="false">' + esc(f.q) + '</button></h3><div class="prose faq-a">' + P(f.a) +
         '<button type="button" class="ed" data-act="edit" data-kind="faq" data-id="' + esc(f.id) + '">Edit</button></div></article>';
     }).join("");
     return (
@@ -1797,9 +1935,31 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     );
   }
 
+  /* the look: a visitor's own choice (kept only in their browser) or else the site's setting */
+  function look() {
+    var k = null; try { k = localStorage.getItem(LOOK_LS); } catch (e) {}
+    return LOOKS.some(function (l) { return l[0] === k; }) ? k : (S.settings.theme || "neon");
+  }
+  function lookName(k) { var l = LOOKS.filter(function (x) { return x[0] === k; })[0]; return l ? l[1] : ""; }
+  function looksHtml(where) {
+    return '<div class="looks in-' + where + '" role="group" aria-label="Choose the look of the site">' +
+      '<span class="looks-l">Look</span>' +
+      LOOKS.map(function (l) { return '<button type="button" class="look-sw" data-look="' + l[0] + '" aria-pressed="false" title="' + esc(l[1]) + '"><i aria-hidden="true"></i><span class="look-name">' + esc(l[1]) + "</span></button>"; }).join("") +
+      '<span class="looks-cur" aria-hidden="true"></span></div>';
+  }
+  function applyLook() {
+    var k = look(), c = document.documentElement.classList;
+    c.toggle("t-neon", k === "neon"); c.toggle("t-forest", k === "forest"); c.toggle("t-deep", k === "deep");
+    [].forEach.call(document.querySelectorAll(".look-sw"), function (b) { b.setAttribute("aria-pressed", b.getAttribute("data-look") === k ? "true" : "false"); });
+    [].forEach.call(document.querySelectorAll(".looks-cur"), function (el) { el.textContent = lookName(k); });
+  }
+  function setLook(k) {
+    try { localStorage.setItem(LOOK_LS, k); } catch (e) {}
+    applyLook(); heroAnim();
+  }
+
   function render() {
-    document.documentElement.classList.toggle("t-neon", (S.settings.theme || "neon") === "neon");
-    document.documentElement.classList.toggle("t-forest", S.settings.theme === "forest");
+    applyLook();
     app.innerHTML =
       '<header class="top"><div class="inner">' +
         '<a class="brand" href="#club"><img src="' + MARK + '" alt=""><span>the ordinary<br>inquiry club</span></a>' +
@@ -1824,12 +1984,13 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
         '<section data-view="datenschutz" hidden>' + datenschutz() + "</section>" +
       "</main>" +
       '<footer><div class="inner foot">' +
-        '<div><img class="word" src="' + WORD + '" alt="1he 0dinary 1nquiry 0lub"><p class="small">Hamburg · founded November 2026</p>' + socialNav() + '<nav class="legal-links" aria-label="More"><a href="#faq">FAQ</a><a href="#impressum">Impressum</a><a href="#datenschutz">Datenschutz</a></nav></div>' +
+        '<div><img class="word" src="' + WORD + '" alt="1he 0dinary 1nquiry 0lub"><p class="small">Hamburg · founded November 2026</p>' + socialNav() + looksHtml("foot") + '<nav class="legal-links" aria-label="More"><a href="#faq">FAQ</a><a href="#impressum">Impressum</a><a href="#datenschutz">Datenschutz</a></nav></div>' +
         '<p class="small guru">&#x2643;&#xFE0E; Thursday is Guruvāra in Sanskrit: the day of Bṛhaspati, teacher of the gods and lord of speech.</p>' +
       "</div></footer>" +
       '<button type="button" class="fab" id="fab" hidden>Edit site</button>' + appDialog() +
       '<dialog id="dlg" aria-labelledby="dlg-title"><form id="dlg-form" class="dlg"></form></dialog>' +
       '<div class="toast" id="toast" role="status" aria-live="polite" hidden></div>';
+    applyLook();
   }
 
   /* ===== the chamber: the building on the Chamber page and the room you can enter ===== */
@@ -2016,6 +2177,41 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
   }
   app.addEventListener("click", function (e) { if (e.target.closest(".chb-enter")) enterChamber(); });
 
+  /* the look switch */
+  document.addEventListener("click", function (e) { var b = e.target.closest(".look-sw"); if (b) setLook(b.getAttribute("data-look")); });
+
+  /* small things that open on request: the steps of a table, the road ahead, the questions people ask */
+  function togglePeek(el) { var on = !el.classList.contains("open"); el.classList.toggle("open", on); el.setAttribute("aria-expanded", on ? "true" : "false"); }
+  app.addEventListener("click", function (e) {
+    var q = e.target.closest(".faq-q");
+    if (q) { var it = q.closest(".faq-item"), on = !it.classList.contains("open"); it.classList.toggle("open", on); q.setAttribute("aria-expanded", on ? "true" : "false"); return; }
+    var pk = e.target.closest(".peek > li, .peek > article");
+    if (pk && !e.target.closest("a, button")) togglePeek(pk);
+  });
+  app.addEventListener("keydown", function (e) {
+    var pk = e.target.closest && e.target.closest(".peek > li, .peek > article");
+    if (pk && e.target === pk && (e.key === "Enter" || e.key === " ")) { e.preventDefault(); togglePeek(pk); }
+  });
+
+  /* the headline steps back after a few seconds, so the scene behind it can breathe; a touch brings it back */
+  var quietT = 0;
+  function heroQuiet(delay) {
+    var hero = app.querySelector(".hero"); if (!hero) return;
+    clearTimeout(quietT); hero.classList.remove("quiet");
+    if (CH_REDUCE) return;
+    quietT = setTimeout(function () {
+      if (hero.matches(":focus-within") || hero.matches(".hover-copy")) return heroQuiet(3500);
+      hero.classList.add("quiet");
+    }, delay || 6500);
+  }
+  app.addEventListener("click", function (e) {
+    var hero = e.target.closest(".hero"); if (!hero || e.target.closest("a, button")) return;
+    heroQuiet(6000);
+  });
+  app.addEventListener("mouseover", function (e) { var c = e.target.closest(".hero-copy"); if (c) { var h = c.closest(".hero"); if (!h.classList.contains("hover-copy")) { h.classList.add("hover-copy"); heroQuiet(3500); } } });
+  app.addEventListener("mouseout", function (e) { var c = e.target.closest(".hero-copy"); if (c && !c.contains(e.relatedTarget)) c.closest(".hero").classList.remove("hover-copy"); });
+  app.addEventListener("focusin", function (e) { if (e.target.closest(".hero")) heroQuiet(4000); });
+
   /* ===== add to home screen ===== */
   var appPrompt = null;
   window.addEventListener("beforeinstallprompt", function (e) { e.preventDefault(); appPrompt = e; });
@@ -2090,6 +2286,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     if (target) { target.classList.add("flash"); target.scrollIntoView({ block: "start" }); }
     else if (h === "vote") { var vb = document.querySelector(".vote"); if (vb) requestAnimationFrame(function () { vb.scrollIntoView({ block: "start" }); }); }
     else if (scroll) window.scrollTo(0, 0);
+    if (v === "club" && typeof heroQuiet === "function") heroQuiet();
   }
 
 
@@ -2154,21 +2351,68 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
     raf = requestAnimationFrame(frame);
     return function () { stopped = true; cancelAnimationFrame(raf); window.removeEventListener("resize", onR); };
   }
-  function heroBirds() {
-    var hero = document.querySelector(".hero"); if (!hero) return;
-    var cv = document.createElement("canvas"); cv.className = "hero-lines"; cv.setAttribute("aria-hidden", "true");
-    hero.insertBefore(cv, hero.firstChild);
-    murmurLayer(hero, cv, {});
+  /* ===== deep waters: specks of light drifting in the water, and a few large soft lights out of focus ===== */
+  function moteLayer(host, cv, opt) {
+    opt = opt || {};
+    var ctx = cv.getContext("2d"), W = 0, H = 0, dpr = 1, raf = 0, stopped = false, lastT = 0, T = 0, i;
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    function size() { dpr = Math.min(2, window.devicePixelRatio || 1); W = host.clientWidth; H = host.clientHeight; cv.width = Math.round(W * dpr); cv.height = Math.round(H * dpr); ctx.setTransform(dpr, 0, 0, dpr, 0, 0); }
+    size();
+    var sprites = {};
+    function sprite(c) {
+      if (sprites[c]) return sprites[c];
+      var s = document.createElement("canvas"); s.width = s.height = 64; var g = s.getContext("2d"), gr = g.createRadialGradient(32, 32, 0, 32, 32, 32);
+      gr.addColorStop(0, "rgba(" + c + ",1)"); gr.addColorStop(.25, "rgba(" + c + ",.55)"); gr.addColorStop(1, "rgba(" + c + ",0)");
+      g.fillStyle = gr; g.fillRect(0, 0, 64, 64); return (sprites[c] = s);
+    }
+    var COLS = ["238,244,242", "207,229,225", "196,192,228"], n = opt.n || (W > 900 ? 110 : 60), P = [];
+    function mote(fresh) {
+      var big = Math.random() < .06, z = Math.random();
+      return { x: Math.random() * W, y: fresh ? Math.random() * H : H + 20, z: z, r: big ? 26 + Math.random() * 48 : .9 + z * 2.6, big: big,
+        vy: -(3 + z * 9) * (big ? .4 : 1), sw: 6 + Math.random() * 16, ph: Math.random() * 6.283, f: .15 + Math.random() * .25,
+        a: big ? .05 + Math.random() * .07 : .25 + z * .55, c: COLS[Math.floor(Math.random() * COLS.length)], tw: Math.random() * 6.283 };
+    }
+    for (i = 0; i < n; i++) P.push(mote(true));
+    function draw() {
+      ctx.clearRect(0, 0, W, H); ctx.globalCompositeOperation = "lighter";
+      for (var i = 0; i < P.length; i++) {
+        var p = P[i], x = p.x + Math.sin(T * p.f + p.ph) * p.sw, a = p.a * (p.big ? 1 : .65 + .35 * Math.sin(T * 1.3 + p.tw));
+        ctx.globalAlpha = a; var r = p.big ? p.r : p.r * 3.2; ctx.drawImage(sprite(p.c), x - r, p.y - r, r * 2, r * 2);
+      }
+      ctx.globalAlpha = 1; ctx.globalCompositeOperation = "source-over";
+    }
+    function step(dt) {
+      T += dt;
+      for (var i = 0; i < P.length; i++) { var p = P[i]; p.y += p.vy * dt; if (p.y < -p.r * 3 - 10) P[i] = mote(false); }
+    }
+    if (reduce) { draw(); return function () {}; }
+    function frame(now) {
+      if (stopped) return;
+      raf = requestAnimationFrame(frame);
+      var r = host.getBoundingClientRect(); if (r.bottom < 0 || r.top > window.innerHeight || document.hidden) { lastT = now; return; }
+      var dt = Math.min(.05, (now - (lastT || now)) / 1000); lastT = now;
+      step(dt); draw();
+    }
+    var rz; function onR() { clearTimeout(rz); rz = setTimeout(function () { size(); P.forEach(function (p) { if (p.x > W) p.x = Math.random() * W; }); }, 200); }
+    window.addEventListener("resize", onR);
+    raf = requestAnimationFrame(frame);
+    return function () { stopped = true; cancelAnimationFrame(raf); window.removeEventListener("resize", onR); };
   }
 
-  function heroLines() {
-    if (S.settings.theme === "forest") return heroBirds();
-    var hero = document.querySelector(".hero");
-    var mode = S.settings.lines || "off";
-    if (!hero || mode === "off") return;
-    var cv = document.createElement("canvas");
-    cv.className = "hero-lines"; cv.setAttribute("aria-hidden", "true");
+  /* the moving layer behind the opening section: columns for neon, birds for forest, drifting light for deep waters */
+  var heroStop = null;
+  function heroAnim() {
+    if (heroStop) { try { heroStop(); } catch (e) {} heroStop = null; }
+    var hero = app.querySelector(".hero"); if (!hero) return;
+    [].forEach.call(hero.querySelectorAll("canvas.hero-lines"), function (c) { c.parentNode.removeChild(c); });
+    var cv = document.createElement("canvas"); cv.className = "hero-lines"; cv.setAttribute("aria-hidden", "true");
     hero.insertBefore(cv, hero.firstChild);
+    var k = look();
+    heroStop = k === "forest" ? murmurLayer(hero, cv, {}) : k === "deep" ? moteLayer(hero, cv, {}) : columnsLayer(hero, cv);
+  }
+  function columnsLayer(hero, cv) {
+    var mode = S.settings.lines || "off", stopped = false, ro = null;
+    if (mode === "off") return null;
     var ctx = cv.getContext("2d");
     var W = 0, H = 0, dpr = 1;
     var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -2438,7 +2682,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       var m = MOTIFS[mi % MOTIFS.length]; mi++;
       var b = build(m, x); b.x = x; b.t0 = now; active.push(b);
     }
-    function color(a) { var c = document.documentElement.classList; return c.contains("t-neon") ? "rgba(247,243,255," + (0.42 * a) + ")" : c.contains("t-forest") ? "rgba(238,240,230," + (0.34 * a) + ")" : "rgba(20,20,18," + (0.32 * a) + ")"; }
+    function color(a) { var c = document.documentElement.classList; return c.contains("t-neon") ? "rgba(247,243,255," + (0.42 * a) + ")" : c.contains("t-forest") || c.contains("t-deep") ? "rgba(238,240,230," + (0.34 * a) + ")" : "rgba(20,20,18," + (0.32 * a) + ")"; }
     function drawPartial(b, p, a) {
       var budget = b.total * p;
       ctx.strokeStyle = color(a); ctx.beginPath();
@@ -2460,10 +2704,11 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       if (reduce) { ctx.clearRect(0, 0, W, H); slots().forEach(function (x, i) { drawPartial(build(MOTIFS[(i * (MOTIFS.length > 4 ? 2 : 1)) % MOTIFS.length], x), 1, 0.8); }); }
     }
     size();
-    if (window.ResizeObserver) new ResizeObserver(function () { var r = hero.getBoundingClientRect(); if (Math.abs(r.width - W) > 2 || Math.abs(r.height - H) > 2) size(); }).observe(hero);
-    if (reduce) return;
+    if (window.ResizeObserver) (ro = new ResizeObserver(function () { var r = hero.getBoundingClientRect(); if (Math.abs(r.width - W) > 2 || Math.abs(r.height - H) > 2) size(); })).observe(hero);
+    if (reduce) return function () { if (ro) ro.disconnect(); };
     var wasVisible = true;
     function frame(now) {
+      if (stopped) return;
       var visible = hero.offsetParent !== null && !document.hidden;
       if (visible && !wasVisible) { active = []; lastSpawn = 0; }
       wasVisible = visible;
@@ -2482,21 +2727,23 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       requestAnimationFrame(frame);
     }
     requestAnimationFrame(frame);
+    return function () { stopped = true; if (ro) ro.disconnect(); };
   }
 
   /* ===== the opening of the home-screen app: oi, ordinary inquiry, the ordinary / inquiry club, 1010 ===== */
   function oiSplash() {
-    var root = document.documentElement, el = null, done = false, anims = [], timers = [], themes = [], forest = S.settings.theme === "forest", stopBirds = null;
+    var root = document.documentElement, el = null, done = false, anims = [], timers = [], themes = [], forest = look() === "forest", deep = look() === "deep", stopBirds = null;
     function release() { root.classList.remove("oi-pending"); }
     try {
       try { sessionStorage.setItem("toic-intro", "1"); } catch (e) {}
-      [].forEach.call(document.querySelectorAll('meta[name="theme-color"]'), function (m) { themes.push([m, m.getAttribute("content")]); m.setAttribute("content", forest ? "#17211b" : "#0b0a12"); });
+      [].forEach.call(document.querySelectorAll('meta[name="theme-color"]'), function (m) { themes.push([m, m.getAttribute("content")]); m.setAttribute("content", forest ? "#17211b" : deep ? "#171a2b" : "#0b0a12"); });
       el = document.createElement("div");
-      el.className = "oi-splash" + (forest ? " oi-forest" : ""); el.setAttribute("role", "img"); el.setAttribute("aria-label", "the ordinary inquiry club");
+      el.className = "oi-splash" + (forest ? " oi-forest" : deep ? " oi-deep" : ""); el.setAttribute("role", "img"); el.setAttribute("aria-label", "the ordinary inquiry club");
       el.innerHTML = '<div class="oi-glow"></div><div class="oi-grain"></div><div class="oi-letters"></div><img class="oi-mark" alt="" src="' + MARK + '"><div class="oi-tag">street philosophy · hamburg</div><div class="oi-hint">Tap to skip</div>';
       document.body.appendChild(el);
       release();
       if (forest) { var bc = document.createElement("canvas"); bc.className = "oi-birds"; el.insertBefore(bc, el.querySelector(".oi-letters")); stopBirds = murmurLayer(el, bc, { n: 170 }); }
+      if (deep) { var mc = document.createElement("canvas"); mc.className = "oi-birds"; el.insertBefore(mc, el.querySelector(".oi-letters")); stopBirds = moteLayer(el, mc, { n: 70 }); }
       var lettersEl = el.querySelector(".oi-letters"), mark = el.querySelector(".oi-mark"), tag = el.querySelector(".oi-tag"), glow = el.querySelector(".oi-glow");
       var BASE = 100, A = "the ordinary", B = "inquiry club", MARK_W = 263, MARK_H = 316;
       var GLYPH = { A0: [6, 10, 103, 151], A4: [131, 6, 256, 150], B0: [18, 164, 115, 305], B8: [131, 165, 256, 309] };
@@ -2606,7 +2853,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
 
   render();
   route(false);
-  heroLines();
+  heroAnim();
   armVote();
   requestAnimationFrame(chamberSpin);
   window.addEventListener("hashchange", function () { route(true); });
@@ -2729,7 +2976,7 @@ dialog::backdrop { background: rgb(0 0 0 / .5); }
       ["instagramUrl", "Instagram link", "url", "e.g. https://www.instagram.com/your_account/. Shown in the footer."],
       ["primary", "Main platform for joining", "select", ["meetup", "luma"]],
       ["lines", "Drawings in the hero", "select", [["off", "Off"], ["on", "Columns and patterns"], ["wisdom", "Figures of wisdom"]]],
-      ["theme", "Look", "select", [["neon", "Neon (Hamburg at night)"], ["forest", "Forest (misty green, film grain)"], ["yellow", "Jupiter yellow (special seasons)"]]],
+      ["theme", "Look", "select", [["neon", "Neon (Hamburg at night)"], ["forest", "Forest (misty green, film grain)"], ["deep", "Deep Waters (blue light, film grain)"], ["yellow", "Jupiter yellow (special seasons)"]]],
       ["letterUrl", "Newsletter sign-up link (optional)", "url", "Leave empty to use the Luma calendar (Luma sends newsletters to its subscribers), or Meetup if there is no Luma link."],
       ["when", "When (shown in the ticker)", "text", "e.g. Thursdays"]
     ] }
